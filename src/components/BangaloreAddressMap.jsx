@@ -15,11 +15,12 @@ const BangaloreAddressMap = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [showInfoPanel, setShowInfoPanel] = useState(false); // We'll keep this state but ensure it's always true when a location is selected
+  const [showInfoPanel, setShowInfoPanel] = useState(false);
   const [zoomedLocation, setZoomedLocation] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [isReverseGeocoding, setIsReverseGeocoding] = useState(false);
   const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
+  const [isMobile, setIsMobile] = useState(false);
   const [locationInfo, setLocationInfo] = useState({
     bbmpInfo: {
       Zone: 'Loading...',
@@ -60,6 +61,25 @@ const BangaloreAddressMap = () => {
   const polygonRef = useRef(null);
   const labelRef = useRef(null);
   const searchTimeoutRef = useRef(null);
+  const infoPanelRef = useRef(null);
+
+  // Check if device is mobile
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    // Initial check
+    checkIsMobile();
+    
+    // Add event listener for window resize
+    window.addEventListener('resize', checkIsMobile);
+    
+    // Cleanup
+    return () => {
+      window.removeEventListener('resize', checkIsMobile);
+    };
+  }, []);
 
   // Helper function to check if a point is inside a polygon (more accurate than bounds check)
   const isMarkerInsidePolygon = (point, poly) => {
@@ -152,6 +172,50 @@ const BangaloreAddressMap = () => {
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             font-size: 0.75rem;
             pointer-events: auto;
+          }
+
+          /* Mobile info panel styles */
+          @media (max-width: 767px) {
+            .mobile-info-panel {
+              position: fixed;
+              bottom: 0;
+              left: 0;
+              width: 100%;
+              max-height: 60vh;
+              border-radius: 16px 16px 0 0;
+              box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+              z-index: 1001;
+              overflow-y: auto;
+              transition: transform 0.3s ease-in-out;
+            }
+            
+            .mobile-info-panel-header {
+              padding: 12px;
+              border-bottom: 1px solid #eee;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              position: sticky;
+              top: 0;
+              background: white;
+              z-index: 2;
+            }
+            
+            .mobile-info-panel .pill-indicator {
+              width: 36px;
+              height: 4px;
+              background-color: #ccc;
+              border-radius: 4px;
+              margin: 0 auto 8px auto;
+            }
+            
+            .mobile-info-collapsed {
+              transform: translateY(calc(100% - 60px));
+            }
+            
+            .mobile-info-expanded {
+              transform: translateY(0);
+            }
           }
         `;
         document.head.appendChild(styleEl);
@@ -1293,17 +1357,33 @@ const BangaloreAddressMap = () => {
     // Close suggestions after search
     setShowSuggestions(false);
   };
+
+  // Toggle mobile info panel state (expanded/collapsed)
+  const toggleMobileInfoPanel = () => {
+    const panel = document.getElementById('mobile-info-panel');
+    if (panel) {
+      if (panel.classList.contains('mobile-info-collapsed')) {
+        panel.classList.remove('mobile-info-collapsed');
+        panel.classList.add('mobile-info-expanded');
+      } else {
+        panel.classList.remove('mobile-info-expanded');
+        panel.classList.add('mobile-info-collapsed');
+      }
+    }
+  };
   
   return (
-    <div className="bg-gray-100 h-screen flex justify-center items-center p-0">
-      <div className="w-full h-screen bg-white overflow-hidden">
-        <div className="p-4 text-center">
-          <h1 className="text-xl font-semibold flex justify-center items-center gap-1">
-            Find key details of
-            <br />your address in Bangalore <Info size={16} className="text-gray-500" />
+    <div className="bg-gray-100 h-screen flex flex-col justify-start items-center p-0">
+      <div className="w-full h-screen flex flex-col bg-white overflow-hidden">
+        {/* Header Area (always at top) */}
+        <div className="px-4 py-3 text-center">
+          <h1 className="text-lg md:text-xl font-semibold flex justify-center items-center gap-1">
+            Find key details of 
+            <br className="md:hidden" />
+            your address in Bangalore <Info size={16} className="text-gray-500" />
           </h1>
           
-          <div className="mt-6 max-w-md mx-auto">
+          <div className="mt-4 max-w-md mx-auto">
             <div className="flex items-center gap-2">
               <form onSubmit={handleSearch} className="relative flex-grow">
                 <input
@@ -1359,247 +1439,399 @@ const BangaloreAddressMap = () => {
                 <MapPin size={20} />
               </button>
             </div>
-            
-            {/* Click instruction */}
-            <div className="mt-2 text-sm text-gray-500">
-                {/* <span>Sources</span>
-                <span>Other information</span>
-                <span>Links</span> */}
-            </div>
           </div>
         </div>
   
-        <div className="flex flex-col">
-          {/* Map container - takes full width */}
-          <div className="flex-1 relative" style={{ minHeight: '80vh' }}>
-            {/* Map container */}
-            <div 
-              ref={mapContainerRef} 
-              className="w-full h-full absolute inset-0" 
-            ></div>
-            
-            {/* Floating info panel */}
-            {selectedLocation && (
-              <div className="absolute top-4 left-4 z-40 bg-white rounded-lg shadow-lg max-w-sm w-full md:w-96 max-h-80vh overflow-auto">
-                <div className="p-4 overflow-y-auto" style={{ maxHeight: 'calc(80vh - 40px)' }}>
-                  <div className="flex justify-between items-center mb-2">
-                    <h2 className="font-bold text-gray-800">Location Details</h2>
+        {/* Map Container (flex-grow to take remaining space) */}
+        <div className="flex-1 relative">
+          {/* Map container */}
+          <div 
+            ref={mapContainerRef} 
+            className="w-full h-full absolute inset-0" 
+          ></div>
+          
+          {/* Desktop Info Panel (only visible on desktop) */}
+          {selectedLocation && !isMobile && (
+            <div className="absolute top-4 left-4 z-40 bg-white rounded-lg shadow-lg max-w-sm w-full md:w-96 max-h-80vh overflow-auto">
+              <div className="p-4 overflow-y-auto" style={{ maxHeight: 'calc(80vh - 40px)' }}>
+                <div className="flex justify-between items-center mb-2">
+                  <h2 className="font-bold text-gray-800">Location Details</h2>
+                </div>
+                
+                <div className="text-sm text-gray-600 mb-4 border-b pb-2">
+                  {selectedLocation.display_name}
+                </div>
+                
+                <div className="space-y-6">
+                  {/* BBMP information */}
+                  <div>
+                    <h2 className="font-semibold text-gray-700 mb-3 pb-2 border-b">BBMP information</h2>
+                    <div className="space-y-1">
+                      {Object.entries(locationInfo.bbmpInfo).map(([fieldName, value]) => (
+                        <div key={fieldName} className="grid grid-cols-2 py-1">
+                          <span className="text-gray-600">{fieldName}</span>
+                          <span className="text-right font-medium">{value}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                   
-                  <div className="text-sm text-gray-600 mb-4 border-b pb-2">
-                    {selectedLocation.display_name}
-                  </div>
-                  
-                  <div className="space-y-6">
-                    {/* BBMP information */}
-                    <div>
-                      <h2 className="font-semibold text-gray-700 mb-3 pb-2 border-b">BBMP information</h2>
-                      <div className="space-y-1">
-                        {Object.entries(locationInfo.bbmpInfo).map(([fieldName, value]) => (
+                  {/* Revenue Classification */}
+                  <div>
+                    <h2 className="font-semibold text-gray-700 mb-3 pb-2 border-b">Revenue Classification</h2>
+                    <div className="space-y-1">
+                      {Object.entries(locationInfo.revenueClassification)
+                        .filter(([key]) => key !== 'htmlDescription')
+                        .map(([fieldName, value]) => (
                           <div key={fieldName} className="grid grid-cols-2 py-1">
                             <span className="text-gray-600">{fieldName}</span>
                             <span className="text-right font-medium">{value}</span>
                           </div>
-                        ))}
-                      </div>
+                        ))
+                      }
                     </div>
                     
-                    {/* Revenue Classification */}
-                    <div>
-                      <h2 className="font-semibold text-gray-700 mb-3 pb-2 border-b">Revenue Classification</h2>
-                      <div className="space-y-1">
-                        {Object.entries(locationInfo.revenueClassification)
-                          .filter(([key]) => key !== 'htmlDescription')
-                          .map(([fieldName, value]) => (
-                            <div key={fieldName} className="grid grid-cols-2 py-1">
-                              <span className="text-gray-600">{fieldName}</span>
-                              <span className="text-right font-medium">{value}</span>
-                            </div>
-                          ))
-                        }
+                    {/* HTML Description from Revenue Classification */}
+                    {locationInfo.revenueClassification.htmlDescription && (
+                      <div className="mt-4">
+                        <button 
+                          onClick={() => {
+                            const detailsElement = document.getElementById('revenue-details');
+                            if (detailsElement) {
+                              detailsElement.open = !detailsElement.open;
+                            }
+                          }}
+                          className="text-blue-600 hover:text-blue-800 text-sm flex items-center"
+                        >
+                          <Info size={14} className="mr-1" /> View detailed information
+                        </button>
+                        <details id="revenue-details" className="mt-2 text-xs border rounded p-2">
+                          <summary className="cursor-pointer font-medium">Revenue Classification Details</summary>
+                          <div 
+                            className="mt-2 overflow-auto max-h-60 text-xs"
+                            dangerouslySetInnerHTML={{ 
+                              __html: locationInfo.revenueClassification.htmlDescription 
+                            }} 
+                          />
+                        </details>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Revenue Offices */}
+                  <div>
+                    <h2 className="font-semibold text-gray-700 mb-3 pb-2 border-b">Revenue Offices</h2>
+                    <div className="space-y-4">
+                      {/* SRO Information */}
+                      <div>
+                        <div className="grid grid-cols-2 py-1">
+                          <span className="text-gray-600">SRO</span>
+                          <span className="text-right font-medium">{locationInfo.revenueOffices.SRO}</span>
+                        </div>
+                        <div className="grid grid-cols-2 py-1">
+                          <span className="text-gray-600">Address</span>
+                          <span className="text-right text-sm">{locationInfo.revenueOffices['SRO Address']}</span>
+                        </div>
+                        {locationInfo.revenueOffices['SRO Maps Link'] && (
+                          <div className="text-right mt-1">
+                            <a 
+                              href={locationInfo.revenueOffices['SRO Maps Link']} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:text-blue-800 text-sm flex items-center justify-end"
+                            >
+                              <ExternalLink size={14} className="mr-1" /> View on Google Maps
+                            </a>
+                          </div>
+                        )}
                       </div>
                       
-                      {/* HTML Description from Revenue Classification */}
-                      {locationInfo.revenueClassification.htmlDescription && (
-                        <div className="mt-4">
-                          <button 
-                            onClick={() => {
-                              const detailsElement = document.getElementById('revenue-details');
-                              if (detailsElement) {
-                                detailsElement.open = !detailsElement.open;
-                              }
-                            }}
-                            className="text-blue-600 hover:text-blue-800 text-sm flex items-center"
+                      {/* DRO Information */}
+                      <div>
+                        <div className="grid grid-cols-2 py-1">
+                          <span className="text-gray-600">DRO</span>
+                          <span className="text-right font-medium">{locationInfo.revenueOffices.DRO}</span>
+                        </div>
+                        <div className="grid grid-cols-2 py-1">
+                          <span className="text-gray-600">Address</span>
+                          <span className="text-right text-sm">{locationInfo.revenueOffices['DRO Address']}</span>
+                        </div>
+                        {locationInfo.revenueOffices['DRO Maps Link'] && (
+                          <div className="text-right mt-1">
+                            <a 
+                              href={locationInfo.revenueOffices['DRO Maps Link']} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:text-blue-800 text-sm flex items-center justify-end"
+                            >
+                              <ExternalLink size={14} className="mr-1" /> View on Google Maps
+                            </a>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Police Jurisdiction */}
+                  <div>
+                    <h2 className="font-semibold text-gray-700 mb-3 pb-2 border-b">Police Jurisdiction</h2>
+                    <div className="space-y-4">
+                      {/* Police Station Information */}
+                      <div>
+                        <div className="grid grid-cols-2 py-1">
+                          <span className="text-gray-600">Police station</span>
+                          <span className="text-right font-medium">{locationInfo.policeJurisdiction['Police station']}</span>
+                        </div>
+                        <div className="grid grid-cols-2 py-1">
+                          <span className="text-gray-600">Address</span>
+                          <span className="text-right text-sm">{locationInfo.policeJurisdiction['Police station Address']}</span>
+                        </div>
+                        {locationInfo.policeJurisdiction['Police station Maps Link'] && (
+                          <div className="text-right mt-1">
+                            <a 
+                              href={locationInfo.policeJurisdiction['Police station Maps Link']} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:text-blue-800 text-sm flex items-center justify-end"
+                            >
+                              <ExternalLink size={14} className="mr-1" /> View on Google Maps
+                            </a>
+                          </div>
+                        )}
+                      </div>
+                      
+                      {/* Traffic Police Station Information */}
+                      <div>
+                        <div className="grid grid-cols-2 py-1">
+                          <span className="text-gray-600">Traffic station</span>
+                          <span className="text-right font-medium">{locationInfo.policeJurisdiction['Traffic station']}</span>
+                        </div>
+                        <div className="grid grid-cols-2 py-1">
+                          <span className="text-gray-600">Address</span>
+                          <span className="text-right text-sm">{locationInfo.policeJurisdiction['Traffic station Address']}</span>
+                        </div>
+                        {locationInfo.policeJurisdiction['Traffic station Maps Link'] && (
+                          <div className="text-right mt-1">
+                            <a 
+                              href={locationInfo.policeJurisdiction['Traffic station Maps Link']} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:text-blue-800 text-sm flex items-center justify-end"
+                            >
+                              <ExternalLink size={14} className="mr-1" /> View on Google Maps
+                            </a>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {/* Mobile Info Panel (only visible on mobile) */}
+          {selectedLocation && isMobile && showInfoPanel && (
+            <div 
+              id="mobile-info-panel"
+              ref={infoPanelRef}
+              className="mobile-info-panel bg-white mobile-info-collapsed"
+              onClick={toggleMobileInfoPanel}
+            >
+              <div className="mobile-info-panel-header">
+                <div className="pill-indicator" />
+                <div className="flex justify-between items-center w-full">
+                  <h2 className="font-bold text-gray-800">Location Details</h2>
+                  <span className="text-gray-500 text-sm">Tap to view more</span>
+                </div>
+                <div className="text-sm text-gray-600 mt-1 truncate">
+                  {selectedLocation.display_name}
+                </div>
+              </div>
+              
+              <div className="p-4 space-y-6 overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+                {/* BBMP information */}
+                <div>
+                  <h2 className="font-semibold text-gray-700 mb-3 pb-2 border-b">BBMP information</h2>
+                  <div className="space-y-1">
+                    {Object.entries(locationInfo.bbmpInfo).map(([fieldName, value]) => (
+                      <div key={fieldName} className="grid grid-cols-2 py-1">
+                        <span className="text-gray-600">{fieldName}</span>
+                        <span className="text-right font-medium">{value}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                
+                {/* Revenue Classification */}
+                <div>
+                  <h2 className="font-semibold text-gray-700 mb-3 pb-2 border-b">Revenue Classification</h2>
+                  <div className="space-y-1">
+                    {Object.entries(locationInfo.revenueClassification)
+                      .filter(([key]) => key !== 'htmlDescription')
+                      .map(([fieldName, value]) => (
+                        <div key={fieldName} className="grid grid-cols-2 py-1">
+                          <span className="text-gray-600">{fieldName}</span>
+                          <span className="text-right font-medium">{value}</span>
+                        </div>
+                      ))
+                    }
+                  </div>
+                </div>
+                
+                {/* Revenue Offices */}
+                <div>
+                  <h2 className="font-semibold text-gray-700 mb-3 pb-2 border-b">Revenue Offices</h2>
+                  <div className="space-y-4">
+                    {/* SRO Information */}
+                    <div>
+                      <div className="grid grid-cols-2 py-1">
+                        <span className="text-gray-600">SRO</span>
+                        <span className="text-right font-medium">{locationInfo.revenueOffices.SRO}</span>
+                      </div>
+                      <div className="grid grid-cols-2 py-1">
+                        <span className="text-gray-600">Address</span>
+                        <span className="text-right text-sm">{locationInfo.revenueOffices['SRO Address']}</span>
+                      </div>
+                      {locationInfo.revenueOffices['SRO Maps Link'] && (
+                        <div className="text-right mt-1">
+                          <a 
+                            href={locationInfo.revenueOffices['SRO Maps Link']} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:text-blue-800 text-sm flex items-center justify-end"
                           >
-                            <Info size={14} className="mr-1" /> View detailed information
-                          </button>
-                          <details id="revenue-details" className="mt-2 text-xs border rounded p-2">
-                            <summary className="cursor-pointer font-medium">Revenue Classification Details</summary>
-                            <div 
-                              className="mt-2 overflow-auto max-h-60 text-xs"
-                              dangerouslySetInnerHTML={{ 
-                                __html: locationInfo.revenueClassification.htmlDescription 
-                              }} 
-                            />
-                          </details>
+                            <ExternalLink size={14} className="mr-1" /> View on Google Maps
+                          </a>
                         </div>
                       )}
                     </div>
                     
-                    {/* Revenue Offices */}
+                    {/* DRO Information */}
                     <div>
-                      <h2 className="font-semibold text-gray-700 mb-3 pb-2 border-b">Revenue Offices</h2>
-                      <div className="space-y-4">
-                        {/* SRO Information */}
-                        <div>
-                          <div className="grid grid-cols-2 py-1">
-                            <span className="text-gray-600">SRO</span>
-                            <span className="text-right font-medium">{locationInfo.revenueOffices.SRO}</span>
-                          </div>
-                          <div className="grid grid-cols-2 py-1">
-                            <span className="text-gray-600">Address</span>
-                            <span className="text-right text-sm">{locationInfo.revenueOffices['SRO Address']}</span>
-                          </div>
-                          {locationInfo.revenueOffices['SRO Maps Link'] && (
-                            <div className="text-right mt-1">
-                              <a 
-                                href={locationInfo.revenueOffices['SRO Maps Link']} 
-                                target="_blank" 
-                                rel="noopener noreferrer"
-                                className="text-blue-600 hover:text-blue-800 text-sm flex items-center justify-end"
-                              >
-                                <ExternalLink size={14} className="mr-1" /> View on Google Maps
-                              </a>
-                            </div>
-                          )}
-                        </div>
-                        
-                        {/* DRO Information */}
-                        <div>
-                          <div className="grid grid-cols-2 py-1">
-                            <span className="text-gray-600">DRO</span>
-                            <span className="text-right font-medium">{locationInfo.revenueOffices.DRO}</span>
-                          </div>
-                          <div className="grid grid-cols-2 py-1">
-                            <span className="text-gray-600">Address</span>
-                            <span className="text-right text-sm">{locationInfo.revenueOffices['DRO Address']}</span>
-                          </div>
-                          {locationInfo.revenueOffices['DRO Maps Link'] && (
-                            <div className="text-right mt-1">
-                              <a 
-                                href={locationInfo.revenueOffices['DRO Maps Link']} 
-                                target="_blank" 
-                                rel="noopener noreferrer"
-                                className="text-blue-600 hover:text-blue-800 text-sm flex items-center justify-end"
-                              >
-                                <ExternalLink size={14} className="mr-1" /> View on Google Maps
-                              </a>
-                            </div>
-                          )}
-                        </div>
+                      <div className="grid grid-cols-2 py-1">
+                        <span className="text-gray-600">DRO</span>
+                        <span className="text-right font-medium">{locationInfo.revenueOffices.DRO}</span>
                       </div>
+                      <div className="grid grid-cols-2 py-1">
+                        <span className="text-gray-600">Address</span>
+                        <span className="text-right text-sm">{locationInfo.revenueOffices['DRO Address']}</span>
+                      </div>
+                      {locationInfo.revenueOffices['DRO Maps Link'] && (
+                        <div className="text-right mt-1">
+                          <a 
+                            href={locationInfo.revenueOffices['DRO Maps Link']} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:text-blue-800 text-sm flex items-center justify-end"
+                          >
+                            <ExternalLink size={14} className="mr-1" /> View on Google Maps
+                          </a>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Police Jurisdiction */}
+                <div>
+                  <h2 className="font-semibold text-gray-700 mb-3 pb-2 border-b">Police Jurisdiction</h2>
+                  <div className="space-y-4">
+                    {/* Police Station Information */}
+                    <div>
+                      <div className="grid grid-cols-2 py-1">
+                        <span className="text-gray-600">Police station</span>
+                        <span className="text-right font-medium">{locationInfo.policeJurisdiction['Police station']}</span>
+                      </div>
+                      <div className="grid grid-cols-2 py-1">
+                        <span className="text-gray-600">Address</span>
+                        <span className="text-right text-sm">{locationInfo.policeJurisdiction['Police station Address']}</span>
+                      </div>
+                      {locationInfo.policeJurisdiction['Police station Maps Link'] && (
+                        <div className="text-right mt-1">
+                          <a 
+                            href={locationInfo.policeJurisdiction['Police station Maps Link']} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:text-blue-800 text-sm flex items-center justify-end"
+                          >
+                            <ExternalLink size={14} className="mr-1" /> View on Google Maps
+                          </a>
+                        </div>
+                      )}
                     </div>
                     
-                    {/* Police Jurisdiction */}
+                    {/* Traffic Police Station Information */}
                     <div>
-                      <h2 className="font-semibold text-gray-700 mb-3 pb-2 border-b">Police Jurisdiction</h2>
-                      <div className="space-y-4">
-                        {/* Police Station Information */}
-                        <div>
-                          <div className="grid grid-cols-2 py-1">
-                            <span className="text-gray-600">Police station</span>
-                            <span className="text-right font-medium">{locationInfo.policeJurisdiction['Police station']}</span>
-                          </div>
-                          <div className="grid grid-cols-2 py-1">
-                            <span className="text-gray-600">Address</span>
-                            <span className="text-right text-sm">{locationInfo.policeJurisdiction['Police station Address']}</span>
-                          </div>
-                          {locationInfo.policeJurisdiction['Police station Maps Link'] && (
-                            <div className="text-right mt-1">
-                              <a 
-                                href={locationInfo.policeJurisdiction['Police station Maps Link']} 
-                                target="_blank" 
-                                rel="noopener noreferrer"
-                                className="text-blue-600 hover:text-blue-800 text-sm flex items-center justify-end"
-                              >
-                                <ExternalLink size={14} className="mr-1" /> View on Google Maps
-                              </a>
-                            </div>
-                          )}
-                        </div>
-                        
-                        {/* Traffic Police Station Information */}
-                        <div>
-                          <div className="grid grid-cols-2 py-1">
-                            <span className="text-gray-600">Traffic station</span>
-                            <span className="text-right font-medium">{locationInfo.policeJurisdiction['Traffic station']}</span>
-                          </div>
-                          <div className="grid grid-cols-2 py-1">
-                            <span className="text-gray-600">Address</span>
-                            <span className="text-right text-sm">{locationInfo.policeJurisdiction['Traffic station Address']}</span>
-                          </div>
-                          {locationInfo.policeJurisdiction['Traffic station Maps Link'] && (
-                            <div className="text-right mt-1">
-                              <a 
-                                href={locationInfo.policeJurisdiction['Traffic station Maps Link']} 
-                                target="_blank" 
-                                rel="noopener noreferrer"
-                                className="text-blue-600 hover:text-blue-800 text-sm flex items-center justify-end"
-                              >
-                                <ExternalLink size={14} className="mr-1" /> View on Google Maps
-                              </a>
-                            </div>
-                          )}
-                        </div>
-                        
-                        
+                      <div className="grid grid-cols-2 py-1">
+                        <span className="text-gray-600">Traffic station</span>
+                        <span className="text-right font-medium">{locationInfo.policeJurisdiction['Traffic station']}</span>
                       </div>
+                      <div className="grid grid-cols-2 py-1">
+                        <span className="text-gray-600">Address</span>
+                        <span className="text-right text-sm">{locationInfo.policeJurisdiction['Traffic station Address']}</span>
+                      </div>
+                      {locationInfo.policeJurisdiction['Traffic station Maps Link'] && (
+                        <div className="text-right mt-1">
+                          <a 
+                            href={locationInfo.policeJurisdiction['Traffic station Maps Link']} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:text-blue-800 text-sm flex items-center justify-end"
+                          >
+                            <ExternalLink size={14} className="mr-1" /> View on Google Maps
+                          </a>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
+                
+                {/* Add 40px padding at bottom to ensure everything is visible when scrolling */}
+                <div className="h-10"></div>
               </div>
-            )}
-            
-            {/* Zoom notification */}
-            {zoomedLocation && (
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50">
-                <div className="bg-orange-500 text-white px-3 py-1 rounded-md shadow-md">
-                  <div className="absolute h-6 w-6 right-0 bottom-0 transform translate-x-3 translate-y-3">
-                    <div className="w-6 h-0.5 bg-orange-500 rotate-45 origin-left"></div>
-                  </div>
-                </div>
-              </div>
-            )}
-            
-            {/* Loading indicator for reverse geocoding */}
-            {isReverseGeocoding && (
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 bg-white bg-opacity-75 p-3 rounded-lg shadow-lg">
-                <div className="flex items-center">
-                  <Loader size={24} className="animate-spin mr-2 text-blue-500" />
-                  <span>Getting location info...</span>
-                </div>
-              </div>
-            )}
-            
-            {/* Map controls */}
-            <div className="leaflet-map-controls absolute top-4 right-4 flex flex-col gap-2">
-              <button 
-                className="bg-white p-2 rounded shadow hover:bg-gray-100"
-                onClick={zoomIn}
-              >+</button>
-              <button 
-                className="bg-white p-2 rounded shadow hover:bg-gray-100"
-                onClick={zoomOut}
-              >−</button>
             </div>
-  
-            {/* Attribution - Left bottom */}
-            <div className="map-attribution top-4 left-4 text-gray-700">
-              <div>
-                <span>Civic Compass</span>
-                <br />
-                <span className="text-gray-500">by ZenCitizen</span>
+          )}
+          
+          {/* Zoom notification */}
+          {zoomedLocation && (
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50">
+              <div className="bg-orange-500 text-white px-3 py-1 rounded-md shadow-md">
+                <div className="absolute h-6 w-6 right-0 bottom-0 transform translate-x-3 translate-y-3">
+                  <div className="w-6 h-0.5 bg-orange-500 rotate-45 origin-left"></div>
+                </div>
               </div>
+            </div>
+          )}
+          
+          {/* Loading indicator for reverse geocoding */}
+          {isReverseGeocoding && (
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 bg-white bg-opacity-75 p-3 rounded-lg shadow-lg">
+              <div className="flex items-center">
+                <Loader size={24} className="animate-spin mr-2 text-blue-500" />
+                <span>Getting location info...</span>
+              </div>
+            </div>
+          )}
+          
+          {/* Map controls */}
+          <div className="leaflet-map-controls absolute top-4 right-4 flex flex-col gap-2">
+            <button 
+              className="bg-white p-2 rounded shadow hover:bg-gray-100"
+              onClick={zoomIn}
+            >+</button>
+            <button 
+              className="bg-white p-2 rounded shadow hover:bg-gray-100"
+              onClick={zoomOut}
+            >−</button>
+          </div>
+
+          {/* Attribution - Left bottom */}
+          <div className="map-attribution bottom-4 left-4 text-gray-700">
+            <div>
+              <span>Civic Compass</span>
+              <br />
+              <span className="text-gray-500">by ZenCitizen</span>
             </div>
           </div>
         </div>
