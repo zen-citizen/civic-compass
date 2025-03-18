@@ -62,6 +62,7 @@ const BangaloreAddressMap = () => {
   const labelRef = useRef(null);
   const searchTimeoutRef = useRef(null);
   const infoPanelRef = useRef(null);
+  const [showTooltip, setShowTooltip] = useState(false);
 
   // Check if device is mobile
   useEffect(() => {
@@ -1377,11 +1378,28 @@ const BangaloreAddressMap = () => {
       <div className="w-full h-screen flex flex-col bg-white overflow-hidden">
         {/* Header Area (always at top) */}
         <div className="px-4 py-3 text-center">
-          <h1 className="text-lg md:text-xl font-semibold flex justify-center items-center gap-1">
+          <h1 className="text-xl md:text-2xl font-bold mb-1 text-blue-600">
+            Civic Compass
+            <span className="text-sm md:text-base font-medium text-gray-500 ml-2">by ZenCitizen</span>
+          </h1>
+          <h2 className="text-lg md:text-xl font-semibold flex justify-center items-center gap-1 mt-2">
             Find key details of 
             <br className="md:hidden" />
-            your address in Bangalore <Info size={16} className="text-gray-500" />
-          </h1>
+            your address in Bangalore 
+            <div className="relative inline-block">
+              <Info 
+                size={16} 
+                className="text-gray-500 cursor-help ml-1 hover:text-blue-500" 
+                onMouseEnter={() => setShowTooltip(true)}
+                onMouseLeave={() => setShowTooltip(false)}
+              />
+              {showTooltip && (
+                <div className="absolute z-[100] w-64 p-3 bg-white rounded-lg shadow-lg text-sm text-left text-gray-700 left-1/2 -translate-x-1/2 top-[calc(100%+5px)] border border-gray-200">
+                  This tool helps you discover information about your Bangalore address including BBMP Ward details, Revenue classifications, and Police jurisdictions.
+                </div>
+              )}
+            </div>
+          </h2>
           
           <div className="mt-4 max-w-md mx-auto">
             <div className="flex items-center gap-2">
@@ -1638,13 +1656,9 @@ const BangaloreAddressMap = () => {
               className="mobile-info-panel bg-white mobile-info-collapsed"
               onClick={toggleMobileInfoPanel}
             >
-              <div className="mobile-info-panel-header">
-                <div className="pill-indicator" />
-                <div className="flex justify-between items-center w-full">
-                  <h2 className="font-bold text-gray-800">Location Details</h2>
-                  <span className="text-gray-500 text-sm">Tap to view more</span>
-                </div>
-                <div className="text-sm text-gray-600 mt-1 truncate">
+              <div className="mobile-info-panel-header flex flex-col items-center">
+                <div className="pill-indicator w-8 h-1 bg-gray-300 rounded-full my-2" />
+                <div className="text-sm text-gray-600 mt-1 truncate w-full px-3 text-left">
                   {selectedLocation.display_name}
                 </div>
               </div>
@@ -1824,15 +1838,6 @@ const BangaloreAddressMap = () => {
               className="bg-white p-2 rounded shadow hover:bg-gray-100"
               onClick={zoomOut}
             >−</button>
-          </div>
-
-          {/* Attribution - Left bottom */}
-          <div className="map-attribution bottom-4 left-4 text-gray-700">
-            <div>
-              <span>Civic Compass</span>
-              <br />
-              <span className="text-gray-500">by ZenCitizen</span>
-            </div>
           </div>
         </div>
       </div>
