@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/static/css/main.1604fc47.css",
-    "main.js": "/static/js/main.854f73ff.js",
-    "static/js/453.efe6ab4a.chunk.js": "/static/js/453.efe6ab4a.chunk.js",
-    "index.html": "/index.html",
-    "main.1604fc47.css.map": "/static/css/main.1604fc47.css.map",
-    "main.854f73ff.js.map": "/static/js/main.854f73ff.js.map",
-    "453.efe6ab4a.chunk.js.map": "/static/js/453.efe6ab4a.chunk.js.map"
+    "main.css": "/civic-compass/static/css/main.1604fc47.css",
+    "main.js": "/civic-compass/static/js/main.c387dc7e.js",
+    "static/js/453.efe6ab4a.chunk.js": "/civic-compass/static/js/453.efe6ab4a.chunk.js",
+    "index.html": "/civic-compass/index.html",
+    "main.1604fc47.css.map": "/civic-compass/static/css/main.1604fc47.css.map",
+    "main.c387dc7e.js.map": "/civic-compass/static/js/main.c387dc7e.js.map",
+    "453.efe6ab4a.chunk.js.map": "/civic-compass/static/js/453.efe6ab4a.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.1604fc47.css",
-    "static/js/main.854f73ff.js"
+    "static/js/main.c387dc7e.js"
   ]
 }
