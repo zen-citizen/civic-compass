@@ -5,6 +5,13 @@ import BBMPInformation from '../layers/BBMPInformation_11.json'
 import Constituencies from '../layers/Constituencies_3.json'
 import RevenueOffices from '../layers/RevenueOffices_6.json'
 import RevenueClassification from '../layers/RevenueClassification_10.json'
+import bescomSectionBoundary from '../layers/bescom-section-boundary.json'
+import bescomDivisionBoundary from '../layers/bescom-division-boundary.json'
+import bescomSubdivisionBoundary from '../layers/bescom-subdivision-boundary.json'
+import bescomOffices from '../layers/bescom-offices.json'
+import bwssbDivisions from '../layers/bwssb_divisions.json'
+import bwssbSubDivisions from '../layers/bwssb_sub_divisions.json'
+import bwssbServiceStations from '../layers/bwssb_service_station_divisions.json'
 import sroLocations from '../data/sro_locs.json'
 import droLocations from '../data/dro_locs.json'
 import psLocations from '../data/ps_locs.json'
@@ -55,6 +62,21 @@ const BangaloreAddressMap = () => {
       'Traffic station Address': 'Loading...',
       'Police station Maps Link': null,
       'Traffic station Maps Link': null
+    },
+    bescomInfo: {
+      'Division': 'Loading...',
+      'Sub Division': 'Loading...',
+      'Section': 'Loading...',
+      'Office Name': 'Loading...',
+      'Office Address': 'Loading...',
+      'Office Maps Link': null
+    },
+    bwssbInfo: {
+      'Division': 'Loading...',
+      'Sub Division': 'Loading...',
+      'Service Station': 'Loading...',
+      'Office Address': 'Loading...',
+      'Office Maps Link': null
     }
   });
   
@@ -76,9 +98,11 @@ const BangaloreAddressMap = () => {
     bbmpInfo: true, // Open by default
     revenueClassification: false,
     revenueOffices: false,
-    policeJurisdiction: false
+    policeJurisdiction: false,
+    bescomInfo: false,
+    bwssbInfo: false
   });
-
+ // Also open by default
   // Then add a toggle function for accordions
   const toggleAccordion = (section) => {
     setOpenAccordions(prev => ({
@@ -152,6 +176,13 @@ const BangaloreAddressMap = () => {
     console.log("DRO Locations data loaded:", droLocations);
     console.log("Police Station Locations data loaded:", psLocations);
     console.log("Traffic Police Station Locations data loaded:", tpLocations);
+    console.log("BESCOM Division Boundary data loaded:", bescomDivisionBoundary);
+    console.log("BESCOM Subdivision Boundary data loaded:", bescomSubdivisionBoundary);
+    console.log("BESCOM Section Boundary data loaded:", bescomSectionBoundary);
+    console.log("BESCOM Offices data loaded:", bescomOffices);
+    console.log("BWSSB Divisions data loaded:", bwssbDivisions);
+    console.log("BWSSB Sub Divisions data loaded:", bwssbSubDivisions);
+    console.log("BWSSB Service Stations data loaded:", bwssbServiceStations);
     
     // Bangalore coordinates
     const bangaloreCoordinates = [12.9716, 77.5946]; // [latitude, longitude]
@@ -886,6 +917,369 @@ const BangaloreAddressMap = () => {
     };
   };
 
+  // Function to find BESCOM information for a location
+  const findBescomInfo = (lat, lng) => {
+    if (!bescomDivisionBoundary || !bescomDivisionBoundary.features ||
+        !bescomSubdivisionBoundary || !bescomSubdivisionBoundary.features ||
+        !bescomSectionBoundary || !bescomSectionBoundary.features ||
+        !bescomOffices || !bescomOffices.features) {
+      return {
+        'Division': "Unknown",
+        'Sub Division': "Unknown",
+        'Section': "Unknown",
+        'Office Name': "Unknown",
+        'Office Address': "Unknown",
+        'Office Maps Link': null
+      };
+    }
+
+    const L = window.L;
+    if (!L) return {
+      'Division': "Unknown",
+      'Sub Division': "Unknown",
+      'Section': "Unknown",
+      'Office Name': "Unknown",
+      'Office Address': "Unknown",
+      'Office Maps Link': null
+    };
+
+    // Create a point for the clicked location
+    const point = L.latLng(lat, lng);
+    
+    // Find the BESCOM division
+    let divisionName = "Unknown";
+    for (const feature of bescomDivisionBoundary.features) {
+      if (feature.geometry && (feature.geometry.type === "Polygon" || feature.geometry.type === "MultiPolygon")) {
+        try {
+          let polygon = null;
+          let polygonLatLngs = [];
+          
+          if (feature.geometry.type === "Polygon") {
+            // Single polygon
+            const polygonCoords = feature.geometry.coordinates[0].map(coord => [coord[1], coord[0]]);
+            polygon = L.polygon(polygonCoords);
+            polygonLatLngs = polygon.getLatLngs()[0]; // Get array of LatLng objects
+          } else if (feature.geometry.type === "MultiPolygon") {
+            // Multiple polygons
+            const multiPolygonCoords = feature.geometry.coordinates.map(poly => {
+              // Each polygon in the multi-polygon
+              return poly[0].map(coord => [coord[1], coord[0]]);
+            });
+            polygon = L.polygon(multiPolygonCoords);
+            
+            // For MultiPolygon, we need to check each ring
+            polygonLatLngs = polygon.getLatLngs().flat();
+          }
+          
+          // First do a quick bounds check (for performance)
+          if (polygon && polygon.getBounds().contains(point)) {
+            // Then do a precise point-in-polygon check
+            const isInside = isMarkerInsidePolygon(point, polygonLatLngs);
+            
+            if (isInside) {
+              divisionName = feature.properties.DivisionName || "Unknown";
+              console.log("Found BESCOM Division:", divisionName, feature.properties);
+              break;
+            }
+          }
+        } catch (error) {
+          console.error('Error checking BESCOM division polygon:', error);
+        }
+      }
+    }
+    
+    // Find the BESCOM subdivision
+    let subdivisionName = "Unknown";
+    for (const feature of bescomSubdivisionBoundary.features) {
+      if (feature.geometry && (feature.geometry.type === "Polygon" || feature.geometry.type === "MultiPolygon")) {
+        try {
+          let polygon = null;
+          let polygonLatLngs = [];
+          
+          if (feature.geometry.type === "Polygon") {
+            // Single polygon
+            const polygonCoords = feature.geometry.coordinates[0].map(coord => [coord[1], coord[0]]);
+            polygon = L.polygon(polygonCoords);
+            polygonLatLngs = polygon.getLatLngs()[0]; // Get array of LatLng objects
+          } else if (feature.geometry.type === "MultiPolygon") {
+            // Multiple polygons
+            const multiPolygonCoords = feature.geometry.coordinates.map(poly => {
+              // Each polygon in the multi-polygon
+              return poly[0].map(coord => [coord[1], coord[0]]);
+            });
+            polygon = L.polygon(multiPolygonCoords);
+            
+            // For MultiPolygon, we need to check each ring
+            polygonLatLngs = polygon.getLatLngs().flat();
+          }
+          
+          // First do a quick bounds check (for performance)
+          if (polygon && polygon.getBounds().contains(point)) {
+            // Then do a precise point-in-polygon check
+            const isInside = isMarkerInsidePolygon(point, polygonLatLngs);
+            
+            if (isInside) {
+              subdivisionName = feature.properties.Sub_DivisionName || "Unknown";
+              console.log("Found BESCOM Subdivision:", subdivisionName, feature.properties);
+              break;
+            }
+          }
+        } catch (error) {
+          console.error('Error checking BESCOM subdivision polygon:', error);
+        }
+      }
+    }
+    
+    // Find the BESCOM section
+    let sectionName = "Unknown";
+    for (const feature of bescomSectionBoundary.features) {
+      if (feature.geometry && (feature.geometry.type === "Polygon" || feature.geometry.type === "MultiPolygon")) {
+        try {
+          let polygon = null;
+          let polygonLatLngs = [];
+          
+          if (feature.geometry.type === "Polygon") {
+            // Single polygon
+            const polygonCoords = feature.geometry.coordinates[0].map(coord => [coord[1], coord[0]]);
+            polygon = L.polygon(polygonCoords);
+            polygonLatLngs = polygon.getLatLngs()[0]; // Get array of LatLng objects
+          } else if (feature.geometry.type === "MultiPolygon") {
+            // Multiple polygons
+            const multiPolygonCoords = feature.geometry.coordinates.map(poly => {
+              // Each polygon in the multi-polygon
+              return poly[0].map(coord => [coord[1], coord[0]]);
+            });
+            polygon = L.polygon(multiPolygonCoords);
+            
+            // For MultiPolygon, we need to check each ring
+            polygonLatLngs = polygon.getLatLngs().flat();
+          }
+          
+          // First do a quick bounds check (for performance)
+          if (polygon && polygon.getBounds().contains(point)) {
+            // Then do a precise point-in-polygon check
+            const isInside = isMarkerInsidePolygon(point, polygonLatLngs);
+            
+            if (isInside) {
+              sectionName = feature.properties.SectionName || "Unknown";
+              console.log("Found BESCOM Section:", sectionName, feature.properties);
+              break;
+            }
+          }
+        } catch (error) {
+          console.error('Error checking BESCOM section polygon:', error);
+        }
+      }
+    }
+    
+    // Find the nearest BESCOM office
+    let officeName = "Unknown";
+    let officeAddress = "Unknown";
+    let officeMapsLink = null;
+    
+    // Find the nearest BESCOM office (using point features)
+    if (bescomOffices.features.length > 0) {
+      let nearestOffice = null;
+      let shortestDistance = Infinity;
+      
+      for (const feature of bescomOffices.features) {
+        if (feature.geometry && feature.geometry.type === "Point") {
+          try {
+            const officeCoords = feature.geometry.coordinates;
+            const officeLatLng = L.latLng(officeCoords[1], officeCoords[0]);
+            
+            // Calculate distance
+            const distance = point.distanceTo(officeLatLng);
+            
+            if (distance < shortestDistance) {
+              shortestDistance = distance;
+              nearestOffice = feature;
+            }
+          } catch (error) {
+            console.error('Error calculating distance to BESCOM office:', error);
+          }
+        }
+      }
+      
+      if (nearestOffice) {
+        officeName = nearestOffice.properties.ESCOM_OfficeName || "Unknown";
+        console.log("Found nearest BESCOM Office:", officeName, nearestOffice.properties);
+        // Placeholder for address and maps link - would need actual data source
+        officeAddress = "Address not available";
+      }
+    }
+    
+    return {
+      'Division': divisionName,
+      'Sub Division': subdivisionName,
+      'Section': sectionName,
+      'Office Name': officeName,
+      'Office Address': officeAddress,
+      'Office Maps Link': officeMapsLink
+    };
+  };
+
+  // Function to find BWSSB information for a location
+  const findBwssbInfo = (lat, lng) => {
+    if (!bwssbDivisions || !bwssbDivisions.features ||
+        !bwssbSubDivisions || !bwssbSubDivisions.features ||
+        !bwssbServiceStations || !bwssbServiceStations.features) {
+      return {
+        'Division': "Unknown",
+        'Sub Division': "Unknown",
+        'Service Station': "Unknown",
+        'Office Address': "Unknown",
+        'Office Maps Link': null
+      };
+    }
+
+    const L = window.L;
+    if (!L) return {
+      'Division': "Unknown",
+      'Sub Division': "Unknown",
+      'Service Station': "Unknown",
+      'Office Address': "Unknown",
+      'Office Maps Link': null
+    };
+
+    // Create a point for the clicked location
+    const point = L.latLng(lat, lng);
+    
+    // Find the BWSSB division
+    let divisionName = "Unknown";
+    for (const feature of bwssbDivisions.features) {
+      if (feature.geometry && (feature.geometry.type === "Polygon" || feature.geometry.type === "MultiPolygon")) {
+        try {
+          let polygon = null;
+          let polygonLatLngs = [];
+          
+          if (feature.geometry.type === "Polygon") {
+            // Single polygon
+            const polygonCoords = feature.geometry.coordinates[0].map(coord => [coord[1], coord[0]]);
+            polygon = L.polygon(polygonCoords);
+            polygonLatLngs = polygon.getLatLngs()[0]; // Get array of LatLng objects
+          } else if (feature.geometry.type === "MultiPolygon") {
+            // Multiple polygons
+            const multiPolygonCoords = feature.geometry.coordinates.map(poly => {
+              // Each polygon in the multi-polygon
+              return poly[0].map(coord => [coord[1], coord[0]]);
+            });
+            polygon = L.polygon(multiPolygonCoords);
+            
+            // For MultiPolygon, we need to check each ring
+            polygonLatLngs = polygon.getLatLngs().flat();
+          }
+          
+          // First do a quick bounds check (for performance)
+          if (polygon && polygon.getBounds().contains(point)) {
+            // Then do a precise point-in-polygon check
+            const isInside = isMarkerInsidePolygon(point, polygonLatLngs);
+            
+            if (isInside) {
+              divisionName = feature.properties.DivisionName || "Unknown";
+              console.log("Found BWSSB Division:", divisionName, feature.properties);
+              break;
+            }
+          }
+        } catch (error) {
+          console.error('Error checking BWSSB division polygon:', error);
+        }
+      }
+    }
+    
+    // Find the BWSSB subdivision
+    let subdivisionName = "Unknown";
+    for (const feature of bwssbSubDivisions.features) {
+      if (feature.geometry && (feature.geometry.type === "Polygon" || feature.geometry.type === "MultiPolygon")) {
+        try {
+          let polygon = null;
+          let polygonLatLngs = [];
+          
+          if (feature.geometry.type === "Polygon") {
+            // Single polygon
+            const polygonCoords = feature.geometry.coordinates[0].map(coord => [coord[1], coord[0]]);
+            polygon = L.polygon(polygonCoords);
+            polygonLatLngs = polygon.getLatLngs()[0]; // Get array of LatLng objects
+          } else if (feature.geometry.type === "MultiPolygon") {
+            // Multiple polygons
+            const multiPolygonCoords = feature.geometry.coordinates.map(poly => {
+              // Each polygon in the multi-polygon
+              return poly[0].map(coord => [coord[1], coord[0]]);
+            });
+            polygon = L.polygon(multiPolygonCoords);
+            
+            // For MultiPolygon, we need to check each ring
+            polygonLatLngs = polygon.getLatLngs().flat();
+          }
+          
+          // First do a quick bounds check (for performance)
+          if (polygon && polygon.getBounds().contains(point)) {
+            // Then do a precise point-in-polygon check
+            const isInside = isMarkerInsidePolygon(point, polygonLatLngs);
+            
+            if (isInside) {
+              subdivisionName = feature.properties.Sub_DivisionName || "Unknown";
+              console.log("Found BWSSB Subdivision:", subdivisionName, feature.properties);
+              break;
+            }
+          }
+        } catch (error) {
+          console.error('Error checking BWSSB subdivision polygon:', error);
+        }
+      }
+    }
+    
+    // Find the BWSSB service station
+    let serviceStationName = "Unknown";
+    for (const feature of bwssbServiceStations.features) {
+      if (feature.geometry && (feature.geometry.type === "Polygon" || feature.geometry.type === "MultiPolygon")) {
+        try {
+          let polygon = null;
+          let polygonLatLngs = [];
+          
+          if (feature.geometry.type === "Polygon") {
+            // Single polygon
+            const polygonCoords = feature.geometry.coordinates[0].map(coord => [coord[1], coord[0]]);
+            polygon = L.polygon(polygonCoords);
+            polygonLatLngs = polygon.getLatLngs()[0]; // Get array of LatLng objects
+          } else if (feature.geometry.type === "MultiPolygon") {
+            // Multiple polygons
+            const multiPolygonCoords = feature.geometry.coordinates.map(poly => {
+              // Each polygon in the multi-polygon
+              return poly[0].map(coord => [coord[1], coord[0]]);
+            });
+            polygon = L.polygon(multiPolygonCoords);
+            
+            // For MultiPolygon, we need to check each ring
+            polygonLatLngs = polygon.getLatLngs().flat();
+          }
+          
+          // First do a quick bounds check (for performance)
+          if (polygon && polygon.getBounds().contains(point)) {
+            // Then do a precise point-in-polygon check
+            const isInside = isMarkerInsidePolygon(point, polygonLatLngs);
+            
+            if (isInside) {
+              serviceStationName = feature.properties.Service_StationName || "Unknown";
+              console.log("Found BWSSB Service Station:", serviceStationName, feature.properties);
+              break;
+            }
+          }
+        } catch (error) {
+          console.error('Error checking BWSSB service station polygon:', error);
+        }
+      }
+    }
+    
+    return {
+      'Division': divisionName,
+      'Sub Division': subdivisionName,
+      'Service Station': serviceStationName,
+      'Office Address': "Address not available", // Placeholder
+      'Office Maps Link': null // Placeholder
+    };
+  };
+
   // Handle map click for reverse geocoding
   const handleMapClick = async (e) => {
     if (!mapInstanceRef.current) return;
@@ -940,7 +1334,9 @@ const BangaloreAddressMap = () => {
         policeJurisdiction: {
           ...policeStation,
           'Electicity station': 'Calculated from GeoJSON'
-        }
+        },
+        bescomInfo: findBescomInfo(lat, lng),
+        bwssbInfo: findBwssbInfo(lat, lng)
       });
       
       // Add marker to map without changing zoom or center
@@ -971,7 +1367,9 @@ const BangaloreAddressMap = () => {
         policeJurisdiction: {
           ...policeStation,
           'Electicity station': 'Unknown'
-        }
+        },
+        bescomInfo: findBescomInfo(lat, lng),
+        bwssbInfo: findBwssbInfo(lat, lng)
       });
       
       zoomToLocation(lat, lng, `Location at ${lat.toFixed(5)}, ${lng.toFixed(5)}`);
@@ -1041,7 +1439,9 @@ const BangaloreAddressMap = () => {
             policeJurisdiction: {
               ...policeStation,
               'Electicity station': 'Calculated from GeoJSON'
-            }
+            },
+            bescomInfo: findBescomInfo(latitude, longitude),
+            bwssbInfo: findBwssbInfo(latitude, longitude)
           });
           
           // Try to reverse geocode the location
@@ -1069,7 +1469,9 @@ const BangaloreAddressMap = () => {
               policeJurisdiction: {
                 ...policeStation,
                 'Electicity station': 'Calculated from GeoJSON'
-              }
+              },
+              bescomInfo: findBescomInfo(latitude, longitude),
+              bwssbInfo: findBwssbInfo(latitude, longitude)
             });
             setShowInfoPanel(true); // Always show info panel
           })
@@ -1178,7 +1580,9 @@ const BangaloreAddressMap = () => {
         policeJurisdiction: {
           ...policeStation,
           'Electicity station': 'Calculated from GeoJSON'
-        }
+        },
+        bescomInfo: findBescomInfo(latitude, longitude),
+        bwssbInfo: findBwssbInfo(latitude, longitude)
       });
       
       // When selecting from search results, DO center the map on the location
@@ -1295,7 +1699,9 @@ const BangaloreAddressMap = () => {
           ...policeStation,
           'Electicity station': 'Calculated from GeoJSON'
         },
-        constituency: constituencyInfo
+        constituency: constituencyInfo,
+        bescomInfo: findBescomInfo(lat, lng),
+        bwssbInfo: findBwssbInfo(lat, lng)
       });
       
       // Show the info panel
@@ -1439,7 +1845,9 @@ const BangaloreAddressMap = () => {
           ...policeStation,
           'Electicity station': 'Calculated from GeoJSON'
         },
-        constituency: constituencyInfo
+        constituency: constituencyInfo,
+        bescomInfo: findBescomInfo(lat, lng),
+        bwssbInfo: findBwssbInfo(lat, lng)
       });
       
       // Show the info panel
@@ -1923,8 +2331,8 @@ const BangaloreAddressMap = () => {
                   </div>
                   
                   {/* Police Jurisdiction - Accordion */}
-                  <div>
-                    <button 
+                  <div className="border-b border-gray-200">                    
+                  <button 
                       onClick={() => toggleAccordion('policeJurisdiction')}
                       className="w-full flex justify-between items-center my-3 text-left focus:outline-none"
                     >
@@ -1990,6 +2398,72 @@ const BangaloreAddressMap = () => {
                               </div>
                             </div>
                           </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* BESCOM Information - Accordion */}
+                  <div className="border-b border-gray-200">
+                    <button 
+                      onClick={() => toggleAccordion('bescomInfo')}
+                      className="w-full flex justify-between items-center my-3 text-left focus:outline-none"
+                    >
+                      <h2 className="font-bold text-gray-800">Electricity (BESCOM)</h2>
+                      <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        className={`h-5 w-5 transform transition-transform ${openAccordions.bescomInfo ? 'rotate-180' : ''}`} 
+                        fill="none" 
+                        viewBox="0 0 24 24" 
+                        stroke="currentColor"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+                    
+                    {openAccordions.bescomInfo && (
+                      <div className="my-3">
+                        <div className="space-y-1">
+                          {/* <p className="text-sm text-gray-600 mb-2">Bangalore Electricity Supply Company (BESCOM) is the electric power distribution company serving Bangalore and surrounding areas.</p> */}
+                          {Object.entries(locationInfo.bescomInfo).map(([fieldName, value]) => (
+                            <div key={fieldName} className="grid grid-cols-2 py-1">
+                              <span className="text-gray-600">{fieldName}</span>
+                              <span className="font-medium">{value}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* BWSSB Information - Accordion */}
+                  <div>
+                    <button 
+                      onClick={() => toggleAccordion('bwssbInfo')}
+                      className="w-full flex justify-between items-center my-3 text-left focus:outline-none"
+                    >
+                      <h2 className="font-bold text-gray-800">Water Supply (BWSSB)</h2>
+                      <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        className={`h-5 w-5 transform transition-transform ${openAccordions.bwssbInfo ? 'rotate-180' : ''}`} 
+                        fill="none" 
+                        viewBox="0 0 24 24" 
+                        stroke="currentColor"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+                    
+                    {openAccordions.bwssbInfo && (
+                      <div className="my-3">
+                        <div className="space-y-1">
+                          {/* <p className="text-sm text-gray-600 mb-2">Bangalore Water Supply and Sewerage Board (BWSSB) is the water supply and sewerage board serving Bangalore and surrounding areas.</p> */}
+                          {Object.entries(locationInfo.bwssbInfo).map(([fieldName, value]) => (
+                            <div key={fieldName} className="grid grid-cols-2 py-1">
+                              <span className="text-gray-600">{fieldName}</span>
+                              <span className="font-medium">{value}</span>
+                            </div>
+                          ))}
                         </div>
                       </div>
                     )}
@@ -2237,6 +2711,72 @@ const BangaloreAddressMap = () => {
                             </div>
                           </div>
                         </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                
+                {/* BESCOM Information - Accordion - Removed border-b class */}
+                <div>
+                  <button 
+                    onClick={() => toggleAccordion('bescomInfo')}
+                    className="w-full flex justify-between items-center my-3 text-left focus:outline-none"
+                  >
+                    <h2 className="font-bold text-gray-800">Electricity (BESCOM) Information</h2>
+                    <svg 
+                      xmlns="http://www.w3.org/2000/svg" 
+                      className={`h-5 w-5 transform transition-transform ${openAccordions.bescomInfo ? 'rotate-180' : ''}`} 
+                      fill="none" 
+                      viewBox="0 0 24 24" 
+                      stroke="currentColor"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  
+                  {openAccordions.bescomInfo && (
+                    <div className="my-3">
+                      <div className="space-y-1">
+                        <p className="text-sm text-gray-600 mb-2">Bangalore Electricity Supply Company (BESCOM) is the electric power distribution company serving Bangalore and surrounding areas.</p>
+                        {Object.entries(locationInfo.bescomInfo).map(([fieldName, value]) => (
+                          <div key={fieldName} className="grid grid-cols-2 py-1">
+                            <span className="text-gray-600">{fieldName}</span>
+                            <span className="font-medium">{value}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+                
+                {/* BWSSB Information - Accordion - Removed border-b class */}
+                <div>
+                  <button 
+                    onClick={() => toggleAccordion('bwssbInfo')}
+                    className="w-full flex justify-between items-center my-3 text-left focus:outline-none"
+                  >
+                    <h2 className="font-bold text-gray-800">Water Supply (BWSSB) Information</h2>
+                    <svg 
+                      xmlns="http://www.w3.org/2000/svg" 
+                      className={`h-5 w-5 transform transition-transform ${openAccordions.bwssbInfo ? 'rotate-180' : ''}`} 
+                      fill="none" 
+                      viewBox="0 0 24 24" 
+                      stroke="currentColor"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  
+                  {openAccordions.bwssbInfo && (
+                    <div className="my-3">
+                      <div className="space-y-1">
+                        <p className="text-sm text-gray-600 mb-2">Bangalore Water Supply and Sewerage Board (BWSSB) is the water supply and sewerage board serving Bangalore and surrounding areas.</p>
+                        {Object.entries(locationInfo.bwssbInfo).map(([fieldName, value]) => (
+                          <div key={fieldName} className="grid grid-cols-2 py-1">
+                            <span className="text-gray-600">{fieldName}</span>
+                            <span className="font-medium">{value}</span>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   )}
