@@ -1617,7 +1617,7 @@ const BangaloreAddressMap = () => {
     }
   };
 
-  // Search for locations using Nominatim
+  // Search for locations using photon
   const searchLocations = async (query) => {
     if (!query || query.length < 2) {
       setSearchResults([]);
@@ -1627,23 +1627,44 @@ const BangaloreAddressMap = () => {
     
     try {
       setIsSearching(true);
-      // Add "Bangalore" to the search query to focus results
-      const searchUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query + ' Bangalore')}&limit=5`;
+      // Photon API with Bangalore as a bias point
+      // The lon,lat coordinates are for Bangalore center
+      const searchUrl = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=5&lang=en&lon=77.5946&lat=12.9716`;
       
-      const response = await fetch(searchUrl, {
-        headers: {
-          'Accept-Language': 'en-US,en',
-          'User-Agent': 'CivicCompassWebApp'
-        }
-      });
+      const response = await fetch(searchUrl);
       
       if (!response.ok) {
         throw new Error('Search failed');
       }
       
       const data = await response.json();
-      setSearchResults(data);
-      setShowSuggestions(data.length > 0);
+      
+      const transformedResults = data.features.map(feature => {
+        const { properties, geometry } = feature;
+        
+        const parts = [];
+        if (properties.name) parts.push(properties.name);
+        if (properties.street) parts.push(properties.street);
+        if (properties.city) parts.push(properties.city);
+        if (properties.state) parts.push(properties.state);
+        if (properties.country) parts.push(properties.country);
+        
+        const display_name = parts.join(', ');
+        
+        return {
+          display_name,
+          lat: geometry.coordinates[1].toString(), // Photon uses [lon, lat] format
+          lon: geometry.coordinates[0].toString(),
+          address: properties,
+          // Add any additional properties needed for compatibility
+          osm_type: properties.osm_type || '',
+          osm_id: properties.osm_id || '',
+          type: properties.type || ''
+        };
+      });
+      
+      setSearchResults(transformedResults);
+      setShowSuggestions(transformedResults.length > 0);
     } catch (error) {
       console.error('Search error:', error);
       setSearchResults([]);
@@ -2010,7 +2031,7 @@ const BangaloreAddressMap = () => {
     // Search with a tiny delay to avoid too many requests
     searchTimeoutRef.current = setTimeout(() => {
       searchLocations(value);
-    }, 150);
+    }, 350);
   };
 
   // Handle form submission
