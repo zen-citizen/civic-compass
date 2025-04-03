@@ -12,6 +12,7 @@ import bescomOffices from '../layers/bescom-offices.json'
 import bwssbDivisions from '../layers/bwssb_divisions.json'
 import bwssbSubDivisions from '../layers/bwssb_sub_divisions.json'
 import bwssbServiceStations from '../layers/bwssb_service_station_divisions.json'
+import bdaLayoutBoundaries from '../layers/bda_layout_boundaries.json'
 import sroLocations from '../data/sro_locs.json'
 import droLocations from '../data/dro_locs.json'
 import psLocations from '../data/ps_locs.json'
@@ -33,50 +34,69 @@ const BangaloreAddressMap = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [locationInfo, setLocationInfo] = useState({
     bbmpInfo: {
-      Zone: 'Loading...',
-      Division: 'Loading...',
-      Subdivision: 'Loading...',
-      'Ward name': 'Loading...',
-      'Ward number': 'Loading...'
+      'Zone': 'Unknown',
+      'Division': 'Unknown',
+      'Subdivision': 'Unknown',
+      'Ward name': 'Unknown',
+      'Ward number': 'Unknown'
     },
     revenueClassification: {
-      District: 'Loading...',
-      Taluk: 'Loading...',
-      Hobli: 'Loading...',
-      Village: 'Loading...',
-      htmlDescription: null
+      'Hobli': 'Unknown',
+      'Taluk': 'Unknown',
+      'District': 'Unknown',
+      'Land zone': 'Unknown'
     },
     revenueOffices: {
-      SRO: 'Loading...',
-      DRO: 'Loading...',
+      'Tahsildar Office': 'Unknown',
+      'Tahsildar Office Address': 'Loading...',
+      'Tahsildar Office Maps Link': null,
+      'SRO': 'Unknown',
       'SRO Address': 'Loading...',
-      'DRO Address': 'Loading...',
       'SRO Maps Link': null,
+      'DRO': 'Unknown',
+      'DRO Address': 'Loading...',
       'DRO Maps Link': null
     },
     policeJurisdiction: {
-      'Police station': 'Loading...',
-      'Traffic station': 'Loading...',
-      'Electicity station': 'Loading...',
-      'Police station Address': 'Loading...',
-      'Traffic station Address': 'Loading...',
+      'Police station': 'Unknown',
+      'Traffic station': 'Unknown',
+      'Police station Address': 'Unknown',
+      'Traffic station Address': 'Unknown',
       'Police station Maps Link': null,
-      'Traffic station Maps Link': null
+      'Traffic station Maps Link': null,
+      'Electicity station': 'Unknown'
     },
     bescomInfo: {
-      'Division': 'Loading...',
-      'Sub Division': 'Loading...',
-      'Section': 'Loading...',
-      'Office Name': 'Loading...',
-      'Office Address': 'Loading...',
-      'Office Maps Link': null
+      'Division': 'Unknown',
+      'Division Office': 'Unknown',
+      'Division Address': 'Loading...',
+      'Division Contact': 'Loading...',
+      'Subdivision': 'Unknown',
+      'Subdivision Office': 'Unknown',
+      'Subdivision Address': 'Loading...',
+      'Subdivision Contact': 'Loading...',
+      'Section': 'Unknown',
+      'Section Office': 'Unknown',
+      'Section Address': 'Loading...',
+      'Section Contact': 'Loading...'
     },
     bwssbInfo: {
-      'Division': 'Loading...',
-      'Sub Division': 'Loading...',
-      'Service Station': 'Loading...',
-      'Office Address': 'Loading...',
-      'Office Maps Link': null
+      'Division': 'Unknown',
+      'Division Office': 'Unknown',
+      'Division Address': 'Loading...',
+      'Division Contact': 'Loading...',
+      'Subdivision': 'Unknown',
+      'Subdivision Office': 'Unknown',
+      'Subdivision Address': 'Loading...',
+      'Subdivision Contact': 'Loading...',
+      'Service Station': 'Unknown',
+      'Service Station Office': 'Unknown',
+      'Service Station Address': 'Loading...',
+      'Service Station Contact': 'Loading...'
+    },
+    bdaInfo: {
+      'BDA Layout Name': "Unknown",
+      'BDA Layout Number': "Unknown"
     }
   });
   
@@ -100,7 +120,8 @@ const BangaloreAddressMap = () => {
     revenueOffices: false,
     policeJurisdiction: false,
     bescomInfo: false,
-    bwssbInfo: false
+    bwssbInfo: false,
+    bdaInfo: false // Add BDA info accordion section
   });
  // Also open by default
   // Then add a toggle function for accordions
@@ -1280,6 +1301,78 @@ const BangaloreAddressMap = () => {
     };
   };
 
+  // Function to find BDA (Bangalore Development Authority) information for a location
+  const findBdaInfo = (lat, lng) => {
+    // Default return object with missing data
+    const defaultInfo = {
+      'BDA Layout Name': "Unknown",
+      'BDA Layout Number': "Unknown"
+    };
+    
+    if (!bdaLayoutBoundaries || !bdaLayoutBoundaries.features) {
+      return defaultInfo;
+    }
+
+    const L = window.L;
+    if (!L) return defaultInfo;
+
+    // Create a point for the clicked location
+    const point = L.latLng(lat, lng);
+    
+    // Log the first feature to see its properties structure (only once)
+    if (bdaLayoutBoundaries.features.length > 0 && lng === 77.5946 && lat === 12.9716) {
+      // Only log for the initial Bangalore coordinates to avoid excessive logging
+      console.log("BDA Layout feature example:", bdaLayoutBoundaries.features[0]);
+    }
+    
+    // Check each BDA layout polygon
+    for (const feature of bdaLayoutBoundaries.features) {
+      if (feature.geometry && (feature.geometry.type === "Polygon" || feature.geometry.type === "MultiPolygon")) {
+        try {
+          let polygon = null;
+          let polygonLatLngs = [];
+          
+          if (feature.geometry.type === "Polygon") {
+            // Single polygon
+            const polygonCoords = feature.geometry.coordinates[0].map(coord => [coord[1], coord[0]]);
+            polygon = L.polygon(polygonCoords);
+            polygonLatLngs = polygon.getLatLngs()[0]; // Get array of LatLng objects
+          } else if (feature.geometry.type === "MultiPolygon") {
+            // Multiple polygons
+            const multiPolygonCoords = feature.geometry.coordinates.map(poly => {
+              // Each polygon in the multi-polygon
+              return poly[0].map(coord => [coord[1], coord[0]]);
+            });
+            polygon = L.polygon(multiPolygonCoords);
+            
+            // For MultiPolygon, we need to check each ring
+            polygonLatLngs = polygon.getLatLngs().flat();
+          }
+          
+          // First do a quick bounds check (for performance)
+          if (polygon && polygon.getBounds().contains(point)) {
+            // Then do a precise point-in-polygon check
+            const isInside = isMarkerInsidePolygon(point, polygonLatLngs);
+            
+            if (isInside) {
+              // Extract BDA layout information from properties
+              // Only use LAYOUT_NAME and LAYOUT_NO properties
+              return {
+                'BDA Layout Name': feature.properties.LAYOUT_NAME || "Unknown",
+                'BDA Layout Number': feature.properties.LAYOUT_NO || "Unknown"
+              };
+            }
+          }
+        } catch (error) {
+          console.error('Error checking BDA layout polygon:', error);
+        }
+      }
+    }
+    
+    // If no layout is found, return default info
+    return defaultInfo;
+  };
+
   // Handle map click for reverse geocoding
   const handleMapClick = async (e) => {
     if (!mapInstanceRef.current) return;
@@ -1336,7 +1429,8 @@ const BangaloreAddressMap = () => {
           'Electicity station': 'Calculated from GeoJSON'
         },
         bescomInfo: findBescomInfo(lat, lng),
-        bwssbInfo: findBwssbInfo(lat, lng)
+        bwssbInfo: findBwssbInfo(lat, lng),
+        bdaInfo: findBdaInfo(lat, lng)
       });
       
       // Add marker to map without changing zoom or center
@@ -1369,7 +1463,8 @@ const BangaloreAddressMap = () => {
           'Electicity station': 'Unknown'
         },
         bescomInfo: findBescomInfo(lat, lng),
-        bwssbInfo: findBwssbInfo(lat, lng)
+        bwssbInfo: findBwssbInfo(lat, lng),
+        bdaInfo: findBdaInfo(lat, lng)
       });
       
       zoomToLocation(lat, lng, `Location at ${lat.toFixed(5)}, ${lng.toFixed(5)}`);
@@ -1441,7 +1536,8 @@ const BangaloreAddressMap = () => {
               'Electicity station': 'Calculated from GeoJSON'
             },
             bescomInfo: findBescomInfo(latitude, longitude),
-            bwssbInfo: findBwssbInfo(latitude, longitude)
+            bwssbInfo: findBwssbInfo(latitude, longitude),
+            bdaInfo: findBdaInfo(latitude, longitude)
           });
           
           // Try to reverse geocode the location
@@ -1471,7 +1567,8 @@ const BangaloreAddressMap = () => {
                 'Electicity station': 'Calculated from GeoJSON'
               },
               bescomInfo: findBescomInfo(latitude, longitude),
-              bwssbInfo: findBwssbInfo(latitude, longitude)
+              bwssbInfo: findBwssbInfo(latitude, longitude),
+              bdaInfo: findBdaInfo(latitude, longitude)
             });
             setShowInfoPanel(true); // Always show info panel
           })
@@ -1582,7 +1679,8 @@ const BangaloreAddressMap = () => {
           'Electicity station': 'Calculated from GeoJSON'
         },
         bescomInfo: findBescomInfo(latitude, longitude),
-        bwssbInfo: findBwssbInfo(latitude, longitude)
+        bwssbInfo: findBwssbInfo(latitude, longitude),
+        bdaInfo: findBdaInfo(latitude, longitude)
       });
       
       // When selecting from search results, DO center the map on the location
@@ -1701,7 +1799,8 @@ const BangaloreAddressMap = () => {
         },
         constituency: constituencyInfo,
         bescomInfo: findBescomInfo(lat, lng),
-        bwssbInfo: findBwssbInfo(lat, lng)
+        bwssbInfo: findBwssbInfo(lat, lng),
+        bdaInfo: findBdaInfo(lat, lng)
       });
       
       // Show the info panel
@@ -1847,7 +1946,8 @@ const BangaloreAddressMap = () => {
         },
         constituency: constituencyInfo,
         bescomInfo: findBescomInfo(lat, lng),
-        bwssbInfo: findBwssbInfo(lat, lng)
+        bwssbInfo: findBwssbInfo(lat, lng),
+        bdaInfo: findBdaInfo(lat, lng)
       });
       
       // Show the info panel
@@ -2437,7 +2537,7 @@ const BangaloreAddressMap = () => {
                   </div>
                   
                   {/* BWSSB Information - Accordion */}
-                  <div>
+                  <div className="border-b border-gray-200">
                     <button 
                       onClick={() => toggleAccordion('bwssbInfo')}
                       className="w-full flex justify-between items-center my-3 text-left focus:outline-none"
@@ -2459,6 +2559,38 @@ const BangaloreAddressMap = () => {
                         <div className="space-y-1">
                           {/* <p className="text-sm text-gray-600 mb-2">Bangalore Water Supply and Sewerage Board (BWSSB) is the water supply and sewerage board serving Bangalore and surrounding areas.</p> */}
                           {Object.entries(locationInfo.bwssbInfo).map(([fieldName, value]) => (
+                            <div key={fieldName} className="grid grid-cols-2 py-1">
+                              <span className="text-gray-600">{fieldName}</span>
+                              <span className="font-medium">{value}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* BDA Information - Accordion */}
+                  <div>
+                    <button 
+                      onClick={() => toggleAccordion('bdaInfo')}
+                      className="w-full flex justify-between items-center my-3 text-left focus:outline-none"
+                    >
+                      <h2 className="font-bold text-gray-800">BDA Information</h2>
+                      <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        className={`h-5 w-5 transform transition-transform ${openAccordions.bdaInfo ? 'rotate-180' : ''}`} 
+                        fill="none" 
+                        viewBox="0 0 24 24" 
+                        stroke="currentColor"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+                    
+                    {openAccordions.bdaInfo && (
+                      <div className="my-3">
+                        <div className="space-y-1">
+                          {Object.entries(locationInfo.bdaInfo).map(([fieldName, value]) => (
                             <div key={fieldName} className="grid grid-cols-2 py-1">
                               <span className="text-gray-600">{fieldName}</span>
                               <span className="font-medium">{value}</span>
@@ -2644,7 +2776,7 @@ const BangaloreAddressMap = () => {
                 </div>
                 
                 {/* Police Jurisdiction - Accordion - Removed border-b class */}
-                <div>
+                <div className="border-b border-gray-200">
                   <button 
                     onClick={() => toggleAccordion('policeJurisdiction')}
                     className="w-full flex justify-between items-center my-3 text-left focus:outline-none"
@@ -2717,7 +2849,7 @@ const BangaloreAddressMap = () => {
                 </div>
                 
                 {/* BESCOM Information - Accordion - Removed border-b class */}
-                <div>
+                <div className="border-b border-gray-200">
                   <button 
                     onClick={() => toggleAccordion('bescomInfo')}
                     className="w-full flex justify-between items-center my-3 text-left focus:outline-none"
@@ -2737,7 +2869,6 @@ const BangaloreAddressMap = () => {
                   {openAccordions.bescomInfo && (
                     <div className="my-3">
                       <div className="space-y-1">
-                        <p className="text-sm text-gray-600 mb-2">Bangalore Electricity Supply Company (BESCOM) is the electric power distribution company serving Bangalore and surrounding areas.</p>
                         {Object.entries(locationInfo.bescomInfo).map(([fieldName, value]) => (
                           <div key={fieldName} className="grid grid-cols-2 py-1">
                             <span className="text-gray-600">{fieldName}</span>
@@ -2750,7 +2881,7 @@ const BangaloreAddressMap = () => {
                 </div>
                 
                 {/* BWSSB Information - Accordion - Removed border-b class */}
-                <div>
+                <div className="border-b border-gray-200">
                   <button 
                     onClick={() => toggleAccordion('bwssbInfo')}
                     className="w-full flex justify-between items-center my-3 text-left focus:outline-none"
@@ -2770,8 +2901,39 @@ const BangaloreAddressMap = () => {
                   {openAccordions.bwssbInfo && (
                     <div className="my-3">
                       <div className="space-y-1">
-                        <p className="text-sm text-gray-600 mb-2">Bangalore Water Supply and Sewerage Board (BWSSB) is the water supply and sewerage board serving Bangalore and surrounding areas.</p>
                         {Object.entries(locationInfo.bwssbInfo).map(([fieldName, value]) => (
+                          <div key={fieldName} className="grid grid-cols-2 py-1">
+                            <span className="text-gray-600">{fieldName}</span>
+                            <span className="font-medium">{value}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+                
+                {/* BDA Information - Accordion - Removed border-b class */}
+                <div>
+                  <button 
+                    onClick={() => toggleAccordion('bdaInfo')}
+                    className="w-full flex justify-between items-center my-3 text-left focus:outline-none"
+                  >
+                    <h2 className="font-bold text-gray-800">BDA Information</h2>
+                    <svg 
+                      xmlns="http://www.w3.org/2000/svg" 
+                      className={`h-5 w-5 transform transition-transform ${openAccordions.bdaInfo ? 'rotate-180' : ''}`} 
+                      fill="none" 
+                      viewBox="0 0 24 24" 
+                      stroke="currentColor"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  
+                  {openAccordions.bdaInfo && (
+                    <div className="my-3">
+                      <div className="space-y-1">
+                        {Object.entries(locationInfo.bdaInfo).map(([fieldName, value]) => (
                           <div key={fieldName} className="grid grid-cols-2 py-1">
                             <span className="text-gray-600">{fieldName}</span>
                             <span className="font-medium">{value}</span>
