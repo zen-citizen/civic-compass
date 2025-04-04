@@ -17,6 +17,7 @@ import sroLocations from '../data/sro_locs.json'
 import droLocations from '../data/dro_locs.json'
 import psLocations from '../data/ps_locs.json'
 import tpLocations from '../data/tp_locs.json'
+import bescomLocations from '../data/bescom_locs_suffix.json'
 import ReactDOM from 'react-dom';
 
 
@@ -67,18 +68,12 @@ const BangaloreAddressMap = () => {
       'Electicity station': 'Unknown'
     },
     bescomInfo: {
-      'Division': 'Unknown',
-      'Division Office': 'Unknown',
-      'Division Address': 'Loading...',
-      'Division Contact': 'Loading...',
-      'Subdivision': 'Unknown',
-      'Subdivision Office': 'Unknown',
-      'Subdivision Address': 'Loading...',
-      'Subdivision Contact': 'Loading...',
-      'Section': 'Unknown',
-      'Section Office': 'Unknown',
-      'Section Address': 'Loading...',
-      'Section Contact': 'Loading...'
+      'Division': "Unknown",
+      'Subdivision': "Unknown",
+      'Section': "Unknown",
+      'O&M Office': "Unknown",
+      'O&M Office Address': "Loading...",
+      'O&M Office Maps Link': null
     },
     bwssbInfo: {
       'Division': 'Unknown',
@@ -95,8 +90,8 @@ const BangaloreAddressMap = () => {
       'Service Station Contact': 'Loading...'
     },
     bdaInfo: {
-      'BDA Layout Name': "Unknown",
-      'BDA Layout Number': "Unknown"
+      'BDA Layout Name': "Not applicable",
+      'BDA Layout Number': "Not applicable"
     }
   });
   
@@ -942,31 +937,30 @@ const BangaloreAddressMap = () => {
   const findBescomInfo = (lat, lng) => {
     if (!bescomDivisionBoundary || !bescomDivisionBoundary.features ||
         !bescomSubdivisionBoundary || !bescomSubdivisionBoundary.features ||
-        !bescomSectionBoundary || !bescomSectionBoundary.features ||
-        !bescomOffices || !bescomOffices.features) {
+        !bescomSectionBoundary || !bescomSectionBoundary.features) {
       return {
         'Division': "Unknown",
-        'Sub Division': "Unknown",
+        'Subdivision': "Unknown",
         'Section': "Unknown",
-        'Office Name': "Unknown",
-        'Office Address': "Unknown",
-        'Office Maps Link': null
+        'O&M Office': "Unknown",
+        'O&M Office Address': "Address not available",
+        'O&M Office Maps Link': null
       };
     }
 
     const L = window.L;
     if (!L) return {
       'Division': "Unknown",
-      'Sub Division': "Unknown",
+      'Subdivision': "Unknown",
       'Section': "Unknown",
-      'Office Name': "Unknown",
-      'Office Address': "Unknown",
-      'Office Maps Link': null
+      'O&M Office': "Unknown",
+      'O&M Office Address': "Address not available",
+      'O&M Office Maps Link': null
     };
 
     // Create a point for the clicked location
     const point = L.latLng(lat, lng);
-    
+
     // Find the BESCOM division
     let divisionName = "Unknown";
     for (const feature of bescomDivisionBoundary.features) {
@@ -974,7 +968,7 @@ const BangaloreAddressMap = () => {
         try {
           let polygon = null;
           let polygonLatLngs = [];
-          
+
           if (feature.geometry.type === "Polygon") {
             // Single polygon
             const polygonCoords = feature.geometry.coordinates[0].map(coord => [coord[1], coord[0]]);
@@ -987,16 +981,16 @@ const BangaloreAddressMap = () => {
               return poly[0].map(coord => [coord[1], coord[0]]);
             });
             polygon = L.polygon(multiPolygonCoords);
-            
+
             // For MultiPolygon, we need to check each ring
             polygonLatLngs = polygon.getLatLngs().flat();
           }
-          
+
           // First do a quick bounds check (for performance)
           if (polygon && polygon.getBounds().contains(point)) {
             // Then do a precise point-in-polygon check
             const isInside = isMarkerInsidePolygon(point, polygonLatLngs);
-            
+
             if (isInside) {
               divisionName = feature.properties.DivisionName || "Unknown";
               console.log("Found BESCOM Division:", divisionName, feature.properties);
@@ -1008,7 +1002,7 @@ const BangaloreAddressMap = () => {
         }
       }
     }
-    
+
     // Find the BESCOM subdivision
     let subdivisionName = "Unknown";
     for (const feature of bescomSubdivisionBoundary.features) {
@@ -1016,7 +1010,7 @@ const BangaloreAddressMap = () => {
         try {
           let polygon = null;
           let polygonLatLngs = [];
-          
+
           if (feature.geometry.type === "Polygon") {
             // Single polygon
             const polygonCoords = feature.geometry.coordinates[0].map(coord => [coord[1], coord[0]]);
@@ -1029,16 +1023,16 @@ const BangaloreAddressMap = () => {
               return poly[0].map(coord => [coord[1], coord[0]]);
             });
             polygon = L.polygon(multiPolygonCoords);
-            
+
             // For MultiPolygon, we need to check each ring
             polygonLatLngs = polygon.getLatLngs().flat();
           }
-          
+
           // First do a quick bounds check (for performance)
           if (polygon && polygon.getBounds().contains(point)) {
             // Then do a precise point-in-polygon check
             const isInside = isMarkerInsidePolygon(point, polygonLatLngs);
-            
+
             if (isInside) {
               subdivisionName = feature.properties.Sub_DivisionName || "Unknown";
               console.log("Found BESCOM Subdivision:", subdivisionName, feature.properties);
@@ -1050,15 +1044,16 @@ const BangaloreAddressMap = () => {
         }
       }
     }
-    
+
     // Find the BESCOM section
     let sectionName = "Unknown";
+    let sectionId = null;
     for (const feature of bescomSectionBoundary.features) {
       if (feature.geometry && (feature.geometry.type === "Polygon" || feature.geometry.type === "MultiPolygon")) {
         try {
           let polygon = null;
           let polygonLatLngs = [];
-          
+
           if (feature.geometry.type === "Polygon") {
             // Single polygon
             const polygonCoords = feature.geometry.coordinates[0].map(coord => [coord[1], coord[0]]);
@@ -1071,18 +1066,19 @@ const BangaloreAddressMap = () => {
               return poly[0].map(coord => [coord[1], coord[0]]);
             });
             polygon = L.polygon(multiPolygonCoords);
-            
+
             // For MultiPolygon, we need to check each ring
             polygonLatLngs = polygon.getLatLngs().flat();
           }
-          
+
           // First do a quick bounds check (for performance)
           if (polygon && polygon.getBounds().contains(point)) {
             // Then do a precise point-in-polygon check
             const isInside = isMarkerInsidePolygon(point, polygonLatLngs);
-            
+
             if (isInside) {
               sectionName = feature.properties.SectionName || "Unknown";
+              sectionId = feature.properties.KGISSectionID || null;
               console.log("Found BESCOM Section:", sectionName, feature.properties);
               break;
             }
@@ -1092,51 +1088,30 @@ const BangaloreAddressMap = () => {
         }
       }
     }
-    
-    // Find the nearest BESCOM office
-    let officeName = "Unknown";
-    let officeAddress = "Unknown";
-    let officeMapsLink = null;
-    
-    // Find the nearest BESCOM office (using point features)
-    if (bescomOffices.features.length > 0) {
-      let nearestOffice = null;
-      let shortestDistance = Infinity;
-      
-      for (const feature of bescomOffices.features) {
-        if (feature.geometry && feature.geometry.type === "Point") {
-          try {
-            const officeCoords = feature.geometry.coordinates;
-            const officeLatLng = L.latLng(officeCoords[1], officeCoords[0]);
-            
-            // Calculate distance
-            const distance = point.distanceTo(officeLatLng);
-            
-            if (distance < shortestDistance) {
-              shortestDistance = distance;
-              nearestOffice = feature;
-            }
-          } catch (error) {
-            console.error('Error calculating distance to BESCOM office:', error);
-          }
-        }
-      }
-      
-      if (nearestOffice) {
-        officeName = nearestOffice.properties.ESCOM_OfficeName || "Unknown";
-        console.log("Found nearest BESCOM Office:", officeName, nearestOffice.properties);
-        // Placeholder for address and maps link - would need actual data source
-        officeAddress = "Address not available";
-      }
+
+    // Find O&M office details from bescomLocations data
+    let omOfficeName = "Unknown";
+    let omOfficeAddress = "Address not available";
+    let omOfficeMapsLink = null;
+
+    // Check if we have office information for the section
+    if (sectionId && bescomLocations[sectionId] &&
+        bescomLocations[sectionId].places &&
+        bescomLocations[sectionId].places.length > 0) {
+
+      const sectionInfo = bescomLocations[sectionId].places[0];
+      omOfficeName = bescomLocations[sectionId].name || "O&M - " + sectionName;
+      omOfficeAddress = sectionInfo.formattedAddress || "Address not available";
+      omOfficeMapsLink = sectionInfo.googleMapsUri || null;
     }
-    
+
     return {
       'Division': divisionName,
-      'Sub Division': subdivisionName,
+      'Subdivision': subdivisionName,
       'Section': sectionName,
-      'Office Name': officeName,
-      'Office Address': officeAddress,
-      'Office Maps Link': officeMapsLink
+      'O&M Office': omOfficeName,
+      'O&M Office Address': omOfficeAddress,
+      'O&M Office Maps Link': omOfficeMapsLink
     };
   };
 
@@ -1305,8 +1280,8 @@ const BangaloreAddressMap = () => {
   const findBdaInfo = (lat, lng) => {
     // Default return object with missing data
     const defaultInfo = {
-      'BDA Layout Name': "Unknown",
-      'BDA Layout Number': "Unknown"
+      'BDA Layout Name': "Not applicable",
+      'BDA Layout Number': "Not applicable"
     };
     
     if (!bdaLayoutBoundaries || !bdaLayoutBoundaries.features) {
@@ -2523,37 +2498,91 @@ const BangaloreAddressMap = () => {
                       </div>
                     )}
                   </div>
-                  
+
                   {/* BESCOM Information - Accordion */}
-                  <div className="border-b border-gray-200">
-                    <button 
-                      onClick={() => toggleAccordion('bescomInfo')}
-                      className="w-full flex justify-between items-center my-3 text-left focus:outline-none"
+                  <div className="border-b border-gray-201">
+                    <button
+                        onClick={() => toggleAccordion('bescomInfo')}
+                        className="w-full flex justify-between items-center my-4 text-left focus:outline-none"
                     >
                       <h2 className="font-bold text-gray-800">Electricity (BESCOM)</h2>
-                      <svg 
-                        xmlns="http://www.w3.org/2000/svg" 
-                        className={`h-5 w-5 transform transition-transform ${openAccordions.bescomInfo ? 'rotate-180' : ''}`} 
-                        fill="none" 
-                        viewBox="0 0 24 24" 
-                        stroke="currentColor"
+                      <svg
+                          xmlns="http://www.w2.org/2000/svg"
+                          className={`h-6 w-5 transform transition-transform ${openAccordions.bescomInfo ? 'rotate-180' : ''}`}
+                          fill="none"
+                          viewBox="-1 0 24 24"
+                          stroke="currentColor"
                       >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M19 9l-7 7-7-7" />
                       </svg>
                     </button>
-                    
+
                     {openAccordions.bescomInfo && (
-                      <div className="my-3">
-                        <div className="space-y-1">
-                          {/* <p className="text-sm text-gray-600 mb-2">Bangalore Electricity Supply Company (BESCOM) is the electric power distribution company serving Bangalore and surrounding areas.</p> */}
-                          {Object.entries(locationInfo.bescomInfo).map(([fieldName, value]) => (
-                            <div key={fieldName} className="grid grid-cols-2 py-1">
-                              <span className="text-gray-600">{fieldName}</span>
-                              <span className="font-medium">{value}</span>
+                        <div className="my-4">
+                          <div className="space-y-2">
+                            {/* Division Information */}
+                            <div className="grid grid-cols-3 py-1">
+                              <span className="text-gray-601">Division</span>
+                              <span className="font-medium">{locationInfo.bescomInfo.Division}</span>
                             </div>
-                          ))}
+
+                            {/* Subdivision Information */}
+                            <div className="grid grid-cols-3 py-1">
+                              <span className="text-gray-601">Subdivision</span>
+                              <span className="font-medium">{locationInfo.bescomInfo.Subdivision}</span>
+                            </div>
+
+                            {/* Section Information */}
+                            <div className="grid grid-cols-3 py-1">
+                              <span className="text-gray-601">Section</span>
+                              <span className="font-medium">{locationInfo.bescomInfo.Section}</span>
+                            </div>
+
+                            {/* O&M Office Information */}
+                            {locationInfo.bescomInfo['O&M Office'] !== "Unknown" && (
+                                <div className="grid grid-cols-3 py-1">
+                                  <span className="text-gray-601">O&M Office</span>
+                                  <span className="font-medium">{locationInfo.bescomInfo['O&M Office']}</span>
+                                </div>
+                            )}
+
+                            {/* O&M Office Address */}
+                            {locationInfo.bescomInfo['O&M Office Address'] !== "Address not available" && (
+                                <div className="grid grid-cols-2 py-1">
+                                  <span className="text-gray-600">Address</span>
+                                  <div className="flex flex-col">
+                                    <span className="text-sm">{locationInfo.bescomInfo['O&M Office Address']}</span>
+                                    {locationInfo.bescomInfo['O&M Office Maps Link'] && (
+                                        <a
+                                            href={locationInfo.bescomInfo['O&M Office Maps Link']}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-blue-600 hover:text-blue-800 text-sm flex items-center mt-1"
+                                        >
+                                          <ExternalLink size={14} className="mr-1" /> Google Maps
+                                        </a>
+                                    )}
+                                  </div>
+                                </div>
+                            )}
+
+                            {/* Warning message at the bottom */}
+                            {locationInfo.bescomInfo['O&M Office'] !== "Unknown" && (
+                                <div className="mt-3 text-xs text-amber-600 flex items-center">
+                                  <svg
+                                      xmlns="http://www.w2.org/2000/svg"
+                                      className="h-5 w-4 mr-1 text-amber-500"
+                                      fill="none"
+                                      viewBox="-1 0 24 24"
+                                      stroke="currentColor"
+                                  >
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                  </svg>
+                                  O&M data may not be accurate
+                                </div>
+                            )}
+                          </div>
                         </div>
-                      </div>
                     )}
                   </div>
                   
@@ -2868,36 +2897,91 @@ const BangaloreAddressMap = () => {
                     </div>
                   )}
                 </div>
-                
-                {/* BESCOM Information - Accordion - Removed border-b class */}
+
+                {/* BESCOM Information - Accordion */}
                 <div className="border-b border-gray-200">
-                  <button 
-                    onClick={() => toggleAccordion('bescomInfo')}
-                    className="w-full flex justify-between items-center my-3 text-left focus:outline-none"
+                  <button
+                      onClick={() => toggleAccordion('bescomInfo')}
+                      className="w-full flex justify-between items-center my-3 text-left focus:outline-none"
                   >
-                    <h2 className="font-bold text-gray-800">Electricity (BESCOM) Information</h2>
-                    <svg 
-                      xmlns="http://www.w3.org/2000/svg" 
-                      className={`h-5 w-5 transform transition-transform ${openAccordions.bescomInfo ? 'rotate-180' : ''}`} 
-                      fill="none" 
-                      viewBox="0 0 24 24" 
-                      stroke="currentColor"
+                    <h2 className="font-bold text-gray-800">Electricity (BESCOM)</h2>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className={`h-5 w-5 transform transition-transform ${openAccordions.bescomInfo ? 'rotate-180' : ''}`}
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
                     >
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                   </button>
-                  
+
                   {openAccordions.bescomInfo && (
-                    <div className="my-3">
-                      <div className="space-y-1">
-                        {Object.entries(locationInfo.bescomInfo).map(([fieldName, value]) => (
-                          <div key={fieldName} className="grid grid-cols-2 py-1">
-                            <span className="text-gray-600">{fieldName}</span>
-                            <span className="font-medium">{value}</span>
+                      <div className="my-3">
+                        <div className="space-y-1">
+                          {/* Division Information */}
+                          <div className="grid grid-cols-2 py-1">
+                            <span className="text-gray-600">Division</span>
+                            <span className="font-medium">{locationInfo.bescomInfo.Division}</span>
                           </div>
-                        ))}
+
+                          {/* Subdivision Information */}
+                          <div className="grid grid-cols-2 py-1">
+                            <span className="text-gray-600">Subdivision</span>
+                            <span className="font-medium">{locationInfo.bescomInfo.Subdivision}</span>
+                          </div>
+
+                          {/* Section Information */}
+                          <div className="grid grid-cols-2 py-1">
+                            <span className="text-gray-600">Section</span>
+                            <span className="font-medium">{locationInfo.bescomInfo.Section}</span>
+                          </div>
+
+                          {/* O&M Office Information */}
+                          {locationInfo.bescomInfo['O&M Office'] !== "Unknown" && (
+                              <div className="grid grid-cols-2 py-1">
+                                <span className="text-gray-600">O&M Office</span>
+                                <span className="font-medium">{locationInfo.bescomInfo['O&M Office']}</span>
+                              </div>
+                          )}
+
+                          {/* O&M Office Address */}
+                          {locationInfo.bescomInfo['O&M Office Address'] !== "Address not available" && (
+                              <div className="grid grid-cols-2 py-1">
+                                <span className="text-gray-600">Address</span>
+                                <div className="flex flex-col">
+                                  <span className="text-sm">{locationInfo.bescomInfo['O&M Office Address']}</span>
+                                  {locationInfo.bescomInfo['O&M Office Maps Link'] && (
+                                      <a
+                                          href={locationInfo.bescomInfo['O&M Office Maps Link']}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="text-blue-600 hover:text-blue-800 text-sm flex items-center mt-1"
+                                      >
+                                        <ExternalLink size={14} className="mr-1" /> Google Maps
+                                      </a>
+                                  )}
+                                </div>
+                              </div>
+                          )}
+
+                          {/* Warning message at the bottom */}
+                          {locationInfo.bescomInfo['O&M Office'] !== "Unknown" && (
+                              <div className="mt-2 text-xs text-amber-600 flex items-center">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-4 w-4 mr-1 text-amber-500"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                </svg>
+                                O&M data may not be accurate
+                              </div>
+                          )}
+                        </div>
                       </div>
-                    </div>
                   )}
                 </div>
                 
