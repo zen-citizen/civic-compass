@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { LocateFixed, Search, Info, Loader, ExternalLink, ChevronDown, ChevronUp, ArrowLeft } from 'lucide-react';
+import { LocateFixed, Search, Info, Loader, ExternalLink, ChevronDown, ChevronUp, ArrowLeft, Sun, Moon } from 'lucide-react';
 import policeJurisdiction from '../layers/PoliceJurisdiction_5.json'
 import BBMPInformation from '../layers/BBMPInformation_11.json'
 import Constituencies from '../layers/Constituencies_3.json'
@@ -107,12 +107,16 @@ const BangaloreAddressMap = () => {
   const labelRef = useRef(null);
   const searchTimeoutRef = useRef(null);
   const infoPanelRef = useRef(null);
+  const scrollableContentRef = useRef(null); // <-- Add ref for scrollable content
   const [showTooltip, setShowTooltip] = useState(false);
-  const [isPanelExpanded, setIsPanelExpanded] = useState(false);
   const touchStartRef = useRef(null);
   const touchEndRef = useRef(null);
   const minSwipeDistance = 50; // minimum distance required for swipe action
   const [showIntroPanel, setShowIntroPanel] = useState(true); // New state to control intro panel visibility
+  const [isDarkMode, setIsDarkMode] = useState(false); // <-- Add dark mode state
+  // State for panel expansion (start expanded on mobile if intro is showing)
+  const [isPanelExpanded, setIsPanelExpanded] = useState(isMobile && showIntroPanel);
+  const [lastToggledAccordion, setLastToggledAccordion] = useState(null); // <-- State to track last opened accordion
 
   // First, add state for tracking open accordions
   const [openAccordions, setOpenAccordions] = useState({
@@ -139,10 +143,20 @@ const BangaloreAddressMap = () => {
   };
   // Then add a toggle function for accordions
   const toggleAccordion = (section) => {
-    setOpenAccordions(prev => ({
-      ...prev,
-      [section]: !prev[section]
-    }));
+    setOpenAccordions(prev => {
+      const isOpening = !prev[section]; // Check if we are opening this section
+      const newState = {
+        ...prev,
+        [section]: isOpening
+      };
+      // If opening, track which one was just opened
+      if (isOpening) {
+        setLastToggledAccordion(section);
+      } else {
+          setLastToggledAccordion(null); // Reset if closing
+      }
+      return newState;
+    });
   };
 
   // Check if device is mobile
@@ -162,6 +176,38 @@ const BangaloreAddressMap = () => {
       window.removeEventListener('resize', checkIsMobile);
     };
   }, []);
+
+  useEffect(() => {
+    // Scroll adjustment effect for mobile accordion
+    // Only run if an accordion was just opened and we are on mobile
+    if (lastToggledAccordion && isMobile && scrollableContentRef.current) {
+      // Use requestAnimationFrame to ensure calculation happens after DOM update
+      requestAnimationFrame(() => {
+        // Find the accordion's container element using the data attribute
+        const accordionElement = scrollableContentRef.current.querySelector(`[data-accordion-section="${lastToggledAccordion}"]`);
+
+        if (accordionElement && scrollableContentRef.current) {
+          // Calculate the offsetTop relative to the scrollable container's parent
+          // (since offsetTop is relative to the offsetParent, which might not be the scrollable container itself)
+          const offsetTop = accordionElement.offsetTop;
+
+          // Get the sticky header's height (it's the previous sibling of the scrollable container)
+          const headerElement = scrollableContentRef.current.previousElementSibling;
+          const headerHeight = headerElement ? headerElement.offsetHeight : 0;
+
+          // Calculate the desired scroll position
+          // We want the top of the accordion element to be just below the sticky header
+          const desiredScrollTop = offsetTop - headerHeight - 10; // Subtract 10px for a small margin
+
+          // Set the scroll position
+          scrollableContentRef.current.scrollTop = desiredScrollTop;
+        }
+        // Reset the tracker after attempting scroll adjustment
+        // This prevents re-scrolling if the component re-renders for other reasons
+        setLastToggledAccordion(null);
+      });
+    }
+  }, [lastToggledAccordion, isMobile]); // Depend on the tracker and mobile status
 
   // Helper function to check if a point is inside a polygon (more accurate than bounds check)
   const isMarkerInsidePolygon = (point, poly) => {
@@ -2149,6 +2195,54 @@ const BangaloreAddressMap = () => {
     }
   }, [selectedLocation]);
 
+  // Load dark mode preference from localStorage
+  // useEffect(() => {
+  //   const savedMode = localStorage.getItem('darkMode');
+  //   if (savedMode) {
+  //     const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  //     setIsDarkMode(JSON.parse(savedMode) ?? prefersDark); // Default to system preference if no saved value
+  //   } else {
+  //      // Set initial state based on system preference if no localStorage value
+  //      setIsDarkMode(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  //   }
+  // }, []);
+
+  // Save dark mode preference to localStorage and update root class
+  // useEffect(() => {
+  //   console.log('Dark mode effect running. isDarkMode:', isDarkMode);
+  //   localStorage.setItem('darkMode', JSON.stringify(isDarkMode));
+  //   if (isDarkMode) {
+  //     console.log('Adding dark class');
+  //     document.documentElement.classList.add('dark');
+  //   } else {
+  //     console.log('Removing dark class');
+  //     document.documentElement.classList.remove('dark');
+  //   }
+  // }, [isDarkMode]);
+
+  // Toggle dark mode
+  const toggleDarkMode = () => {
+    console.log('Toggling dark mode');
+    setIsDarkMode(prevMode => !prevMode);
+  };
+
+  // Update initial panel expansion state when mobile status changes or intro panel is shown/hidden
+  useEffect(() => {
+    // Expand if mobile and showing intro OR if mobile and a location is selected (always start expanded if content exists)
+    // Collapse if desktop OR if mobile and panel was manually collapsed
+    if (isMobile && (showIntroPanel || selectedLocation)) {
+        // If it wasn't already expanded, expand it. Avoid forcing expansion if user manually collapsed.
+        // Let's simplify: always expand if mobile and content is visible. User can collapse if they want.
+        setIsPanelExpanded(true);
+    } else if (!isMobile) {
+        setIsPanelExpanded(false); // Collapse on desktop
+    }
+    // If switching to mobile view with intro panel, ensure BBMP accordion is open
+    if (isMobile && showIntroPanel) {
+        setOpenAccordions(prev => ({...prev, bbmpInfo: true}));
+    }
+  }, [isMobile, showIntroPanel, selectedLocation]);
+
   return (
     <div className="relative h-screen overflow-hidden"> {/* Root container */}
       {/* Map Area and Overlays - Always visible */}
@@ -2204,12 +2298,23 @@ const BangaloreAddressMap = () => {
              <button
                type="button"
                onClick={setCurrentLocation}
-               className="bg-white p-2 rounded-lg border border-gray-300 text-blue-600 hover:text-blue-800 hover:border-blue-300 transition-colors flex-shrink-0"
+               className="bg-white dark:bg-gray-800 p-2 rounded-lg border border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:border-blue-300 dark:hover:border-blue-500 transition-colors flex-shrink-0 shadow-md" // Add dark mode styles
                title="Use your current location"
                aria-label="Use your current location"
              >
                <LocateFixed size={20} />
              </button>
+
+             {/* Dark Mode Toggle Button */}
+             {/* <button
+               type="button"
+               onClick={toggleDarkMode}
+               className="bg-white dark:bg-gray-800 p-2 rounded-lg border border-gray-300 dark:border-gray-600 text-yellow-500 dark:text-yellow-400 hover:text-yellow-600 dark:hover:text-yellow-300 hover:border-yellow-300 dark:hover:border-yellow-500 transition-colors flex-shrink-0 shadow-md" // Add dark mode styles
+               title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+               aria-label={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+             >
+               {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+             </button> */}
            </div>
         </div>
 
@@ -2220,7 +2325,7 @@ const BangaloreAddressMap = () => {
         ></div>
 
         {/* Map controls */}
-        <div className="leaflet-map-controls absolute top-4 right-4 flex flex-col gap-1 z-10">
+        <div className="leaflet-map-controls absolute top-20 right-2 md:top-4 md:right-4 flex flex-col gap-1 z-10"> {/* Adjusted top/right for mobile */}
           <button
             className="bg-white p-2 rounded shadow hover:bg-gray-100 text-xl text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
             onClick={zoomIn}
@@ -2250,8 +2355,8 @@ const BangaloreAddressMap = () => {
         <div
           id="mobile-info-panel"
           ref={infoPanelRef}
-          className={`fixed bottom-0 left-0 right-0 z-30 bg-white rounded-t-lg shadow-[-4px_0px_10px_rgba(0,0,0,0.1)] transition-transform duration-300 ease-in-out flex flex-col ${
-            isPanelExpanded ? 'translate-y-0 h-[75vh]' : 'translate-y-[calc(100%-80px)] h-[80px]' // Use 80px collapsed height
+          className={`fixed bottom-0 left-0 right-0 z-30 bg-white dark:bg-gray-900 rounded-t-lg shadow-[-4px_0px_10px_rgba(0,0,0,0.1)] dark:shadow-[0_-4px_10px_rgba(255,255,255,0.1)] transition-all duration-300 ease-in-out flex flex-col ${
+            isPanelExpanded ? 'translate-y-0 h-[50vh]' : 'translate-y-[calc(100%-80px)] h-[80px]' // Use 50vh expanded, 80px collapsed
           }`}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
@@ -2259,37 +2364,37 @@ const BangaloreAddressMap = () => {
         >
           {/* Panel Header (Clickable Toggle) */}
           <div
-            className="flex-shrink-0 p-3 border-b border-gray-200 cursor-pointer flex flex-col items-center sticky top-0 bg-white z-10"
+            className="flex-shrink-0 p-3 border-b border-gray-200 dark:border-gray-700 cursor-pointer flex flex-col items-center sticky top-0 bg-white dark:bg-gray-900 z-10" // Add dark mode styles
             onClick={toggleMobileInfoPanel}
           >
             {isPanelExpanded ? <ChevronDown size={24} className="text-gray-500 mb-1"/> : <ChevronUp size={24} className="text-gray-500 mb-1"/>}
-            <h2 className="text-base font-semibold text-gray-800 text-center truncate w-full px-4">
-              {selectedLocation ? selectedLocation.display_name : "Civic Compass - Bengaluru"}
+            <h2 className="text-base font-semibold text-gray-800 dark:text-gray-200 text-center truncate w-full px-4">
+              {selectedLocation ? selectedLocation.display_name.split(',')[0] : "Civic Compass - Bengaluru"}
             </h2>
           </div>
 
           {/* Panel Content (Scrollable) */}
-          <div className="flex-grow overflow-y-auto p-4">
+          <div ref={scrollableContentRef} className={`flex-grow overflow-y-auto p-4 dark:text-gray-300 ${isPanelExpanded ? '' : 'hidden'}`}> {/* Hide content when collapsed, ADDED REF */}
             {showIntroPanel && !selectedLocation ? (
               // Intro Content for Mobile
-              <div className="space-y-4 text-sm pb-4"> {/* Add padding-bottom */} 
-                <p className="text-gray-700">
+              <div className="space-y-4 text-sm pb-4"> {/* Add padding-bottom */}
+                <p className="text-gray-700 dark:text-gray-300">
                   Helping Bengaluru residents identify government offices for their area. File complaints. Or obtain related Govt services. We cover BBMP, Revenue, BESCOM, BWSSB, BDA, and RTO offices.
                 </p>
-                <h3 className="text-md font-semibold text-gray-800">How to use the tool</h3>
-                <p className="text-gray-700">
+                <h3 className="text-md font-semibold text-gray-800 dark:text-gray-100">How to use the tool</h3> {/* Dark mode */}
+                <p className="text-gray-700 dark:text-gray-300">
                   Enter the exact address or select a location on the map
                 </p>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-gray-500 dark:text-gray-400">
                   Note: A single pincode can cover multiple wards/ some roads may fall under two different wards.
                 </p>
 
-                <h3 className="text-md font-semibold text-gray-800">Data Sources</h3>
-                <p className="text-gray-500">
+                <h3 className="text-md font-semibold text-gray-800 dark:text-gray-100">Data Sources</h3> {/* Dark mode */}
+                <p className="text-gray-500 dark:text-gray-400">
                   Information is compiled from publicly available sources and may not always be fully accurate or up-to-date
                 </p>
                 {/* Linkified Data Sources for Mobile */}
-                <div className="flex flex-wrap gap-x-2 text-sm text-blue-600">
+                <div className="flex flex-wrap gap-x-2 text-sm text-blue-600 dark:text-blue-400"> {/* Dark mode */}
                   <a href="https://opencity.in/data" target="_blank" rel="noopener noreferrer" className="hover:underline">Open City Data</a>,
                   <a href="https://kgis.ksrsac.in/kgis/" target="_blank" rel="noopener noreferrer" className="hover:underline">Karnataka GIS Portal</a>,
                   <a href="https://www.openstreetmap.org/about" target="_blank" rel="noopener noreferrer" className="hover:underline">OpenStreetMap</a>
@@ -2301,18 +2406,18 @@ const BangaloreAddressMap = () => {
                   {/* Back Button - Only show if location is selected */}
                    <button
                     onClick={handleGoBack} // Use the same Go Back logic
-                    className="flex items-center text-sm text-blue-600 hover:text-blue-800 mb-4 focus:outline-none flex-shrink-0"
+                    className="flex items-center text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 mb-4 focus:outline-none flex-shrink-0" // Dark mode
                   >
                     <ArrowLeft size={16} className="mr-1" /> Go back
                   </button>
 
                   {/* BBMP Information */}
-                  <div className="border-b border-gray-200">
+                  <div data-accordion-section="bbmpInfo" className="border-b border-gray-200 dark:border-gray-700"> {/* Dark mode, ADDED DATA ATTRIBUTE */}
                     <button
                       onClick={() => toggleAccordion('bbmpInfo')}
                       className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
                     >
-                      <h3 className="font-semibold text-gray-800 text-base">BBMP Information</h3>
+                      <h3 className="font-semibold text-gray-800 dark:text-gray-100 text-base">BBMP Information</h3> {/* Dark mode */}
                       {openAccordions.bbmpInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                     </button>
                     {openAccordions.bbmpInfo && (
@@ -2320,19 +2425,19 @@ const BangaloreAddressMap = () => {
                         {Object.entries(locationInfo.bbmpInfo).map(([fieldName, value]) => (
                           <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
                             <span className="text-gray-600">{fieldName}</span>
-                            <span className="font-medium text-gray-800 text-left break-words">{value}</span>
+                            <span className="font-medium text-gray-800 dark:text-gray-200 text-left break-words">{value}</span> {/* Dark mode */}
                           </div>
                         ))}
                       </div>
                     )}
                   </div>
                   {/* Revenue Classification */}
-                  <div className="border-b border-gray-200">
+                  <div data-accordion-section="revenueClassification" className="border-b border-gray-200 dark:border-gray-700"> {/* Dark mode, ADDED DATA ATTRIBUTE */}
                     <button
                       onClick={() => toggleAccordion('revenueClassification')}
                       className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
                     >
-                      <h3 className="font-semibold text-gray-800 text-base">Revenue Classification</h3>
+                      <h3 className="font-semibold text-gray-800 dark:text-gray-100 text-base">Revenue Classification</h3> {/* Dark mode */}
                       {openAccordions.revenueClassification ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                     </button>
                     {openAccordions.revenueClassification && (
@@ -2342,7 +2447,7 @@ const BangaloreAddressMap = () => {
                           .map(([fieldName, value]) => (
                             <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
                               <span className="text-gray-600">{fieldName}</span>
-                              <span className="font-medium text-gray-800 text-left break-words">{value}</span>
+                              <span className="font-medium text-gray-800 dark:text-gray-200 text-left break-words">{value}</span> {/* Dark mode */}
                             </div>
                           ))
                         }
@@ -2350,12 +2455,12 @@ const BangaloreAddressMap = () => {
                     )}
                   </div>
                   {/* Revenue Offices */}
-                  <div className="border-b border-gray-200">
+                  <div data-accordion-section="revenueOffices" className="border-b border-gray-200 dark:border-gray-700"> {/* Dark mode, ADDED DATA ATTRIBUTE */}
                     <button
                       onClick={() => toggleAccordion('revenueOffices')}
                       className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
                     >
-                      <h3 className="font-semibold text-gray-800 text-base">Revenue Offices</h3>
+                      <h3 className="font-semibold text-gray-800 dark:text-gray-100 text-base">Revenue Offices</h3> {/* Dark mode */}
                       {openAccordions.revenueOffices ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                     </button>
                     {openAccordions.revenueOffices && (
@@ -2364,14 +2469,14 @@ const BangaloreAddressMap = () => {
                         <div className="space-y-2">
                           <div className="grid grid-cols-2 gap-2 py-1">
                             <span className="text-gray-600">SRO</span>
-                            <span className="font-medium text-gray-800 text-left break-words">{locationInfo.revenueOffices.SRO}</span>
+                            <span className="font-medium text-gray-800 dark:text-gray-200 text-left break-words">{locationInfo.revenueOffices.SRO}</span> {/* Dark mode */}
                           </div>
                           <div className="grid grid-cols-2 gap-2 py-1 items-start">
                             <span className="text-gray-600">Address</span>
                             <div className="flex flex-col text-left">
-                              <span className="text-gray-800 break-words">{locationInfo.revenueOffices['SRO Address']}</span>
+                              <span className="text-gray-800 dark:text-gray-200 break-words">{locationInfo.revenueOffices['SRO Address']}</span> {/* Dark mode */}
                               {locationInfo.revenueOffices['SRO Maps Link'] && (
-                                <a href={locationInfo.revenueOffices['SRO Maps Link']} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 flex items-center mt-1">
+                                <a href={locationInfo.revenueOffices['SRO Maps Link']} target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 flex items-center mt-1"> {/* Dark mode */}
                                   <ExternalLink size={14} className="mr-1 flex-shrink-0" /> Google Maps
                                 </a>
                               )}
@@ -2382,14 +2487,14 @@ const BangaloreAddressMap = () => {
                         <div className="space-y-2 mt-4">
                           <div className="grid grid-cols-2 gap-2 py-1">
                             <span className="text-gray-600">DRO</span>
-                            <span className="font-medium text-gray-800 text-left break-words">{locationInfo.revenueOffices.DRO}</span>
+                            <span className="font-medium text-gray-800 dark:text-gray-200 text-left break-words">{locationInfo.revenueOffices.DRO}</span> {/* Dark mode */}
                           </div>
                           <div className="grid grid-cols-2 gap-2 py-1 items-start">
                             <span className="text-gray-600">Address</span>
                             <div className="flex flex-col text-left">
-                              <span className="text-gray-800 break-words">{locationInfo.revenueOffices['DRO Address']}</span>
+                              <span className="text-gray-800 dark:text-gray-200 break-words">{locationInfo.revenueOffices['DRO Address']}</span> {/* Dark mode */}
                               {locationInfo.revenueOffices['DRO Maps Link'] && (
-                                <a href={locationInfo.revenueOffices['DRO Maps Link']} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 flex items-center mt-1">
+                                <a href={locationInfo.revenueOffices['DRO Maps Link']} target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 flex items-center mt-1"> {/* Dark mode */}
                                   <ExternalLink size={14} className="mr-1 flex-shrink-0" /> Google Maps
                                 </a>
                               )}
@@ -2400,12 +2505,12 @@ const BangaloreAddressMap = () => {
                     )}
                   </div>
                   {/* Police Jurisdiction */}
-                  <div className="border-b border-gray-200">
+                  <div data-accordion-section="policeJurisdiction" className="border-b border-gray-200 dark:border-gray-700"> {/* Dark mode, ADDED DATA ATTRIBUTE */}
                     <button
                       onClick={() => toggleAccordion('policeJurisdiction')}
                       className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
                     >
-                      <h3 className="font-semibold text-gray-800 text-base">Police Jurisdiction</h3>
+                      <h3 className="font-semibold text-gray-800 dark:text-gray-100 text-base">Police Jurisdiction</h3> {/* Dark mode */}
                       {openAccordions.policeJurisdiction ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                     </button>
                     {openAccordions.policeJurisdiction && (
@@ -2414,14 +2519,14 @@ const BangaloreAddressMap = () => {
                         <div className="space-y-2">
                           <div className="grid grid-cols-2 gap-2 py-1">
                             <span className="text-gray-600">Police station</span>
-                            <span className="font-medium text-gray-800 text-left break-words">{locationInfo.policeJurisdiction['Police station']}</span>
+                            <span className="font-medium text-gray-800 dark:text-gray-200 text-left break-words">{locationInfo.policeJurisdiction['Police station']}</span> {/* Dark mode */}
                           </div>
                           <div className="grid grid-cols-2 gap-2 py-1 items-start">
                             <span className="text-gray-600">Address</span>
                             <div className="flex flex-col text-left">
-                              <span className="text-gray-800 break-words">{locationInfo.policeJurisdiction['Police station Address']}</span>
+                              <span className="text-gray-800 dark:text-gray-200 break-words">{locationInfo.policeJurisdiction['Police station Address']}</span> {/* Dark mode */}
                               {locationInfo.policeJurisdiction['Police station Maps Link'] && (
-                                <a href={locationInfo.policeJurisdiction['Police station Maps Link']} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 flex items-center mt-1">
+                                <a href={locationInfo.policeJurisdiction['Police station Maps Link']} target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 flex items-center mt-1"> {/* Dark mode */}
                                   <ExternalLink size={14} className="mr-1 flex-shrink-0" /> Google Maps
                                 </a>
                               )}
@@ -2432,14 +2537,14 @@ const BangaloreAddressMap = () => {
                         <div className="space-y-2 mt-4">
                           <div className="grid grid-cols-2 gap-2 py-1">
                             <span className="text-gray-600">Traffic station</span>
-                            <span className="font-medium text-gray-800 text-left break-words">{locationInfo.policeJurisdiction['Traffic station']}</span>
+                            <span className="font-medium text-gray-800 dark:text-gray-200 text-left break-words">{locationInfo.policeJurisdiction['Traffic station']}</span> {/* Dark mode */}
                           </div>
                           <div className="grid grid-cols-2 gap-2 py-1 items-start">
                             <span className="text-gray-600">Address</span>
                             <div className="flex flex-col text-left">
-                              <span className="text-gray-800 break-words">{locationInfo.policeJurisdiction['Traffic station Address']}</span>
+                              <span className="text-gray-800 dark:text-gray-200 break-words">{locationInfo.policeJurisdiction['Traffic station Address']}</span> {/* Dark mode */}
                               {locationInfo.policeJurisdiction['Traffic station Maps Link'] && (
-                                <a href={locationInfo.policeJurisdiction['Traffic station Maps Link']} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 flex items-center mt-1">
+                                <a href={locationInfo.policeJurisdiction['Traffic station Maps Link']} target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 flex items-center mt-1"> {/* Dark mode */}
                                   <ExternalLink size={14} className="mr-1 flex-shrink-0" /> Google Maps
                                 </a>
                               )}
@@ -2450,83 +2555,89 @@ const BangaloreAddressMap = () => {
                     )}
                   </div>
                   {/* BESCOM Information */}
-                  <div className="border-b border-gray-200">
+                  <div data-accordion-section="bescomInfo" className="border-b border-gray-200 dark:border-gray-700"> {/* Dark mode, ADDED DATA ATTRIBUTE */}
                     <button
                       onClick={() => toggleAccordion('bescomInfo')}
                       className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
                     >
-                      <h3 className="font-semibold text-gray-800 text-base">Electricity (BESCOM)</h3>
+                      <h3 className="font-semibold text-gray-800 dark:text-gray-100 text-base">Electricity (BESCOM)</h3> {/* Dark mode */}
                       {openAccordions.bescomInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                     </button>
                     {openAccordions.bescomInfo && (
                       <div className="pb-3 text-sm space-y-1">
                         {Object.entries(locationInfo.bescomInfo).map(([fieldName, value]) => (
                            <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
-                            <span className="text-gray-600">{fieldName}</span>
-                            <span className="font-medium text-gray-800 text-left break-words">{value}</span>
+                            <span className="text-gray-600 dark:text-gray-400">{fieldName}</span> {/* Dark mode */}
+                            <span className="font-medium text-gray-800 dark:text-gray-200 text-left break-words">{value}</span> {/* Dark mode */}
                           </div>
                         ))}
                       </div>
                     )}
                   </div>
                   {/* BWSSB Information */}
-                  <div className="border-b border-gray-200">
+                  <div data-accordion-section="bwssbInfo" className="border-b border-gray-200 dark:border-gray-700"> {/* Dark mode, ADDED DATA ATTRIBUTE */}
                     <button
                       onClick={() => toggleAccordion('bwssbInfo')}
                       className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
                     >
-                      <h3 className="font-semibold text-gray-800 text-base">Water Supply (BWSSB)</h3>
-                      {openAccordions.bwssbInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                      <h3 className="font-semibold text-gray-800 dark:text-gray-100 text-base">Water Supply (BWSSB)</h3> {/* Dark mode */}
+                       {openAccordions.bwssbInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                     </button>
                     {openAccordions.bwssbInfo && (
                        <div className="pb-3 text-sm space-y-1">
                         {Object.entries(locationInfo.bwssbInfo).map(([fieldName, value]) => (
                            <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
-                            <span className="text-gray-600">{fieldName}</span>
-                            <span className="font-medium text-gray-800 text-left break-words">{value}</span>
+                            <span className="text-gray-600 dark:text-gray-400">{fieldName}</span> {/* Dark mode */}
+                            <span className="font-medium text-gray-800 dark:text-gray-200 text-left break-words">{value}</span> {/* Dark mode */}
                           </div>
                         ))}
                       </div>
                     )}
                   </div>
                   {/* BDA Information */}
-                  <div> {/* Removed border-b */}
+                  <div data-accordion-section="bdaInfo" className="border-b border-gray-200 dark:border-gray-700"> {/* Dark mode, ADDED DATA ATTRIBUTE */}
                     <button
                       onClick={() => toggleAccordion('bdaInfo')}
                       className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
                     >
-                      <h3 className="font-semibold text-gray-800 text-base">BDA Information</h3>
+                      <h3 className="font-semibold text-gray-800 dark:text-gray-100 text-base">BDA Information</h3> {/* Dark mode */}
                       {openAccordions.bdaInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                     </button>
                     {openAccordions.bdaInfo && (
                       <div className="pb-3 text-sm space-y-1">
-                         {Object.entries(locationInfo.bdaInfo).map(([fieldName, value]) => (
-                            <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
-                             <span className="text-gray-600">{fieldName}</span>
-                             <span className="font-medium text-gray-800 text-left break-words">{value}</span>
-                           </div>
-                         ))}
-                       </div>
+                         <div className="space-y-1 text-sm">
+                          {Object.entries(locationInfo.bdaInfo).map(([fieldName, value]) => (
+                             <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
+                              <span className="text-gray-600 dark:text-gray-400">{fieldName}</span> {/* Dark mode */}
+                              <span className="font-medium text-gray-800 dark:text-gray-200 text-left break-words">{value}</span> {/* Dark mode */}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
                     )}
                   </div>
               </div>
             ) : null} {/* Render nothing if no selection and not intro */}
 
-            {/* Footer - Common for mobile */}
-            <div className="mt-auto pt-4 border-t border-gray-200 flex-shrink-0 sticky bottom-0 bg-white z-10">
+            {/* Footer moved outside this scrollable div */}
+          </div>
+
+          {/* Footer - Common for mobile (Now outside scrollable content) */}
+          {isPanelExpanded && ( // Only show footer when panel is expanded
+            <div className="flex-shrink-0 p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 z-10"> {/* Dark mode, Removed sticky/mt-auto */}
               <div className="flex justify-between items-center text-sm">
                  <a
                     href="https://zencitizen.in"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-gray-600 hover:text-blue-600 font-medium"
+                    className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-300 font-medium" // Dark mode
                   >
                     Zen Citizen
                   </a>
                 <button className="text-blue-600 hover:underline">Share Feedback</button>
               </div>
             </div>
-          </div>
+          )}
         </div>
       ) : (
         // Desktop: Sidebar
@@ -2534,27 +2645,27 @@ const BangaloreAddressMap = () => {
           {/* Conditional Rendering: Intro Panel or Location Details */}
           {showIntroPanel && !selectedLocation ? (
             <div className="p-4 flex flex-col flex-grow h-full"> {/* Ensure full height */}
-              <h1 className="text-xl font-bold mb-3 text-blue-600 border-b border-gray-200 pb-3 flex-shrink-0">
+              <h1 className="text-xl font-bold mb-3 text-blue-600 dark:text-blue-400 border-b border-gray-200 dark:border-gray-700 pb-3 flex-shrink-0"> {/* Dark mode */}
                 Civic Compass - Bengaluru
               </h1>
               <div className="flex-grow overflow-y-auto pr-1 space-y-4 text-sm mt-4"> {/* Scrollable content area */}
-                <p className="text-gray-700">
+                <p className="text-gray-700 dark:text-gray-300"> {/* Dark mode */}
                   Helping Bengaluru residents identify government offices for their area. File complaints. Or obtain related Govt services. We cover BBMP, Revenue, BESCOM, BWSSB, BDA, and RTO offices.
                 </p>
                 <h2 className="text-md font-semibold text-gray-800">How to use the tool</h2>
-                <p className="text-gray-700">
+                <p className="text-gray-700 dark:text-gray-300"> {/* Dark mode */}
                   Enter the exact address or select a location on the map
                 </p>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-gray-500 dark:text-gray-400"> {/* Dark mode */}
                   Note: A single pincode can cover multiple wards/ some roads may fall under two different wards.
                 </p>
 
                 <h2 className="text-md font-semibold text-gray-800">Data Sources</h2>
-                <p className="text-gray-500">
+                <p className="text-gray-500 dark:text-gray-400"> {/* Dark mode */}
                   Information is compiled from publicly available sources and may not always be fully accurate or up-to-date
                 </p>
                 {/* Linkified Data Sources */}
-                <div className="flex flex-col space-y-1 text-sm text-blue-600">
+                <div className="flex flex-col space-y-1 text-sm text-blue-600 dark:text-blue-400"> {/* Dark mode */}
                   <a href="https://opencity.in/data" target="_blank" rel="noopener noreferrer" className="hover:underline">Open City Data</a>
                   <a href="https://kgis.ksrsac.in/kgis/" target="_blank" rel="noopener noreferrer" className="hover:underline">Karnataka GIS Portal</a>
                   <a href="https://www.openstreetmap.org/about" target="_blank" rel="noopener noreferrer" className="hover:underline">OpenStreetMap</a>
@@ -2566,7 +2677,7 @@ const BangaloreAddressMap = () => {
                       href="https://zencitizen.in"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-gray-600 hover:text-blue-600 font-medium"
+                      className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-300 font-medium" // Dark mode
                     >
                       Zen Citizen
                     </a>
@@ -2575,11 +2686,11 @@ const BangaloreAddressMap = () => {
               </div>
             </div>
           ) : selectedLocation ? (
-            <div className="p-4 flex flex-col flex-grow h-full"> {/* Ensure full height */}
+            <div className="p-4 flex flex-col flex-grow h-full dark:bg-gray-900 dark:text-gray-300"> {/* Dark mode */}
               {/* Back Button */}
               <button
                 onClick={handleGoBack}
-                className="flex items-center text-sm text-blue-600 hover:text-blue-800 mb-4 focus:outline-none flex-shrink-0"
+                className="flex items-center text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 mb-4 focus:outline-none flex-shrink-0" // Dark mode
               >
                 <ArrowLeft size={16} className="mr-1" /> Go back
               </button>
@@ -2848,13 +2959,13 @@ const BangaloreAddressMap = () => {
                 </div> {/* End Accordions Container */}
 
                 {/* Footer in sidebar */}
-                <div className="mt-auto pt-4 border-t border-gray-200 flex-shrink-0">
+                <div className="mt-auto pt-4 border-t border-gray-200 dark:border-gray-700 flex-shrink-0"> {/* Dark mode */}
                   <div className="flex justify-between items-center text-sm">
                      <a
                         href="https://zencitizen.in"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-gray-600 hover:text-blue-600 font-medium"
+                        className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-300 font-medium" // Dark mode
                       >
                         Zen Citizen
                       </a>
