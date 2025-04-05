@@ -1720,7 +1720,9 @@ const BangaloreAddressMap = () => {
       setIsSearching(true);
       // Photon API with Bangalore as a bias point
       // The lon,lat coordinates are for Bangalore center
-      const searchUrl = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=5&lang=en&lon=77.5946&lat=12.9716`;
+      // Add bbox parameter for Bangalore (approximate coordinates)
+      const bangaloreBbox = '77.4,12.8,77.8,13.2'; // minLon, minLat, maxLon, maxLat
+      const searchUrl = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=5&lang=en&lon=77.5946&lat=12.9716&bbox=${bangaloreBbox}`;
       
       const response = await fetch(searchUrl);
       
@@ -2298,11 +2300,14 @@ const BangaloreAddressMap = () => {
              <button
                type="button"
                onClick={setCurrentLocation}
-               className="bg-white  p-2 rounded-lg border-2 border-gray-300 text-blue-600 dark:text-blue-400 hover:bg-gray-100 transition-colors flex-shrink-0 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500" // Add dark mode styles
-               title="Use your current location"
+               className="bg-white p-2 rounded-lg border-2 border-gray-300 text-blue-600 dark:text-blue-400 hover:bg-gray-100 transition-colors flex-shrink-0 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 relative group" // Added 'relative group' for tooltip positioning
                aria-label="Use your current location"
              >
                <LocateFixed size={22} />
+               {/* Tooltip */}
+               <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
+                 Find your current location
+               </div>
              </button>
 
              {/* Dark Mode Toggle Button */}
