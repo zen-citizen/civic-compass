@@ -111,11 +111,11 @@ const BangaloreAddressMap = () => {
   const [showTooltip, setShowTooltip] = useState(false);
   const touchStartRef = useRef(null);
   const touchEndRef = useRef(null);
-  const minSwipeDistance = 50; // minimum distance required for swipe action
+  const minSwipeDistance = 150; // minimum distance required for swipe action
   const [showIntroPanel, setShowIntroPanel] = useState(true); // New state to control intro panel visibility
   const [isDarkMode, setIsDarkMode] = useState(false); // <-- Add dark mode state
   // State for panel expansion (start expanded on mobile if intro is showing)
-  const [isPanelExpanded, setIsPanelExpanded] = useState(isMobile && showIntroPanel);
+  const [isPanelExpanded, setIsPanelExpanded] = useState(false);
   const [lastToggledAccordion, setLastToggledAccordion] = useState(null); // <-- State to track last opened accordion
 
   // First, add state for tracking open accordions
@@ -2230,7 +2230,7 @@ const BangaloreAddressMap = () => {
   useEffect(() => {
     // Expand if mobile and showing intro OR if mobile and a location is selected (always start expanded if content exists)
     // Collapse if desktop OR if mobile and panel was manually collapsed
-    if (isMobile && (showIntroPanel || selectedLocation)) {
+    if (isMobile && (showIntroPanel && selectedLocation)) {
         // If it wasn't already expanded, expand it. Avoid forcing expansion if user manually collapsed.
         // Let's simplify: always expand if mobile and content is visible. User can collapse if they want.
         setIsPanelExpanded(true);
@@ -2325,7 +2325,7 @@ const BangaloreAddressMap = () => {
         ></div>
 
         {/* Map controls */}
-        <div className="leaflet-map-controls absolute top-20 right-5 md:top-20 md:right-4 flex flex-col gap-2 z-10"> {/* Adjusted top/right for mobile */}
+        <div className="leaflet-map-controls absolute top-20 right-5 md:top-20 md:right-4 flex flex-col gap-2"> {/* Adjusted top/right for mobile */}
           <button
             className="bg-white p-2 rounded-md border-2 border-gray-300 dark:text-blue-400 hover:bg-gray-100 transition-colors flex-shrink-0 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             onClick={zoomIn}
@@ -2355,12 +2355,8 @@ const BangaloreAddressMap = () => {
         <div
           id="mobile-info-panel"
           ref={infoPanelRef}
-          className={`fixed bottom-0 left-0 right-0 z-30 bg-white dark:bg-gray-900 rounded-t-lg shadow-[-4px_0px_10px_rgba(0,0,0,0.1)] dark:shadow-[0_-4px_10px_rgba(255,255,255,0.1)] transition-all duration-300 ease-in-out flex flex-col ${
-            isPanelExpanded ? 'translate-y-0 h-[50vh]' : 'translate-y-[calc(100%-80px)] h-[80px]' // Use 50vh expanded, 80px collapsed
-          }`}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
+          className="fixed bottom-0 left-0 right-0 bg-white rounded-t-lg transition-all duration-300 ease-in-out flex flex-col"
+          style={{ zIndex: 401 }}
         >
           {/* Panel Header (Clickable Toggle) */}
           <div
@@ -2368,36 +2364,44 @@ const BangaloreAddressMap = () => {
             onClick={toggleMobileInfoPanel}
           >
             {isPanelExpanded ? <ChevronDown size={24} className="text-gray-500 mb-1"/> : <ChevronUp size={24} className="text-gray-500 mb-1"/>}
-            <h2 className="text-base font-semibold text-gray-800 dark:text-gray-200 text-center truncate w-full px-4">
-              {selectedLocation ? selectedLocation.display_name.split(',')[0] : "Civic Compass - Bengaluru"}
-            </h2>
+            <div className="flex flex-col items-center">
+              <h1 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex-shrink-0"> {/* Dark mode */}
+                Civic Compass – Bengaluru
+              </h1>
+              <a
+                href="https://zencitizen.in"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-300 font-medium text-lg" // Dark mode
+              >
+                Zen Citizen
+              </a>                
+            </div>
           </div>
+        
 
           {/* Panel Content (Scrollable) */}
-          <div ref={scrollableContentRef} className={`flex-grow overflow-y-auto p-4 dark:text-gray-300 ${isPanelExpanded ? '' : 'hidden'}`}> {/* Hide content when collapsed, ADDED REF */}
+          <div ref={scrollableContentRef} className={`flex-grow overflow-y-auto p-4 dark:text-gray-300 ${isPanelExpanded ? 'h-96' : 'h-56'}`}> {/* Hide content when collapsed, ADDED REF */}
             {showIntroPanel && !selectedLocation ? (
               // Intro Content for Mobile
-              <div className="space-y-4 text-sm pb-4"> {/* Add padding-bottom */}
-                <p className="text-gray-700 dark:text-gray-300">
+              <div className="flex-grow overflow-y-auto pr-1 text-md mt-4"> {/* Scrollable content area */}
+                <p className="text-gray-600"> {/* Dark mode */}
                   Helping Bengaluru residents identify government offices for their area. File complaints. Or obtain related Govt services. We cover BBMP, Revenue, BESCOM, BWSSB, BDA, and RTO offices.
                 </p>
-                <h3 className="text-md font-semibold text-gray-800 dark:text-gray-100">How to use the tool</h3> {/* Dark mode */}
-                <p className="text-gray-700 dark:text-gray-300">
-                  Enter the exact address or select a location on the map
-                </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
-                  Note: A single pincode can cover multiple wards/ some roads may fall under two different wards.
+                <h2 className="text-lg font-semibold text-gray-800 mt-7 mb-1">Note</h2>
+                <p className="text-gray-600"> {/* Dark mode */}
+                  Enter the exact address or select a location on the map. A single pincode can cover multiple wards/ some roads may fall under two different wards.
                 </p>
 
-                <h3 className="text-md font-semibold text-gray-800 dark:text-gray-100">Data Sources</h3> {/* Dark mode */}
-                <p className="text-gray-500 dark:text-gray-400">
-                  Information is compiled from publicly available sources and may not always be fully accurate or up-to-date
+                <h2 className="text-lg font-semibold text-gray-800 mt-7 mb-1">Data Sources</h2>
+                <p className="text-gray-600"> {/* Dark mode */}
+                  Information is compiled from publicly available sources and may not always be fully accurate or up-to-date.
                 </p>
-                {/* Linkified Data Sources for Mobile */}
-                <div className="flex flex-wrap gap-x-2 text-sm text-blue-600 dark:text-blue-400"> {/* Dark mode */}
-                  <a href="https://opencity.in/data" target="_blank" rel="noopener noreferrer" className="hover:underline">Open City Data</a>,
-                  <a href="https://kgis.ksrsac.in/kgis/" target="_blank" rel="noopener noreferrer" className="hover:underline">Karnataka GIS Portal</a>,
-                  <a href="https://www.openstreetmap.org/about" target="_blank" rel="noopener noreferrer" className="hover:underline">OpenStreetMap</a>
+                {/* Linkified Data Sources */}
+                <div className="flex flex-col space-y-2 text-sm mt-2"> {/* Dark mode */}
+                  <a href="https://opencity.in/data" target="_blank" rel="noopener noreferrer" className="underline text-gray-500 transtition-opacity hover:opacity-80">OpenCity Data</a>
+                  <a href="https://kgis.ksrsac.in/kgis/" target="_blank" rel="noopener noreferrer" className="underline text-gray-500 transtition-opacity hover:opacity-80">Karnataka-GIS Portal</a>
+                  <a href="https://www.openstreetmap.org/about" target="_blank" rel="noopener noreferrer" className="underline text-gray-500 transtition-opacity hover:opacity-80">OpenStreetMap</a>
                 </div>
               </div>
             ) : selectedLocation ? (
@@ -2623,21 +2627,13 @@ const BangaloreAddressMap = () => {
           </div>
 
           {/* Footer - Common for mobile (Now outside scrollable content) */}
-          {isPanelExpanded && ( // Only show footer when panel is expanded
-            <div className="flex-shrink-0 p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 z-10"> {/* Dark mode, Removed sticky/mt-auto */}
-              <div className="flex justify-between items-center text-sm">
-                 <a
-                    href="https://zencitizen.in"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-300 font-medium" // Dark mode
-                  >
-                    Zen Citizen
-                  </a>
-                <button className="text-blue-600 hover:underline">Share Feedback</button>
-              </div>
+          <div className="flex-shrink-0 p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 z-10"> {/* Dark mode, Removed sticky/mt-auto */}          
+            <div className="flex justify-between items-center text-sm">
+              <a href="https://zencitizen.in/contact-us/" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80">Share Feedback</a>
+              <a href="https://docs.google.com/forms/d/e/1FAIpQLScQS_-VgUFQZJedyu6iIlpoYymsKSyGUhrvPoJX1WkZGQqfLQ/viewform" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80">Volunteer with Us</a>
+              <a href="https://github.com/zen-citizen/civic-compass" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80">Open Source</a>                  
             </div>
-          )}
+          </div>
         </div>
       ) : (
         // Desktop: Sidebar
