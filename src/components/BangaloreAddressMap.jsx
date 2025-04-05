@@ -2645,9 +2645,19 @@ const BangaloreAddressMap = () => {
           {/* Conditional Rendering: Intro Panel or Location Details */}
           {showIntroPanel && !selectedLocation ? (
             <div className="p-4 flex flex-col flex-grow h-full"> {/* Ensure full height */}
-              <h1 className="text-xl font-bold mb-3 text-blue-600 dark:text-blue-400 border-b border-gray-200 dark:border-gray-700 pb-3 flex-shrink-0"> {/* Dark mode */}
-                Civic Compass - Bengaluru
-              </h1>
+              <div className="flex justify-between mb-3 pb-3 border-b border-gray-200">
+                <h1 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex-shrink-0"> {/* Dark mode */}
+                  Civic Compass – Bengaluru
+                </h1>
+                <a
+                  href="https://zencitizen.in"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-300 font-medium text-lg" // Dark mode
+                >
+                  Zen Citizen
+                </a>                
+              </div>
               <div className="flex-grow overflow-y-auto pr-1 space-y-4 text-sm mt-4"> {/* Scrollable content area */}
                 <p className="text-gray-700 dark:text-gray-300"> {/* Dark mode */}
                   Helping Bengaluru residents identify government offices for their area. File complaints. Or obtain related Govt services. We cover BBMP, Revenue, BESCOM, BWSSB, BDA, and RTO offices.
@@ -2673,15 +2683,9 @@ const BangaloreAddressMap = () => {
               </div>
               <div className="mt-auto pt-4 border-t border-gray-200 flex-shrink-0"> {/* Footer stick to bottom */}
                 <div className="flex justify-between items-center text-sm">
-                   <a
-                      href="https://zencitizen.in"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-300 font-medium" // Dark mode
-                    >
-                      Zen Citizen
-                    </a>
-                  <button className="text-blue-600 hover:underline">Share Feedback</button>
+                  <a href="https://zencitizen.in/contact-us/" target="_blank" className="underline text-gray-500">Share Feedback</a>
+                  <a href="https://docs.google.com/forms/d/e/1FAIpQLScQS_-VgUFQZJedyu6iIlpoYymsKSyGUhrvPoJX1WkZGQqfLQ/viewform" target="_blank" className="underline text-gray-500">Volunteer with Us</a>
+                  <a href="https://github.com/zen-citizen/civic-compass" target="_blank" className="underline text-gray-500">Open Source</a>                  
                 </div>
               </div>
             </div>
