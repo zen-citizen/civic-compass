@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { LocateFixed, Search, Info, Loader, ExternalLink, ChevronDown, ChevronUp, ArrowLeft, Sun, Moon } from 'lucide-react';
+import { LocateFixed, Search, Info, Loader, ExternalLink, ChevronDown, ChevronUp, ArrowLeft, Sun, Moon, Plus, Minus } from 'lucide-react';
 import policeJurisdiction from '../layers/PoliceJurisdiction_5.json'
 import BBMPInformation from '../layers/BBMPInformation_11.json'
 import Constituencies from '../layers/Constituencies_3.json'
@@ -1767,7 +1767,7 @@ const BangaloreAddressMap = () => {
   // Handle location selection from suggestions
   const handleLocationSelect = (location) => {
     setSelectedLocation(location);
-    setSearchQuery(location.display_name.split(',')[0]); // Set the input to first part of location name
+    setSearchQuery(location.display_name); // Set the input to first part of location name
     setShowSuggestions(false);
     setShowInfoPanel(true);
     setShowIntroPanel(false); // Hide intro panel
@@ -2244,25 +2244,25 @@ const BangaloreAddressMap = () => {
   }, [isMobile, showIntroPanel, selectedLocation]);
 
   return (
-    <div className="relative h-screen overflow-hidden"> {/* Root container */}
+    <div className="relative h-screen overflow-hidden flex"> {/* Root container */}
       {/* Map Area and Overlays - Always visible */}
-      <div className="absolute inset-0 z-0"> {/* Map container wrapper */}
+      <div className="relative w-full h-screen"> {/* Map container wrapper */}
         {/* Search Bar Overlay */}
-        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-20 w-full max-w-xl">
-           <div className="flex items-center gap-2 bg-white p-1 rounded-lg shadow-md border border-gray-200">
+        <div className="absolute top-4 z-20 w-full px-5 md:pl-10 md:pr-24">
+           <div className="flex items-center gap-3">
              <form onSubmit={handleSearch} className="relative flex-grow">
                <input
-                 type="text"
+                 type="search"
                  value={searchQuery}
                  onChange={handleSearchInputChange}
                  onKeyDown={handleKeyDown}
                  onFocus={() => searchQuery.length >= 2 && setShowSuggestions(true)}
-                 placeholder="Enter the exact address or select a location"
-                 className="w-full px-4 py-2 border border-gray-300 rounded-lg pr-12 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                 placeholder="Enter the exact address"
+                 className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
                />
                <button
                  type="submit"
-                 className="absolute right-2 top-1/2 transform -translate-y-1/2 text-blue-600 hover:text-blue-800"
+                 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 hover:text-blue-800"
                  aria-label="Search"
                >
                  {isSearching ? <Loader size={20} className="animate-spin" /> : <Search size={20} />}
@@ -2270,7 +2270,7 @@ const BangaloreAddressMap = () => {
 
                {/* Search suggestions */}
                {showSuggestions && (
-                 <div className="absolute text-left mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg z-50 max-h-60 overflow-y-auto">
+                 <div className="absolute text-left mt-1 w-full bg-white border border-gray-200 rounded-lg z-50 max-h-60 overflow-y-auto">
                    {searchResults.map((result, index) => (
                      <div
                        key={index}
@@ -2298,11 +2298,11 @@ const BangaloreAddressMap = () => {
              <button
                type="button"
                onClick={setCurrentLocation}
-               className="bg-white dark:bg-gray-800 p-2 rounded-lg border border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:border-blue-300 dark:hover:border-blue-500 transition-colors flex-shrink-0 shadow-md" // Add dark mode styles
+               className="bg-white  p-2 rounded-lg border-2 border-gray-300 text-blue-600 dark:text-blue-400 hover:bg-gray-100 transition-colors flex-shrink-0 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500" // Add dark mode styles
                title="Use your current location"
                aria-label="Use your current location"
              >
-               <LocateFixed size={20} />
+               <LocateFixed size={22} />
              </button>
 
              {/* Dark Mode Toggle Button */}
@@ -2325,17 +2325,17 @@ const BangaloreAddressMap = () => {
         ></div>
 
         {/* Map controls */}
-        <div className="leaflet-map-controls absolute top-20 right-2 md:top-4 md:right-4 flex flex-col gap-1 z-10"> {/* Adjusted top/right for mobile */}
+        <div className="leaflet-map-controls absolute top-20 right-5 md:top-20 md:right-4 flex flex-col gap-2 z-10"> {/* Adjusted top/right for mobile */}
           <button
-            className="bg-white p-2 rounded shadow hover:bg-gray-100 text-xl text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="bg-white p-2 rounded-md border-2 border-gray-300 dark:text-blue-400 hover:bg-gray-100 transition-colors flex-shrink-0 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             onClick={zoomIn}
             aria-label="Zoom in"
-          >+</button>
+          ><Plus size={20} strokeWidth={2.5} /></button>
           <button
-            className="bg-white p-2 rounded shadow hover:bg-gray-100 text-xl text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="bg-white p-2 rounded-md border-2 border-gray-300 dark:text-blue-400 hover:bg-gray-100 transition-colors flex-shrink-0 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             onClick={zoomOut}
             aria-label="Zoom out"
-          >−</button>
+          ><Minus size={20} strokeWidth={2.5} /></button>
         </div>
 
         {/* Loading indicator */}
@@ -2641,7 +2641,7 @@ const BangaloreAddressMap = () => {
         </div>
       ) : (
         // Desktop: Sidebar
-        <div className="absolute top-0 left-0 bottom-0 w-full md:w-1/3 lg:w-1/4 bg-white shadow-lg flex flex-col z-10 border-r border-gray-200"> {/* Sidebar is absolute for desktop too */}
+        <div className="order-first h-screen bg-white shadow-lg flex flex-col border-r border-gray-200 flex-shrink-0" style={{ width: '480px' }}> {/* Sidebar is absolute for desktop too */}
           {/* Conditional Rendering: Intro Panel or Location Details */}
           {showIntroPanel && !selectedLocation ? (
             <div className="p-4 flex flex-col flex-grow h-full"> {/* Ensure full height */}
