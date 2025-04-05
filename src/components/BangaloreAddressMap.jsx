@@ -2659,27 +2659,24 @@ const BangaloreAddressMap = () => {
 
             {/* Conditional Rendering: Intro Panel or Location Details */}
             {showIntroPanel && !selectedLocation ? (
-              <div className="flex-grow overflow-y-auto pr-1 space-y-4 text-sm mt-4"> {/* Scrollable content area */}
-                <p className="text-gray-700 dark:text-gray-300"> {/* Dark mode */}
+              <div className="flex-grow overflow-y-auto pr-1 text-md mt-4"> {/* Scrollable content area */}
+                <p className="text-gray-600"> {/* Dark mode */}
                   Helping Bengaluru residents identify government offices for their area. File complaints. Or obtain related Govt services. We cover BBMP, Revenue, BESCOM, BWSSB, BDA, and RTO offices.
                 </p>
-                <h2 className="text-md font-semibold text-gray-800">How to use the tool</h2>
-                <p className="text-gray-700 dark:text-gray-300"> {/* Dark mode */}
-                  Enter the exact address or select a location on the map
-                </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400"> {/* Dark mode */}
-                  Note: A single pincode can cover multiple wards/ some roads may fall under two different wards.
+                <h2 className="text-lg font-semibold text-gray-800 mt-7 mb-1">Note</h2>
+                <p className="text-gray-600"> {/* Dark mode */}
+                  Enter the exact address or select a location on the map. A single pincode can cover multiple wards/ some roads may fall under two different wards.
                 </p>
 
-                <h2 className="text-md font-semibold text-gray-800">Data Sources</h2>
-                <p className="text-gray-500 dark:text-gray-400"> {/* Dark mode */}
-                  Information is compiled from publicly available sources and may not always be fully accurate or up-to-date
+                <h2 className="text-lg font-semibold text-gray-800 mt-7 mb-1">Data Sources</h2>
+                <p className="text-gray-600"> {/* Dark mode */}
+                  Information is compiled from publicly available sources and may not always be fully accurate or up-to-date.
                 </p>
                 {/* Linkified Data Sources */}
-                <div className="flex flex-col space-y-1 text-sm text-blue-600 dark:text-blue-400"> {/* Dark mode */}
-                  <a href="https://opencity.in/data" target="_blank" rel="noopener noreferrer" className="hover:underline">Open City Data</a>
-                  <a href="https://kgis.ksrsac.in/kgis/" target="_blank" rel="noopener noreferrer" className="hover:underline">Karnataka GIS Portal</a>
-                  <a href="https://www.openstreetmap.org/about" target="_blank" rel="noopener noreferrer" className="hover:underline">OpenStreetMap</a>
+                <div className="flex flex-col space-y-2 text-sm mt-2"> {/* Dark mode */}
+                  <a href="https://opencity.in/data" target="_blank" rel="noopener noreferrer" className="underline text-gray-500 transtition-opacity hover:opacity-80">OpenCity Data</a>
+                  <a href="https://kgis.ksrsac.in/kgis/" target="_blank" rel="noopener noreferrer" className="underline text-gray-500 transtition-opacity hover:opacity-80">Karnataka-GIS Portal</a>
+                  <a href="https://www.openstreetmap.org/about" target="_blank" rel="noopener noreferrer" className="underline text-gray-500 transtition-opacity hover:opacity-80">OpenStreetMap</a>
                 </div>
               </div>
             ) : selectedLocation ? (
@@ -2701,7 +2698,7 @@ const BangaloreAddressMap = () => {
                 </div>
 
                 {/* Accordions Container */}
-                <div className="space-y-1 flex-grow overflow-y-auto pr-1"> {/* Scrollable accordion area */}
+                <div className="flex-grow overflow-y-auto pr-1"> {/* Scrollable accordion area */}
                   {/* BBMP Information */}
                   <div className="border-b border-gray-200">
                     <button
@@ -2959,9 +2956,9 @@ const BangaloreAddressMap = () => {
 
             <div className="mt-auto pt-4 border-t border-gray-200 flex-shrink-0"> {/* Footer stick to bottom */}
               <div className="flex justify-between items-center text-sm">
-                <a href="https://zencitizen.in/contact-us/" target="_blank" className="underline text-gray-500">Share Feedback</a>
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLScQS_-VgUFQZJedyu6iIlpoYymsKSyGUhrvPoJX1WkZGQqfLQ/viewform" target="_blank" className="underline text-gray-500">Volunteer with Us</a>
-                <a href="https://github.com/zen-citizen/civic-compass" target="_blank" className="underline text-gray-500">Open Source</a>                  
+                <a href="https://zencitizen.in/contact-us/" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80">Share Feedback</a>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLScQS_-VgUFQZJedyu6iIlpoYymsKSyGUhrvPoJX1WkZGQqfLQ/viewform" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80">Volunteer with Us</a>
+                <a href="https://github.com/zen-citizen/civic-compass" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80">Open Source</a>                  
               </div>
             </div>
           </div>
