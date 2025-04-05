@@ -2390,22 +2390,22 @@ const BangaloreAddressMap = () => {
               // Intro Content for Mobile
               <div className="flex-grow overflow-y-auto pr-1 text-md mt-4"> {/* Scrollable content area */}
                 <p className="text-gray-600"> {/* Dark mode */}
-                If you're a Bengaluru resident, you can use Civic compass to identify the BBMP, Revenue, BESCOM, BWSSB, and BDA offices for your area.
+                If you're a Bengaluru resident, you can use Civic Compass to identify the BBMP, BDA, Revenue, BESCOM, BWSSB offices, and Police offices for your area.
                 </p>
                 <h2 className="text-lg font-semibold text-gray-800 mt-7 mb-1">Note</h2>
                 <p className="text-gray-600"> {/* Dark mode */}
-                Enter the exact address you need information for. Note that a single pincode can cover multiple wards, and that some roads may fall under two different wards.
+                Enter the <strong>exact address</strong> you need information for; a single pincode may include multiple wards.
                 </p>
                 <p className="text-gray-600 mt-2"><em>This tool is only for Bengaluru at this time.</em></p>
 
                 <h2 className="text-lg font-semibold text-gray-800 mt-7 mb-1">Data Sources</h2>
                 <p className="text-gray-600"> {/* Dark mode */}
-                We pull information from government records. While we strive for accuracy, these sources can be incomplete or outdated.
+                We pull information from Government records. While we strive for accuracy, these sources can sometimes be incomplete or outdated.
                 </p>
                 {/* Linkified Data Sources */}
                 <div className="flex flex-col space-y-2 text-sm mt-2"> {/* Dark mode */}
-                  <a href="https://opencity.in/data" target="_blank" rel="noopener noreferrer" className="underline text-gray-500 transtition-opacity hover:opacity-80">OpenCity Data</a>
-                  <a href="https://kgis.ksrsac.in/kgis/" target="_blank" rel="noopener noreferrer" className="underline text-gray-500 transtition-opacity hover:opacity-80">Karnataka-GIS Portal</a>
+                  <a href="https://opencity.in/data" target="_blank" rel="noopener noreferrer" className="underline text-gray-500 transtition-opacity hover:opacity-80">OpenCity</a>
+                  <a href="https://kgis.ksrsac.in/kgis/" target="_blank" rel="noopener noreferrer" className="underline text-gray-500 transtition-opacity hover:opacity-80">Karnataka-GIS</a>
                   <a href="https://www.openstreetmap.org/about" target="_blank" rel="noopener noreferrer" className="underline text-gray-500 transtition-opacity hover:opacity-80">OpenStreetMap</a>
                 </div>
               </div>
@@ -2454,6 +2454,29 @@ const BangaloreAddressMap = () => {
                     )}
                   </div>
 
+                    {/* BDA Information - Accordion */}
+                    <div className="border-b border-gray-200">
+                      <button
+                        onClick={() => toggleAccordion('bdaInfo')}
+                        className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
+                      >
+                        <h2 className="font-semibold text-gray-800 text-base">BDA Information</h2>
+                        {openAccordions.bdaInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                      </button>
+                      {openAccordions.bdaInfo && (
+                        <div className="pb-4">
+                          <div className="space-y-1 text-md">
+                            {Object.entries(locationInfo.bdaInfo).map(([fieldName, value]) => (
+                              <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
+                                <span className="text-gray-600">{fieldName}</span>
+                                <span className="font-medium text-gray-700 text-left break-words">{value}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>                  
+
                     {/* Revenue Classification - Accordion */}
                     <div className="border-b border-gray-200">
                       <button
@@ -2546,8 +2569,56 @@ const BangaloreAddressMap = () => {
                       )}
                     </div>
 
-                    {/* Police Jurisdiction - Accordion */}
+                    {/* BESCOM Information - Accordion */}
                     <div className="border-b border-gray-200">
+                      <button
+                        onClick={() => toggleAccordion('bescomInfo')}
+                        className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
+                      >
+                        <h2 className="font-semibold text-gray-800 text-base">Electricity (BESCOM)</h2>
+                        {openAccordions.bescomInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                      </button>
+
+                      {openAccordions.bescomInfo && (
+                        <div className="pb-4">
+                          <div className="space-y-1 text-md">
+                            {Object.entries(locationInfo.bescomInfo).map(([fieldName, value]) => (
+                              <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
+                                <span className="text-gray-600">{fieldName}</span>
+                                <span className="font-medium text-gray-700 text-left break-words">{value}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* BWSSB Information - Accordion */}
+                    <div className="border-b border-gray-200">
+                      <button
+                        onClick={() => toggleAccordion('bwssbInfo')}
+                        className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
+                      >
+                        <h2 className="font-semibold text-gray-800 text-base">Water Supply (BWSSB)</h2>
+                        {openAccordions.bwssbInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                      </button>
+
+                      {openAccordions.bwssbInfo && (
+                        <div className="pb-4">
+                          <div className="space-y-1 text-md">
+                            {Object.entries(locationInfo.bwssbInfo).map(([fieldName, value]) => (
+                              <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
+                                <span className="text-gray-600">{fieldName}</span>
+                                <span className="font-medium text-gray-700 text-left break-words">{value}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Police Jurisdiction - Accordion */}
+                    <div>
                     <button
                         onClick={() => toggleAccordion('policeJurisdiction')}
                         className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
@@ -2609,78 +2680,7 @@ const BangaloreAddressMap = () => {
                           </div>
                         </div>
                       )}
-                    </div>
-
-                    {/* BESCOM Information - Accordion */}
-                    <div className="border-b border-gray-200">
-                      <button
-                        onClick={() => toggleAccordion('bescomInfo')}
-                        className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
-                      >
-                        <h2 className="font-semibold text-gray-800 text-base">Electricity (BESCOM)</h2>
-                        {openAccordions.bescomInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                      </button>
-
-                      {openAccordions.bescomInfo && (
-                        <div className="pb-4">
-                          <div className="space-y-1 text-md">
-                            {Object.entries(locationInfo.bescomInfo).map(([fieldName, value]) => (
-                              <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
-                                <span className="text-gray-600">{fieldName}</span>
-                                <span className="font-medium text-gray-700 text-left break-words">{value}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* BWSSB Information - Accordion */}
-                    <div className="border-b border-gray-200">
-                      <button
-                        onClick={() => toggleAccordion('bwssbInfo')}
-                        className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
-                      >
-                        <h2 className="font-semibold text-gray-800 text-base">Water Supply (BWSSB)</h2>
-                        {openAccordions.bwssbInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                      </button>
-
-                      {openAccordions.bwssbInfo && (
-                        <div className="pb-4">
-                          <div className="space-y-1 text-md">
-                            {Object.entries(locationInfo.bwssbInfo).map(([fieldName, value]) => (
-                              <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
-                                <span className="text-gray-600">{fieldName}</span>
-                                <span className="font-medium text-gray-700 text-left break-words">{value}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* BDA Information - Accordion */}
-                    <div> {/* Removed border-b */}
-                      <button
-                        onClick={() => toggleAccordion('bdaInfo')}
-                        className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
-                      >
-                        <h2 className="font-semibold text-gray-800 text-base">BDA Information</h2>
-                        {openAccordions.bdaInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                      </button>
-                      {openAccordions.bdaInfo && (
-                        <div className="pb-4">
-                          <div className="space-y-1 text-md">
-                            {Object.entries(locationInfo.bdaInfo).map(([fieldName, value]) => (
-                              <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
-                                <span className="text-gray-600">{fieldName}</span>
-                                <span className="font-medium text-gray-700 text-left break-words">{value}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
+                    </div>                    
                 </div> {/* End Accordions Container */}
               </div>
             ) : null} {/* Render nothing if no selection and not intro */}
@@ -2719,22 +2719,22 @@ const BangaloreAddressMap = () => {
             {showIntroPanel && !selectedLocation ? (
               <div className="flex-grow overflow-y-auto pr-1 text-md mt-4"> {/* Scrollable content area */}
                 <p className="text-gray-600"> {/* Dark mode */}
-                If you're a Bengaluru resident, you can use Civic compass to identify the BBMP, Revenue, BESCOM, BWSSB, and BDA offices for your area.
+                If you're a Bengaluru resident, you can use Civic Compass to identify the BBMP, BDA, Revenue, BESCOM, BWSSB offices, and Police offices for your area.
                 </p>
                 <h2 className="text-lg font-semibold text-gray-800 mt-7 mb-1">Note</h2>
                 <p className="text-gray-600"> {/* Dark mode */}
-                Enter the exact address you need information for. Note that a single pincode can cover multiple wards, and that some roads may fall under two different wards.
+                Enter the <strong>exact address</strong> you need information for; a single pincode may include multiple wards.
                 </p>
                 <p className="text-gray-600 mt-2"><em>This tool is only for Bengaluru at this time.</em></p>
 
                 <h2 className="text-lg font-semibold text-gray-800 mt-7 mb-1">Data Sources</h2>
                 <p className="text-gray-600"> {/* Dark mode */}
-                We pull information from government records. While we strive for accuracy, these sources can be incomplete or outdated.
+                We pull information from Government records. While we strive for accuracy, these sources can sometimes be incomplete or outdated.
                 </p>
                 {/* Linkified Data Sources */}
                 <div className="flex flex-col space-y-2 text-sm mt-2"> {/* Dark mode */}
-                  <a href="https://opencity.in/data" target="_blank" rel="noopener noreferrer" className="underline text-gray-500 transtition-opacity hover:opacity-80">OpenCity Data</a>
-                  <a href="https://kgis.ksrsac.in/kgis/" target="_blank" rel="noopener noreferrer" className="underline text-gray-500 transtition-opacity hover:opacity-80">Karnataka-GIS Portal</a>
+                  <a href="https://opencity.in/data" target="_blank" rel="noopener noreferrer" className="underline text-gray-500 transtition-opacity hover:opacity-80">OpenCity</a>
+                  <a href="https://kgis.ksrsac.in/kgis/" target="_blank" rel="noopener noreferrer" className="underline text-gray-500 transtition-opacity hover:opacity-80">Karnataka-GIS</a>
                   <a href="https://www.openstreetmap.org/about" target="_blank" rel="noopener noreferrer" className="underline text-gray-500 transtition-opacity hover:opacity-80">OpenStreetMap</a>
                 </div>
               </div>
@@ -2782,6 +2782,29 @@ const BangaloreAddressMap = () => {
                     )}
                   </div>
 
+                    {/* BDA Information - Accordion */}
+                    <div className="border-b border-gray-200">
+                      <button
+                        onClick={() => toggleAccordion('bdaInfo')}
+                        className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
+                      >
+                        <h2 className="font-semibold text-gray-800 text-base">BDA Information</h2>
+                        {openAccordions.bdaInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                      </button>
+                      {openAccordions.bdaInfo && (
+                        <div className="pb-4">
+                          <div className="space-y-1 text-md">
+                            {Object.entries(locationInfo.bdaInfo).map(([fieldName, value]) => (
+                              <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
+                                <span className="text-gray-600">{fieldName}</span>
+                                <span className="font-medium text-gray-700 text-left break-words">{value}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
                     {/* Revenue Classification - Accordion */}
                     <div className="border-b border-gray-200">
                       <button
@@ -2874,8 +2897,56 @@ const BangaloreAddressMap = () => {
                       )}
                     </div>
 
-                    {/* Police Jurisdiction - Accordion */}
+                    {/* BESCOM Information - Accordion */}
                     <div className="border-b border-gray-200">
+                      <button
+                        onClick={() => toggleAccordion('bescomInfo')}
+                        className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
+                      >
+                        <h2 className="font-semibold text-gray-800 text-base">Electricity (BESCOM)</h2>
+                        {openAccordions.bescomInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                      </button>
+
+                      {openAccordions.bescomInfo && (
+                        <div className="pb-4">
+                          <div className="space-y-1 text-md">
+                            {Object.entries(locationInfo.bescomInfo).map(([fieldName, value]) => (
+                              <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
+                                <span className="text-gray-600">{fieldName}</span>
+                                <span className="font-medium text-gray-700 text-left break-words">{value}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* BWSSB Information - Accordion */}
+                    <div className="border-b border-gray-200">
+                      <button
+                        onClick={() => toggleAccordion('bwssbInfo')}
+                        className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
+                      >
+                        <h2 className="font-semibold text-gray-800 text-base">Water Supply (BWSSB)</h2>
+                        {openAccordions.bwssbInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                      </button>
+
+                      {openAccordions.bwssbInfo && (
+                        <div className="pb-4">
+                          <div className="space-y-1 text-md">
+                            {Object.entries(locationInfo.bwssbInfo).map(([fieldName, value]) => (
+                              <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
+                                <span className="text-gray-600">{fieldName}</span>
+                                <span className="font-medium text-gray-700 text-left break-words">{value}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Police Jurisdiction - Accordion */}
+                    <div>
                     <button
                         onClick={() => toggleAccordion('policeJurisdiction')}
                         className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
@@ -2937,78 +3008,7 @@ const BangaloreAddressMap = () => {
                           </div>
                         </div>
                       )}
-                    </div>
-
-                    {/* BESCOM Information - Accordion */}
-                    <div className="border-b border-gray-200">
-                      <button
-                        onClick={() => toggleAccordion('bescomInfo')}
-                        className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
-                      >
-                        <h2 className="font-semibold text-gray-800 text-base">Electricity (BESCOM)</h2>
-                        {openAccordions.bescomInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                      </button>
-
-                      {openAccordions.bescomInfo && (
-                        <div className="pb-4">
-                          <div className="space-y-1 text-md">
-                            {Object.entries(locationInfo.bescomInfo).map(([fieldName, value]) => (
-                              <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
-                                <span className="text-gray-600">{fieldName}</span>
-                                <span className="font-medium text-gray-700 text-left break-words">{value}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* BWSSB Information - Accordion */}
-                    <div className="border-b border-gray-200">
-                      <button
-                        onClick={() => toggleAccordion('bwssbInfo')}
-                        className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
-                      >
-                        <h2 className="font-semibold text-gray-800 text-base">Water Supply (BWSSB)</h2>
-                        {openAccordions.bwssbInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                      </button>
-
-                      {openAccordions.bwssbInfo && (
-                        <div className="pb-4">
-                          <div className="space-y-1 text-md">
-                            {Object.entries(locationInfo.bwssbInfo).map(([fieldName, value]) => (
-                              <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
-                                <span className="text-gray-600">{fieldName}</span>
-                                <span className="font-medium text-gray-700 text-left break-words">{value}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* BDA Information - Accordion */}
-                    <div> {/* Removed border-b */}
-                      <button
-                        onClick={() => toggleAccordion('bdaInfo')}
-                        className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
-                      >
-                        <h2 className="font-semibold text-gray-800 text-base">BDA Information</h2>
-                        {openAccordions.bdaInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                      </button>
-                      {openAccordions.bdaInfo && (
-                        <div className="pb-4">
-                          <div className="space-y-1 text-md">
-                            {Object.entries(locationInfo.bdaInfo).map(([fieldName, value]) => (
-                              <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
-                                <span className="text-gray-600">{fieldName}</span>
-                                <span className="font-medium text-gray-700 text-left break-words">{value}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
+                    </div>                    
                 </div> {/* End Accordions Container */}
               </div>
             ) : null} {/* Render nothing if no selection and not intro */}
