@@ -1440,7 +1440,7 @@ const BangaloreAddressMap = () => {
   // Function to handle "Go back" action
   const handleGoBack = () => {
     setSelectedLocation(null);
-    setSearchQuery('');
+    // setSearchQuery('');
     setShowInfoPanel(false); // Hide info panel
     setShowIntroPanel(true); // Show intro panel
     resetAccordions(); // Reset accordions
@@ -2385,16 +2385,17 @@ const BangaloreAddressMap = () => {
               // Intro Content for Mobile
               <div className="flex-grow overflow-y-auto pr-1 text-md mt-4"> {/* Scrollable content area */}
                 <p className="text-gray-600"> {/* Dark mode */}
-                  Helping Bengaluru residents identify government offices for their area. File complaints. Or obtain related Govt services. We cover BBMP, Revenue, BESCOM, BWSSB, BDA, and RTO offices.
+                If you're a Bengaluru resident, you can use Civic compass to identify the BBMP, Revenue, BESCOM, BWSSB, and BDA offices for your area.
                 </p>
                 <h2 className="text-lg font-semibold text-gray-800 mt-7 mb-1">Note</h2>
                 <p className="text-gray-600"> {/* Dark mode */}
-                  Enter the exact address or select a location on the map. A single pincode can cover multiple wards/ some roads may fall under two different wards.
+                Enter the exact address you need information for. Note that a single pincode can cover multiple wards, and that some roads may fall under two different wards.
                 </p>
+                <p className="text-gray-600 mt-2"><em>This tool is only for Bengaluru at this time.</em></p>
 
                 <h2 className="text-lg font-semibold text-gray-800 mt-7 mb-1">Data Sources</h2>
                 <p className="text-gray-600"> {/* Dark mode */}
-                  Information is compiled from publicly available sources and may not always be fully accurate or up-to-date.
+                We pull information from government records. While we strive for accuracy, these sources can be incomplete or outdated.
                 </p>
                 {/* Linkified Data Sources */}
                 <div className="flex flex-col space-y-2 text-sm mt-2"> {/* Dark mode */}
@@ -2416,7 +2417,7 @@ const BangaloreAddressMap = () => {
 
                 {/* Location Details Header */}
                 <div className="flex-shrink-0 mb-4">
-                  <h2 className="text-lg font-semibold text-gray-800 mb-1">Location Details</h2>
+                  <h2 className="text-lg font-semibold text-gray-800 mb-1">Address</h2>
                   <p className="text-md text-gray-600 break-words">
                     {selectedLocation.display_name}
                   </p>
@@ -2685,7 +2686,7 @@ const BangaloreAddressMap = () => {
           {/* Footer - Common for mobile (Now outside scrollable content) */}
           <div className="flex-shrink-0 p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 z-10"> {/* Dark mode, Removed sticky/mt-auto */}          
             <div className="flex justify-between items-center text-sm">
-              <a href="https://zencitizen.in/contact-us/" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80">Share Feedback</a>
+              <a href="https://zencitizen.in/contact-us/" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80">Report an Error</a>
               <a href="https://docs.google.com/forms/d/e/1FAIpQLScQS_-VgUFQZJedyu6iIlpoYymsKSyGUhrvPoJX1WkZGQqfLQ/viewform" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80">Volunteer with Us</a>
               <a href="https://github.com/zen-citizen/civic-compass" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80">Open Source</a>                  
             </div>
@@ -2713,16 +2714,17 @@ const BangaloreAddressMap = () => {
             {showIntroPanel && !selectedLocation ? (
               <div className="flex-grow overflow-y-auto pr-1 text-md mt-4"> {/* Scrollable content area */}
                 <p className="text-gray-600"> {/* Dark mode */}
-                  Helping Bengaluru residents identify government offices for their area. File complaints. Or obtain related Govt services. We cover BBMP, Revenue, BESCOM, BWSSB, BDA, and RTO offices.
+                If you're a Bengaluru resident, you can use Civic compass to identify the BBMP, Revenue, BESCOM, BWSSB, and BDA offices for your area.
                 </p>
                 <h2 className="text-lg font-semibold text-gray-800 mt-7 mb-1">Note</h2>
                 <p className="text-gray-600"> {/* Dark mode */}
-                  Enter the exact address or select a location on the map. A single pincode can cover multiple wards/ some roads may fall under two different wards.
+                Enter the exact address you need information for. Note that a single pincode can cover multiple wards, and that some roads may fall under two different wards.
                 </p>
+                <p className="text-gray-600 mt-2"><em>This tool is only for Bengaluru at this time.</em></p>
 
                 <h2 className="text-lg font-semibold text-gray-800 mt-7 mb-1">Data Sources</h2>
                 <p className="text-gray-600"> {/* Dark mode */}
-                  Information is compiled from publicly available sources and may not always be fully accurate or up-to-date.
+                We pull information from government records. While we strive for accuracy, these sources can be incomplete or outdated.
                 </p>
                 {/* Linkified Data Sources */}
                 <div className="flex flex-col space-y-2 text-sm mt-2"> {/* Dark mode */}
@@ -2743,7 +2745,7 @@ const BangaloreAddressMap = () => {
 
                 {/* Location Details Header */}
                 <div className="flex-shrink-0 mb-4">
-                  <h2 className="text-lg font-semibold text-gray-800 mb-1">Location Details</h2>
+                  <h2 className="text-lg font-semibold text-gray-800 mb-1">Address</h2>
                   <p className="text-md text-gray-600 break-words">
                     {selectedLocation.display_name}
                   </p>
@@ -3008,7 +3010,7 @@ const BangaloreAddressMap = () => {
 
             <div className="mt-auto pt-4 border-t border-gray-200 flex-shrink-0"> {/* Footer stick to bottom */}
               <div className="flex justify-between items-center text-sm">
-                <a href="https://zencitizen.in/contact-us/" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80">Share Feedback</a>
+                <a href="https://zencitizen.in/contact-us/" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80">Report an Error</a>
                 <a href="https://docs.google.com/forms/d/e/1FAIpQLScQS_-VgUFQZJedyu6iIlpoYymsKSyGUhrvPoJX1WkZGQqfLQ/viewform" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80">Volunteer with Us</a>
                 <a href="https://github.com/zen-citizen/civic-compass" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80">Open Source</a>                  
               </div>
