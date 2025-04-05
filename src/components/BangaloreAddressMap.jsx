@@ -2270,7 +2270,7 @@ const BangaloreAddressMap = () => {
 
                {/* Search suggestions */}
                {showSuggestions && (
-                 <div className="absolute text-left mt-1 w-full bg-white border border-gray-200 rounded-lg z-50 max-h-60 overflow-y-auto">
+                 <div className="absolute text-left mt-1 w-full bg-white border border-gray-200 rounded-lg max-h-60 overflow-y-auto">
                    {searchResults.map((result, index) => (
                      <div
                        key={index}
@@ -2325,7 +2325,7 @@ const BangaloreAddressMap = () => {
         ></div>
 
         {/* Map controls */}
-        <div className="leaflet-map-controls absolute top-20 right-5 md:top-20 md:right-4 flex flex-col gap-2"> {/* Adjusted top/right for mobile */}
+        <div className="leaflet-map-controls absolute top-20 right-5 md:top-20 md:right-4 flex flex-col gap-2" style={{ zIndex: 5}}> {/* Adjusted top/right for mobile */}
           <button
             className="bg-white p-2 rounded-md border-2 border-gray-300 dark:text-blue-400 hover:bg-gray-100 transition-colors flex-shrink-0 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             onClick={zoomIn}
@@ -2355,8 +2355,7 @@ const BangaloreAddressMap = () => {
         <div
           id="mobile-info-panel"
           ref={infoPanelRef}
-          className="fixed bottom-0 left-0 right-0 bg-white rounded-t-lg transition-all duration-300 ease-in-out flex flex-col"
-          style={{ zIndex: 401 }}
+          className="fixed bottom-0 left-0 right-0 bg-white rounded-t-lg transition-all duration-300 ease-in-out flex flex-col z-10"
         >
           {/* Panel Header (Clickable Toggle) */}
           <div
