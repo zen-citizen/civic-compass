@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { LocateFixed, Search, Info, Loader, ExternalLink, ChevronDown, ChevronUp, ArrowLeft, Sun, Moon } from 'lucide-react';
+import { LocateFixed, Search, Info, Loader, ExternalLink, ChevronDown, ChevronUp, ArrowLeft, Sun, Moon, Plus, Minus } from 'lucide-react';
 import policeJurisdiction from '../layers/PoliceJurisdiction_5.json'
 import BBMPInformation from '../layers/BBMPInformation_11.json'
 import Constituencies from '../layers/Constituencies_3.json'
@@ -106,11 +106,11 @@ const BangaloreAddressMap = () => {
   const [showTooltip, setShowTooltip] = useState(false);
   const touchStartRef = useRef(null);
   const touchEndRef = useRef(null);
-  const minSwipeDistance = 50; // minimum distance required for swipe action
+  const minSwipeDistance = 150; // minimum distance required for swipe action
   const [showIntroPanel, setShowIntroPanel] = useState(true); // New state to control intro panel visibility
   const [isDarkMode, setIsDarkMode] = useState(false); // <-- Add dark mode state
   // State for panel expansion (start expanded on mobile if intro is showing)
-  const [isPanelExpanded, setIsPanelExpanded] = useState(isMobile && showIntroPanel);
+  const [isPanelExpanded, setIsPanelExpanded] = useState(false);
   const [lastToggledAccordion, setLastToggledAccordion] = useState(null); // <-- State to track last opened accordion
 
   // First, add state for tracking open accordions
@@ -1188,8 +1188,6 @@ const BangaloreAddressMap = () => {
         'Division': "Unknown",
         'Sub Division': "Unknown",
         'Service Station': "Unknown",
-        'Office Address': "Unknown",
-        'Office Maps Link': null
       };
     }
 
@@ -1198,8 +1196,6 @@ const BangaloreAddressMap = () => {
       'Division': "Unknown",
       'Sub Division': "Unknown",
       'Service Station': "Unknown",
-      'Office Address': "Unknown",
-      'Office Maps Link': null
     };
 
     // Create a point for the clicked location
@@ -1234,7 +1230,7 @@ const BangaloreAddressMap = () => {
           if (polygon && polygon.getBounds().contains(point)) {
             // Then do a precise point-in-polygon check
             const isInside = isMarkerInsidePolygon(point, polygonLatLngs);
-            
+
             if (isInside) {
               divisionName = feature.properties.DivisionName || "Unknown";
               console.log("Found BWSSB Division:", divisionName, feature.properties);
@@ -1335,8 +1331,6 @@ const BangaloreAddressMap = () => {
       'Division': divisionName,
       'Sub Division': subdivisionName,
       'Service Station': serviceStationName,
-      'Office Address': "Address not available", // Placeholder
-      'Office Maps Link': null // Placeholder
     };
   };
 
@@ -1415,7 +1409,7 @@ const BangaloreAddressMap = () => {
   // Function to handle "Go back" action
   const handleGoBack = () => {
     setSelectedLocation(null);
-    setSearchQuery('');
+    // setSearchQuery('');
     setShowInfoPanel(false); // Hide info panel
     setShowIntroPanel(true); // Show intro panel
     resetAccordions(); // Reset accordions
@@ -1695,7 +1689,9 @@ const BangaloreAddressMap = () => {
       setIsSearching(true);
       // Photon API with Bangalore as a bias point
       // The lon,lat coordinates are for Bangalore center
-      const searchUrl = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=5&lang=en&lon=77.5946&lat=12.9716`;
+      // Add bbox parameter for Bangalore (approximate coordinates)
+      const bangaloreBbox = '77.4,12.8,77.8,13.2'; // minLon, minLat, maxLon, maxLat
+      const searchUrl = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=5&lang=en&lon=77.5946&lat=12.9716&bbox=${bangaloreBbox}`;
       
       const response = await fetch(searchUrl);
       
@@ -1742,7 +1738,7 @@ const BangaloreAddressMap = () => {
   // Handle location selection from suggestions
   const handleLocationSelect = (location) => {
     setSelectedLocation(location);
-    setSearchQuery(location.display_name.split(',')[0]); // Set the input to first part of location name
+    setSearchQuery(location.display_name); // Set the input to first part of location name
     setShowSuggestions(false);
     setShowInfoPanel(true);
     setShowIntroPanel(false); // Hide intro panel
@@ -2205,7 +2201,7 @@ const BangaloreAddressMap = () => {
   useEffect(() => {
     // Expand if mobile and showing intro OR if mobile and a location is selected (always start expanded if content exists)
     // Collapse if desktop OR if mobile and panel was manually collapsed
-    if (isMobile && (showIntroPanel || selectedLocation)) {
+    if (isMobile && (showIntroPanel && selectedLocation)) {
         // If it wasn't already expanded, expand it. Avoid forcing expansion if user manually collapsed.
         // Let's simplify: always expand if mobile and content is visible. User can collapse if they want.
         setIsPanelExpanded(true);
@@ -2219,25 +2215,25 @@ const BangaloreAddressMap = () => {
   }, [isMobile, showIntroPanel, selectedLocation]);
 
   return (
-    <div className="relative h-screen overflow-hidden"> {/* Root container */}
+    <div className="relative h-screen overflow-hidden flex"> {/* Root container */}
       {/* Map Area and Overlays - Always visible */}
-      <div className="absolute inset-0 z-0"> {/* Map container wrapper */}
+      <div className="relative w-full h-screen"> {/* Map container wrapper */}
         {/* Search Bar Overlay */}
-        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-20 w-full max-w-xl">
-           <div className="flex items-center gap-2 bg-white p-1 rounded-lg shadow-md border border-gray-200">
+        <div className="absolute top-4 z-20 w-full px-5 md:pl-10 md:pr-24">
+           <div className="flex items-center gap-3">
              <form onSubmit={handleSearch} className="relative flex-grow">
                <input
-                 type="text"
+                 type="search"
                  value={searchQuery}
                  onChange={handleSearchInputChange}
                  onKeyDown={handleKeyDown}
                  onFocus={() => searchQuery.length >= 2 && setShowSuggestions(true)}
-                 placeholder="Enter the exact address or select a location"
-                 className="w-full px-4 py-2 border border-gray-300 rounded-lg pr-12 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                 placeholder="Enter the exact address"
+                 className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
                />
                <button
                  type="submit"
-                 className="absolute right-2 top-1/2 transform -translate-y-1/2 text-blue-600 hover:text-blue-800"
+                 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 hover:text-blue-800"
                  aria-label="Search"
                >
                  {isSearching ? <Loader size={20} className="animate-spin" /> : <Search size={20} />}
@@ -2245,7 +2241,7 @@ const BangaloreAddressMap = () => {
 
                {/* Search suggestions */}
                {showSuggestions && (
-                 <div className="absolute text-left mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg z-50 max-h-60 overflow-y-auto">
+                 <div className="absolute text-left mt-1 w-full bg-white border border-gray-200 rounded-lg max-h-60 overflow-y-auto">
                    {searchResults.map((result, index) => (
                      <div
                        key={index}
@@ -2273,11 +2269,14 @@ const BangaloreAddressMap = () => {
              <button
                type="button"
                onClick={setCurrentLocation}
-               className="bg-white dark:bg-gray-800 p-2 rounded-lg border border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:border-blue-300 dark:hover:border-blue-500 transition-colors flex-shrink-0 shadow-md" // Add dark mode styles
-               title="Use your current location"
+               className="bg-white p-2 rounded-lg border-2 border-gray-300 text-blue-600 dark:text-blue-400 hover:bg-gray-100 transition-colors flex-shrink-0 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 relative group" // Added 'relative group' for tooltip positioning
                aria-label="Use your current location"
              >
-               <LocateFixed size={20} />
+               <LocateFixed size={22} />
+               {/* Tooltip */}
+               <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
+                 Find your current location
+               </div>
              </button>
 
              {/* Dark Mode Toggle Button */}
@@ -2300,17 +2299,17 @@ const BangaloreAddressMap = () => {
         ></div>
 
         {/* Map controls */}
-        <div className="leaflet-map-controls absolute top-20 right-2 md:top-4 md:right-4 flex flex-col gap-1 z-10"> {/* Adjusted top/right for mobile */}
+        <div className="leaflet-map-controls absolute top-20 right-5 md:top-20 md:right-4 flex flex-col gap-2" style={{ zIndex: 5}}> {/* Adjusted top/right for mobile */}
           <button
-            className="bg-white p-2 rounded shadow hover:bg-gray-100 text-xl text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="bg-white p-2 rounded-md border-2 border-gray-300 dark:text-blue-400 hover:bg-gray-100 transition-colors flex-shrink-0 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             onClick={zoomIn}
             aria-label="Zoom in"
-          >+</button>
+          ><Plus size={20} strokeWidth={2.5} /></button>
           <button
-            className="bg-white p-2 rounded shadow hover:bg-gray-100 text-xl text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="bg-white p-2 rounded-md border-2 border-gray-300 dark:text-blue-400 hover:bg-gray-100 transition-colors flex-shrink-0 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             onClick={zoomOut}
             aria-label="Zoom out"
-          >−</button>
+          ><Minus size={20} strokeWidth={2.5} /></button>
         </div>
 
         {/* Loading indicator */}
@@ -2330,12 +2329,7 @@ const BangaloreAddressMap = () => {
         <div
           id="mobile-info-panel"
           ref={infoPanelRef}
-          className={`fixed bottom-0 left-0 right-0 z-30 bg-white dark:bg-gray-900 rounded-t-lg shadow-[-4px_0px_10px_rgba(0,0,0,0.1)] dark:shadow-[0_-4px_10px_rgba(255,255,255,0.1)] transition-all duration-300 ease-in-out flex flex-col ${
-            isPanelExpanded ? 'translate-y-0 h-[50vh]' : 'translate-y-[calc(100%-80px)] h-[80px]' // Use 50vh expanded, 80px collapsed
-          }`}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
+          className="fixed bottom-0 left-0 right-0 bg-white rounded-t-lg transition-all duration-300 ease-in-out flex flex-col z-10"
         >
           {/* Panel Header (Clickable Toggle) */}
           <div
@@ -2343,254 +2337,358 @@ const BangaloreAddressMap = () => {
             onClick={toggleMobileInfoPanel}
           >
             {isPanelExpanded ? <ChevronDown size={24} className="text-gray-500 mb-1"/> : <ChevronUp size={24} className="text-gray-500 mb-1"/>}
-            <h2 className="text-base font-semibold text-gray-800 dark:text-gray-200 text-center truncate w-full px-4">
-              {selectedLocation ? selectedLocation.display_name.split(',')[0] : "Civic Compass - Bengaluru"}
-            </h2>
+            <div className="flex flex-col items-center">
+              <h1 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex-shrink-0"> {/* Dark mode */}
+                Civic Compass – Bengaluru
+              </h1>
+              <a
+                href="https://zencitizen.in"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-300 font-medium text-lg" // Dark mode
+              >
+                Zen Citizen
+              </a>
+            </div>
           </div>
 
+
           {/* Panel Content (Scrollable) */}
-          <div ref={scrollableContentRef} className={`flex-grow overflow-y-auto p-4 dark:text-gray-300 ${isPanelExpanded ? '' : 'hidden'}`}> {/* Hide content when collapsed, ADDED REF */}
+          <div ref={scrollableContentRef} className={`flex-grow overflow-y-auto p-4 dark:text-gray-300 ${isPanelExpanded ? 'h-96' : 'h-56'}`}> {/* Hide content when collapsed, ADDED REF */}
             {showIntroPanel && !selectedLocation ? (
               // Intro Content for Mobile
-              <div className="space-y-4 text-sm pb-4"> {/* Add padding-bottom */}
-                <p className="text-gray-700 dark:text-gray-300">
-                  Helping Bengaluru residents identify government offices for their area. File complaints. Or obtain related Govt services. We cover BBMP, Revenue, BESCOM, BWSSB, BDA, and RTO offices.
+              <div className="flex-grow overflow-y-auto pr-1 text-md mt-4"> {/* Scrollable content area */}
+                <p className="text-gray-600"> {/* Dark mode */}
+                If you're a Bengaluru resident, you can use Civic Compass to identify the BBMP, BDA, Revenue, BESCOM, BWSSB offices, and Police offices for your area.
                 </p>
-                <h3 className="text-md font-semibold text-gray-800 dark:text-gray-100">How to use the tool</h3> {/* Dark mode */}
-                <p className="text-gray-700 dark:text-gray-300">
-                  Enter the exact address or select a location on the map
+                <h2 className="text-lg font-semibold text-gray-800 mt-7 mb-1">Note</h2>
+                <p className="text-gray-600"> {/* Dark mode */}
+                Enter the <strong>exact address</strong> you need information for; a single pincode may include multiple wards.
                 </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
-                  Note: A single pincode can cover multiple wards/ some roads may fall under two different wards.
-                </p>
+                <p className="text-gray-600 mt-2"><em>This tool is only for Bengaluru at this time.</em></p>
 
-                <h3 className="text-md font-semibold text-gray-800 dark:text-gray-100">Data Sources</h3> {/* Dark mode */}
-                <p className="text-gray-500 dark:text-gray-400">
-                  Information is compiled from publicly available sources and may not always be fully accurate or up-to-date
+                <h2 className="text-lg font-semibold text-gray-800 mt-7 mb-1">Data Sources</h2>
+                <p className="text-gray-600"> {/* Dark mode */}
+                We pull information from Government records. While we strive for accuracy, these sources can sometimes be incomplete or outdated.
                 </p>
-                {/* Linkified Data Sources for Mobile */}
-                <div className="flex flex-wrap gap-x-2 text-sm text-blue-600 dark:text-blue-400"> {/* Dark mode */}
-                  <a href="https://opencity.in/data" target="_blank" rel="noopener noreferrer" className="hover:underline">Open City Data</a>,
-                  <a href="https://kgis.ksrsac.in/kgis/" target="_blank" rel="noopener noreferrer" className="hover:underline">Karnataka GIS Portal</a>,
-                  <a href="https://www.openstreetmap.org/about" target="_blank" rel="noopener noreferrer" className="hover:underline">OpenStreetMap</a>
+                {/* Linkified Data Sources */}
+                <div className="flex flex-col space-y-2 text-sm mt-2"> {/* Dark mode */}
+                  <a href="https://opencity.in/data" target="_blank" rel="noopener noreferrer" className="underline text-gray-500 transtition-opacity hover:opacity-80">OpenCity</a>
+                  <a href="https://kgis.ksrsac.in/kgis/" target="_blank" rel="noopener noreferrer" className="underline text-gray-500 transtition-opacity hover:opacity-80">Karnataka-GIS</a>
+                  <a href="https://www.openstreetmap.org/about" target="_blank" rel="noopener noreferrer" className="underline text-gray-500 transtition-opacity hover:opacity-80">OpenStreetMap</a>
                 </div>
               </div>
             ) : selectedLocation ? (
               // Location Details Accordions for Mobile
-              <div className="space-y-1 pb-4"> {/* Add padding-bottom */}
-                  {/* Back Button - Only show if location is selected */}
-                   <button
-                    onClick={handleGoBack} // Use the same Go Back logic
-                    className="flex items-center text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 mb-4 focus:outline-none flex-shrink-0" // Dark mode
-                  >
-                    <ArrowLeft size={16} className="mr-1" /> Go back
-                  </button>
+              <div className="flex flex-col overflow-y-auto flex-grow h-full"> {/* Dark mode */}
+                {/* Back Button */}
+                <button
+                  onClick={handleGoBack}
+                  className="flex items-center text-md text-gray-500 transition-opacity hover:opacity-80 mb-4 focus:outline-none flex-shrink-0" // Dark mode
+                >
+                  <ArrowLeft size={22} className="mr-1" /> Go Back
+                </button>
 
+                {/* Location Details Header */}
+                <div className="flex-shrink-0 mb-4">
+                  <h2 className="text-lg font-semibold text-gray-800 mb-1">Address</h2>
+                  <p className="text-md text-gray-600 break-words">
+                    {selectedLocation.display_name}
+                  </p>
+                </div>
+
+                {/* Accordions Container */}
+                <div className="flex-grow pr-1"> {/* Scrollable accordion area */}
                   {/* BBMP Information */}
-                  <div data-accordion-section="bbmpInfo" className="border-b border-gray-200 dark:border-gray-700"> {/* Dark mode, ADDED DATA ATTRIBUTE */}
+                  <div className="border-b border-gray-200">
                     <button
-                      onClick={() => toggleAccordion('bbmpInfo')}
-                      className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
+                        onClick={() => toggleAccordion('bbmpInfo')}
+                        className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
                     >
-                      <h3 className="font-semibold text-gray-800 dark:text-gray-100 text-base">BBMP Information</h3> {/* Dark mode */}
-                      {openAccordions.bbmpInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                      <h2 className="font-semibold text-gray-800 text-base">BBMP Information</h2>
+                        {openAccordions.bbmpInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                     </button>
+
                     {openAccordions.bbmpInfo && (
-                      <div className="pb-3 text-sm space-y-1">
-                        {Object.entries(locationInfo.bbmpInfo).map(([fieldName, value]) => (
-                          <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
-                            <span className="text-gray-600">{fieldName}</span>
-                            <span className="font-medium text-gray-800 dark:text-gray-200 text-left break-words">{value}</span> {/* Dark mode */}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                  {/* Revenue Classification */}
-                  <div data-accordion-section="revenueClassification" className="border-b border-gray-200 dark:border-gray-700"> {/* Dark mode, ADDED DATA ATTRIBUTE */}
-                    <button
-                      onClick={() => toggleAccordion('revenueClassification')}
-                      className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
-                    >
-                      <h3 className="font-semibold text-gray-800 dark:text-gray-100 text-base">Revenue Classification</h3> {/* Dark mode */}
-                      {openAccordions.revenueClassification ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                    </button>
-                    {openAccordions.revenueClassification && (
-                      <div className="pb-3 text-sm space-y-1">
-                        {Object.entries(locationInfo.revenueClassification)
-                          .filter(([key]) => key !== 'htmlDescription')
-                          .map(([fieldName, value]) => (
+                      <div className="pb-4">
+                        <div className="space-y-1 text-md">
+                          {Object.entries(locationInfo.bbmpInfo).map(([fieldName, value]) => (
                             <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
                               <span className="text-gray-600">{fieldName}</span>
-                              <span className="font-medium text-gray-800 dark:text-gray-200 text-left break-words">{value}</span> {/* Dark mode */}
-                            </div>
-                          ))
-                        }
-                      </div>
-                    )}
-                  </div>
-                  {/* Revenue Offices */}
-                  <div data-accordion-section="revenueOffices" className="border-b border-gray-200 dark:border-gray-700"> {/* Dark mode, ADDED DATA ATTRIBUTE */}
-                    <button
-                      onClick={() => toggleAccordion('revenueOffices')}
-                      className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
-                    >
-                      <h3 className="font-semibold text-gray-800 dark:text-gray-100 text-base">Revenue Offices</h3> {/* Dark mode */}
-                      {openAccordions.revenueOffices ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                    </button>
-                    {openAccordions.revenueOffices && (
-                      <div className="pb-3 text-sm space-y-4">
-                        {/* SRO Info */}
-                        <div className="space-y-2">
-                          <div className="grid grid-cols-2 gap-2 py-1">
-                            <span className="text-gray-600">SRO</span>
-                            <span className="font-medium text-gray-800 dark:text-gray-200 text-left break-words">{locationInfo.revenueOffices.SRO}</span> {/* Dark mode */}
-                          </div>
-                          <div className="grid grid-cols-2 gap-2 py-1 items-start">
-                            <span className="text-gray-600">Address</span>
-                            <div className="flex flex-col text-left">
-                              <span className="text-gray-800 dark:text-gray-200 break-words">{locationInfo.revenueOffices['SRO Address']}</span> {/* Dark mode */}
-                              {locationInfo.revenueOffices['SRO Maps Link'] && (
-                                <a href={locationInfo.revenueOffices['SRO Maps Link']} target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 flex items-center mt-1"> {/* Dark mode */}
-                                  <ExternalLink size={14} className="mr-1 flex-shrink-0" /> Google Maps
-                                </a>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                        {/* DRO Info */}
-                        <div className="space-y-2 mt-4">
-                          <div className="grid grid-cols-2 gap-2 py-1">
-                            <span className="text-gray-600">DRO</span>
-                            <span className="font-medium text-gray-800 dark:text-gray-200 text-left break-words">{locationInfo.revenueOffices.DRO}</span> {/* Dark mode */}
-                          </div>
-                          <div className="grid grid-cols-2 gap-2 py-1 items-start">
-                            <span className="text-gray-600">Address</span>
-                            <div className="flex flex-col text-left">
-                              <span className="text-gray-800 dark:text-gray-200 break-words">{locationInfo.revenueOffices['DRO Address']}</span> {/* Dark mode */}
-                              {locationInfo.revenueOffices['DRO Maps Link'] && (
-                                <a href={locationInfo.revenueOffices['DRO Maps Link']} target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 flex items-center mt-1"> {/* Dark mode */}
-                                  <ExternalLink size={14} className="mr-1 flex-shrink-0" /> Google Maps
-                                </a>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  {/* Police Jurisdiction */}
-                  <div data-accordion-section="policeJurisdiction" className="border-b border-gray-200 dark:border-gray-700"> {/* Dark mode, ADDED DATA ATTRIBUTE */}
-                    <button
-                      onClick={() => toggleAccordion('policeJurisdiction')}
-                      className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
-                    >
-                      <h3 className="font-semibold text-gray-800 dark:text-gray-100 text-base">Police Jurisdiction</h3> {/* Dark mode */}
-                      {openAccordions.policeJurisdiction ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                    </button>
-                    {openAccordions.policeJurisdiction && (
-                      <div className="pb-3 text-sm space-y-4">
-                        {/* Police Station Info */}
-                        <div className="space-y-2">
-                          <div className="grid grid-cols-2 gap-2 py-1">
-                            <span className="text-gray-600">Police station</span>
-                            <span className="font-medium text-gray-800 dark:text-gray-200 text-left break-words">{locationInfo.policeJurisdiction['Police station']}</span> {/* Dark mode */}
-                          </div>
-                          <div className="grid grid-cols-2 gap-2 py-1 items-start">
-                            <span className="text-gray-600">Address</span>
-                            <div className="flex flex-col text-left">
-                              <span className="text-gray-800 dark:text-gray-200 break-words">{locationInfo.policeJurisdiction['Police station Address']}</span> {/* Dark mode */}
-                              {locationInfo.policeJurisdiction['Police station Maps Link'] && (
-                                <a href={locationInfo.policeJurisdiction['Police station Maps Link']} target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 flex items-center mt-1"> {/* Dark mode */}
-                                  <ExternalLink size={14} className="mr-1 flex-shrink-0" /> Google Maps
-                                </a>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                        {/* Traffic Station Info */}
-                        <div className="space-y-2 mt-4">
-                          <div className="grid grid-cols-2 gap-2 py-1">
-                            <span className="text-gray-600">Traffic station</span>
-                            <span className="font-medium text-gray-800 dark:text-gray-200 text-left break-words">{locationInfo.policeJurisdiction['Traffic station']}</span> {/* Dark mode */}
-                          </div>
-                          <div className="grid grid-cols-2 gap-2 py-1 items-start">
-                            <span className="text-gray-600">Address</span>
-                            <div className="flex flex-col text-left">
-                              <span className="text-gray-800 dark:text-gray-200 break-words">{locationInfo.policeJurisdiction['Traffic station Address']}</span> {/* Dark mode */}
-                              {locationInfo.policeJurisdiction['Traffic station Maps Link'] && (
-                                <a href={locationInfo.policeJurisdiction['Traffic station Maps Link']} target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 flex items-center mt-1"> {/* Dark mode */}
-                                  <ExternalLink size={14} className="mr-1 flex-shrink-0" /> Google Maps
-                                </a>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  {/* BESCOM Information */}
-                  <div data-accordion-section="bescomInfo" className="border-b border-gray-200 dark:border-gray-700"> {/* Dark mode, ADDED DATA ATTRIBUTE */}
-                    <button
-                      onClick={() => toggleAccordion('bescomInfo')}
-                      className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
-                    >
-                      <h3 className="font-semibold text-gray-800 dark:text-gray-100 text-base">Electricity (BESCOM)</h3> {/* Dark mode */}
-                      {openAccordions.bescomInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                    </button>
-                    {openAccordions.bescomInfo && (
-                      <div className="pb-3 text-sm space-y-1">
-                        {Object.entries(locationInfo.bescomInfo).map(([fieldName, value]) => (
-                           <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
-                            <span className="text-gray-600 dark:text-gray-400">{fieldName}</span> {/* Dark mode */}
-                            <span className="font-medium text-gray-800 dark:text-gray-200 text-left break-words">{value}</span> {/* Dark mode */}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                  {/* BWSSB Information */}
-                  <div data-accordion-section="bwssbInfo" className="border-b border-gray-200 dark:border-gray-700"> {/* Dark mode, ADDED DATA ATTRIBUTE */}
-                    <button
-                      onClick={() => toggleAccordion('bwssbInfo')}
-                      className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
-                    >
-                      <h3 className="font-semibold text-gray-800 dark:text-gray-100 text-base">Water Supply (BWSSB)</h3> {/* Dark mode */}
-                       {openAccordions.bwssbInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                    </button>
-                    {openAccordions.bwssbInfo && (
-                       <div className="pb-3 text-sm space-y-1">
-                        {Object.entries(locationInfo.bwssbInfo).map(([fieldName, value]) => (
-                           <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
-                            <span className="text-gray-600 dark:text-gray-400">{fieldName}</span> {/* Dark mode */}
-                            <span className="font-medium text-gray-800 dark:text-gray-200 text-left break-words">{value}</span> {/* Dark mode */}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                  {/* BDA Information */}
-                  <div data-accordion-section="bdaInfo" className="border-b border-gray-200 dark:border-gray-700"> {/* Dark mode, ADDED DATA ATTRIBUTE */}
-                    <button
-                      onClick={() => toggleAccordion('bdaInfo')}
-                      className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
-                    >
-                      <h3 className="font-semibold text-gray-800 dark:text-gray-100 text-base">BDA Information</h3> {/* Dark mode */}
-                      {openAccordions.bdaInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                    </button>
-                    {openAccordions.bdaInfo && (
-                      <div className="pb-3 text-sm space-y-1">
-                         <div className="space-y-1 text-sm">
-                          {Object.entries(locationInfo.bdaInfo).map(([fieldName, value]) => (
-                             <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
-                              <span className="text-gray-600 dark:text-gray-400">{fieldName}</span> {/* Dark mode */}
-                              <span className="font-medium text-gray-800 dark:text-gray-200 text-left break-words">{value}</span> {/* Dark mode */}
+                              <span className="font-medium text-gray-700 text-left break-words">{value}</span>
                             </div>
                           ))}
                         </div>
                       </div>
                     )}
                   </div>
+
+                    {/* BDA Information - Accordion */}
+                    <div className="border-b border-gray-200">
+                      <button
+                        onClick={() => toggleAccordion('bdaInfo')}
+                        className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
+                      >
+                        <h2 className="font-semibold text-gray-800 text-base">BDA Information</h2>
+                        {openAccordions.bdaInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                      </button>
+                      {openAccordions.bdaInfo && (
+                        <div className="pb-4">
+                          <div className="space-y-1 text-md">
+                            {Object.entries(locationInfo.bdaInfo).map(([fieldName, value]) => (
+                              <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
+                                <span className="text-gray-600">{fieldName}</span>
+                                <span className="font-medium text-gray-700 text-left break-words">{value}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Revenue Classification - Accordion */}
+                    <div className="border-b border-gray-200">
+                      <button
+                          onClick={() => toggleAccordion('revenueClassification')}
+                          className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
+                      >
+                        <h2 className="font-semibold text-gray-800 text-base">Revenue Classification</h2>
+                        {openAccordions.revenueClassification ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                      </button>
+
+                      {openAccordions.revenueClassification && (
+                        <div className="pb-4">
+                          <div className="space-y-1 text-md">
+                            {Object.entries(locationInfo.revenueClassification)
+                              .filter(([key]) => key !== 'htmlDescription')
+                              .map(([fieldName, value]) => (
+                                <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
+                                  <span className="text-gray-600">{fieldName}</span>
+                                  <span className="font-medium text-gray-700 text-left break-words">{value}</span>
+                                </div>
+                              ))
+                            }
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Revenue Offices - Accordion */}
+                    <div className="border-b border-gray-200">
+                      <button
+                        onClick={() => toggleAccordion('revenueOffices')}
+                        className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
+                      >
+                        <h2 className="font-semibold text-gray-800 text-base">Revenue Offices</h2>
+                        {openAccordions.revenueOffices ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                      </button>
+
+                      {openAccordions.revenueOffices && (
+                        <div className="pb-4">
+                          <div className="space-y-4 text-md">
+                            {/* SRO Information */}
+                            <div className="space-y-2">
+                              <div className="grid grid-cols-2 gap-2 py-1">
+                                <span className="text-gray-600">SRO</span>
+                                <span className="font-medium text-gray-700 text-left break-words">{locationInfo.revenueOffices.SRO}</span>
+                              </div>
+                              <div className="grid grid-cols-2 gap-2 py-1 items-start">
+                                <span className="text-gray-600">Address</span>
+                                <div className="flex flex-col text-left">
+                                  <span className="text-gray-700 break-words">{locationInfo.revenueOffices['SRO Address']}</span>
+                                  {locationInfo.revenueOffices['SRO Maps Link'] && (
+                                    <a
+                                      href={locationInfo.revenueOffices['SRO Maps Link']}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="text-blue-600 hover:text-blue-800 flex items-center mt-1"
+                                    >
+                                      <ExternalLink size={14} className="mr-1 flex-shrink-0" /> Google Maps
+                                    </a>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* DRO Information */}
+                            <div className="space-y-2 mt-4">
+                              <div className="grid grid-cols-2 gap-2 py-1">
+                                <span className="text-gray-600">DRO</span>
+                                <span className="font-medium text-gray-700 text-left break-words">{locationInfo.revenueOffices.DRO}</span>
+                              </div>
+                              <div className="grid grid-cols-2 gap-2 py-1 items-start">
+                                <span className="text-gray-600">Address</span>
+                                <div className="flex flex-col text-left">
+                                  <span className="text-gray-700 break-words">{locationInfo.revenueOffices['DRO Address']}</span>
+                                  {locationInfo.revenueOffices['DRO Maps Link'] && (
+                                    <a
+                                      href={locationInfo.revenueOffices['DRO Maps Link']}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="text-blue-600 hover:text-blue-800 flex items-center mt-1"
+                                    >
+                                      <ExternalLink size={14} className="mr-1 flex-shrink-0" /> Google Maps
+                                    </a>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* BESCOM Information - Accordion */}
+                    <div className="border-b border-gray-200">
+                      <button
+                          onClick={() => toggleAccordion('bescomInfo')}
+                          className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
+                      >
+                        <h2 className="font-semibold text-gray-800 text-base">Electricity (BESCOM)</h2>
+                        {openAccordions.bescomInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                      </button>
+
+                      {openAccordions.bescomInfo && (
+                          <div className="pb-4">
+                            <div className="space-y-1 text-md">
+                              {Object.entries(locationInfo.bescomInfo)
+                                  .filter(([key]) => key !== 'O&M Office Address' && key !== 'O&M Office Maps Link')
+                                  .map(([fieldName, value]) => (
+                                  <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
+                                    <span className="text-gray-600">{fieldName}</span>
+                                    <span className="font-medium text-gray-700 text-left break-words">{value}</span>
+                                  </div>
+                              ))}
+
+                              {/* O&M Office Address */}
+                              {locationInfo.bescomInfo['O&M Office Address'] !== "Address not available" && (
+                                  <div className="grid grid-cols-2 py-1">
+                                    <span className="text-gray-600">O&M Office Address</span>
+                                    <div className="flex flex-col">
+                                      <span className="text-md">{locationInfo.bescomInfo['O&M Office Address']}</span>
+                                      {locationInfo.bescomInfo['O&M Office Maps Link'] && (
+                                          <a
+                                          href={locationInfo.bescomInfo['O&M Office Maps Link']}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-blue-600 hover:text-blue-800 text-md flex items-center mt-1"
+                                        >
+                                        <ExternalLink size={14} className="mr-1" /> Google Maps
+                                        </a>
+                                        )}
+                                    </div>
+                                  </div>
+                              )}
+
+                              {/* Warning message at the bottom */}
+                              {locationInfo.bescomInfo['O&M Office'] !== "Unknown" && (
+                                  <div className="mt-3 text-xs text-amber-600 flex items-center">
+                                    <svg
+                                        xmlns="http://www.w2.org/2000/svg"
+                                        className="h-5 w-4 mr-1 text-amber-500"
+                                        fill="none"
+                                        viewBox="-1 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                    </svg>
+                                    O&M data may not be accurate
+                                  </div>
+                              )}
+                            </div>
+                          </div>
+                      )}
+                    </div>
+
+                    {/* BWSSB Information - Accordion */}
+                    <div className="border-b border-gray-200">
+                      <button
+                        onClick={() => toggleAccordion('bwssbInfo')}
+                        className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
+                      >
+                        <h2 className="font-semibold text-gray-800 text-base">Water Supply (BWSSB)</h2>
+                        {openAccordions.bwssbInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                      </button>
+
+                      {openAccordions.bwssbInfo && (
+                        <div className="pb-4">
+                          <div className="space-y-1 text-md">
+                            {Object.entries(locationInfo.bwssbInfo).map(([fieldName, value]) => (
+                              <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
+                                <span className="text-gray-600">{fieldName}</span>
+                                <span className="font-medium text-gray-700 text-left break-words">{value}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Police Jurisdiction - Accordion */}
+                    <div>
+                    <button
+                        onClick={() => toggleAccordion('policeJurisdiction')}
+                        className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
+                      >
+                        <h2 className="font-semibold text-gray-800 text-base">Police Jurisdiction</h2>
+                        {openAccordions.policeJurisdiction ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                      </button>
+
+                      {openAccordions.policeJurisdiction && (
+                        <div className="pb-4">
+                          <div className="space-y-4 text-md">
+                            {/* Police Station Information */}
+                            <div className="space-y-2">
+                              <div className="grid grid-cols-2 gap-2 py-1">
+                                <span className="text-gray-600">Police station</span>
+                                <span className="font-medium text-gray-700 text-left break-words">{locationInfo.policeJurisdiction['Police station']}</span>
+                              </div>
+                              <div className="grid grid-cols-2 gap-2 py-1 items-start">
+                                <span className="text-gray-600">Address</span>
+                                <div className="flex flex-col text-left">
+                                  <span className="text-gray-700 break-words">{locationInfo.policeJurisdiction['Police station Address']}</span>
+                                  {locationInfo.policeJurisdiction['Police station Maps Link'] && (
+                                    <a
+                                      href={locationInfo.policeJurisdiction['Police station Maps Link']}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="text-blue-600 hover:text-blue-800 flex items-center mt-1"
+                                    >
+                                      <ExternalLink size={14} className="mr-1 flex-shrink-0" /> Google Maps
+                                    </a>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Traffic Police Station Information */}
+                            <div className="space-y-2 mt-4">
+                              <div className="grid grid-cols-2 gap-2 py-1">
+                                <span className="text-gray-600">Traffic station</span>
+                                <span className="font-medium text-gray-700 text-left break-words">{locationInfo.policeJurisdiction['Traffic station']}</span>
+                              </div>
+                              <div className="grid grid-cols-2 gap-2 py-1 items-start">
+                                <span className="text-gray-600">Address</span>
+                                <div className="flex flex-col text-left">
+                                  <span className="text-gray-700 break-words">{locationInfo.policeJurisdiction['Traffic station Address']}</span>
+                                  {locationInfo.policeJurisdiction['Traffic station Maps Link'] && (
+                                    <a
+                                      href={locationInfo.policeJurisdiction['Traffic station Maps Link']}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="text-blue-600 hover:text-blue-800 flex items-center mt-1"
+                                    >
+                                      <ExternalLink size={14} className="mr-1 flex-shrink-0" /> Google Maps
+                                    </a>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                </div> {/* End Accordions Container */}
               </div>
             ) : null} {/* Render nothing if no selection and not intro */}
 
@@ -2598,412 +2696,376 @@ const BangaloreAddressMap = () => {
           </div>
 
           {/* Footer - Common for mobile (Now outside scrollable content) */}
-          {isPanelExpanded && ( // Only show footer when panel is expanded
-            <div className="flex-shrink-0 p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 z-10"> {/* Dark mode, Removed sticky/mt-auto */}
-              <div className="flex justify-between items-center text-sm">
-                 <a
-                    href="https://zencitizen.in"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-300 font-medium" // Dark mode
-                  >
-                    Zen Citizen
-                  </a>
-                <button className="text-blue-600 hover:underline">Share Feedback</button>
-              </div>
+          <div className="flex-shrink-0 p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 z-10"> {/* Dark mode, Removed sticky/mt-auto */}
+            <div className="flex justify-between items-center text-sm">
+              <a href="https://zencitizen.in/contact-us/" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80">Report an Error</a>
+              <a href="https://docs.google.com/forms/d/e/1FAIpQLScQS_-VgUFQZJedyu6iIlpoYymsKSyGUhrvPoJX1WkZGQqfLQ/viewform" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80">Volunteer with Us</a>
+              <a href="https://github.com/zen-citizen/civic-compass" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80">Open Source</a>
             </div>
-          )}
+          </div>
         </div>
       ) : (
         // Desktop: Sidebar
-        <div className="absolute top-0 left-0 bottom-0 w-full md:w-1/3 lg:w-1/4 bg-white shadow-lg flex flex-col z-10 border-r border-gray-200"> {/* Sidebar is absolute for desktop too */}
-          {/* Conditional Rendering: Intro Panel or Location Details */}
-          {showIntroPanel && !selectedLocation ? (
-            <div className="p-4 flex flex-col flex-grow h-full"> {/* Ensure full height */}
-              <h1 className="text-xl font-bold mb-3 text-blue-600 dark:text-blue-400 border-b border-gray-200 dark:border-gray-700 pb-3 flex-shrink-0"> {/* Dark mode */}
-                Civic Compass - Bengaluru
+        <div className="order-first h-screen bg-white shadow-lg flex flex-col border-r border-gray-200 flex-shrink-0" style={{ width: '480px' }}> {/* Sidebar is absolute for desktop too */}
+          <div className="p-4 flex flex-col flex-grow h-full"> {/* Ensure full height */}
+            <div className="flex justify-between mb-4 pb-3 border-b border-gray-200">
+              <h1 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex-shrink-0"> {/* Dark mode */}
+                Civic Compass – Bengaluru
               </h1>
-              <div className="flex-grow overflow-y-auto pr-1 space-y-4 text-sm mt-4"> {/* Scrollable content area */}
-                <p className="text-gray-700 dark:text-gray-300"> {/* Dark mode */}
-                  Helping Bengaluru residents identify government offices for their area. File complaints. Or obtain related Govt services. We cover BBMP, Revenue, BESCOM, BWSSB, BDA, and RTO offices.
-                </p>
-                <h2 className="text-md font-semibold text-gray-800">How to use the tool</h2>
-                <p className="text-gray-700 dark:text-gray-300"> {/* Dark mode */}
-                  Enter the exact address or select a location on the map
-                </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400"> {/* Dark mode */}
-                  Note: A single pincode can cover multiple wards/ some roads may fall under two different wards.
-                </p>
+              <a
+                href="https://zencitizen.in"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-300 font-medium text-lg" // Dark mode
+              >
+                Zen Citizen
+              </a>
+            </div>
 
-                <h2 className="text-md font-semibold text-gray-800">Data Sources</h2>
-                <p className="text-gray-500 dark:text-gray-400"> {/* Dark mode */}
-                  Information is compiled from publicly available sources and may not always be fully accurate or up-to-date
+            {/* Conditional Rendering: Intro Panel or Location Details */}
+            {showIntroPanel && !selectedLocation ? (
+              <div className="flex-grow overflow-y-auto pr-1 text-md mt-4"> {/* Scrollable content area */}
+                <p className="text-gray-600"> {/* Dark mode */}
+                If you're a Bengaluru resident, you can use Civic Compass to identify the BBMP, BDA, Revenue, BESCOM, BWSSB offices, and Police offices for your area.
+                </p>
+                <h2 className="text-lg font-semibold text-gray-800 mt-7 mb-1">Note</h2>
+                <p className="text-gray-600"> {/* Dark mode */}
+                Enter the <strong>exact address</strong> you need information for; a single pincode may include multiple wards.
+                </p>
+                <p className="text-gray-600 mt-2"><em>This tool is only for Bengaluru at this time.</em></p>
+
+                <h2 className="text-lg font-semibold text-gray-800 mt-7 mb-1">Data Sources</h2>
+                <p className="text-gray-600"> {/* Dark mode */}
+                We pull information from Government records. While we strive for accuracy, these sources can sometimes be incomplete or outdated.
                 </p>
                 {/* Linkified Data Sources */}
-                <div className="flex flex-col space-y-1 text-sm text-blue-600 dark:text-blue-400"> {/* Dark mode */}
-                  <a href="https://opencity.in/data" target="_blank" rel="noopener noreferrer" className="hover:underline">Open City Data</a>
-                  <a href="https://kgis.ksrsac.in/kgis/" target="_blank" rel="noopener noreferrer" className="hover:underline">Karnataka GIS Portal</a>
-                  <a href="https://www.openstreetmap.org/about" target="_blank" rel="noopener noreferrer" className="hover:underline">OpenStreetMap</a>
+                <div className="flex flex-col space-y-2 text-sm mt-2"> {/* Dark mode */}
+                  <a href="https://opencity.in/data" target="_blank" rel="noopener noreferrer" className="underline text-gray-500 transtition-opacity hover:opacity-80">OpenCity</a>
+                  <a href="https://kgis.ksrsac.in/kgis/" target="_blank" rel="noopener noreferrer" className="underline text-gray-500 transtition-opacity hover:opacity-80">Karnataka-GIS</a>
+                  <a href="https://www.openstreetmap.org/about" target="_blank" rel="noopener noreferrer" className="underline text-gray-500 transtition-opacity hover:opacity-80">OpenStreetMap</a>
                 </div>
               </div>
-              <div className="mt-auto pt-4 border-t border-gray-200 flex-shrink-0"> {/* Footer stick to bottom */}
-                <div className="flex justify-between items-center text-sm">
-                   <a
-                      href="https://zencitizen.in"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-300 font-medium" // Dark mode
-                    >
-                      Zen Citizen
-                    </a>
-                  <button className="text-blue-600 hover:underline">Share Feedback</button>
+            ) : selectedLocation ? (
+              <div className="flex flex-col overflow-y-auto flex-grow h-full"> {/* Dark mode */}
+                {/* Back Button */}
+                <button
+                  onClick={handleGoBack}
+                  className="flex items-center text-md text-gray-500 transition-opacity hover:opacity-80 mb-4 focus:outline-none flex-shrink-0" // Dark mode
+                >
+                  <ArrowLeft size={22} className="mr-1" /> Go Back
+                </button>
+
+                {/* Location Details Header */}
+                <div className="flex-shrink-0 mb-4">
+                  <h2 className="text-lg font-semibold text-gray-800 mb-1">Address</h2>
+                  <p className="text-md text-gray-600 break-words">
+                    {selectedLocation.display_name}
+                  </p>
                 </div>
+
+                {/* Accordions Container */}
+                <div className="flex-grow overflow-y-auto pr-1"> {/* Scrollable accordion area */}
+                  {/* BBMP Information */}
+                  <div className="border-b border-gray-200">
+                    <button
+                        onClick={() => toggleAccordion('bbmpInfo')}
+                        className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
+                    >
+                      <h2 className="font-semibold text-gray-800 text-base">BBMP Information</h2>
+                        {openAccordions.bbmpInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                    </button>
+
+                    {openAccordions.bbmpInfo && (
+                      <div className="pb-4">
+                        <div className="space-y-1 text-md">
+                          {Object.entries(locationInfo.bbmpInfo).map(([fieldName, value]) => (
+                            <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
+                              <span className="text-gray-600">{fieldName}</span>
+                              <span className="font-medium text-gray-700 text-left break-words">{value}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                    {/* BDA Information - Accordion */}
+                    <div className="border-b border-gray-200">
+                      <button
+                        onClick={() => toggleAccordion('bdaInfo')}
+                        className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
+                      >
+                        <h2 className="font-semibold text-gray-800 text-base">BDA Information</h2>
+                        {openAccordions.bdaInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                      </button>
+                      {openAccordions.bdaInfo && (
+                        <div className="pb-4">
+                          <div className="space-y-1 text-md">
+                            {Object.entries(locationInfo.bdaInfo).map(([fieldName, value]) => (
+                              <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
+                                <span className="text-gray-600">{fieldName}</span>
+                                <span className="font-medium text-gray-700 text-left break-words">{value}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Revenue Classification - Accordion */}
+                    <div className="border-b border-gray-200">
+                      <button
+                          onClick={() => toggleAccordion('revenueClassification')}
+                          className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
+                      >
+                        <h2 className="font-semibold text-gray-800 text-base">Revenue Classification</h2>
+                        {openAccordions.revenueClassification ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                      </button>
+
+                      {openAccordions.revenueClassification && (
+                        <div className="pb-4">
+                          <div className="space-y-1 text-md">
+                            {Object.entries(locationInfo.revenueClassification)
+                              .filter(([key]) => key !== 'htmlDescription')
+                              .map(([fieldName, value]) => (
+                                <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
+                                  <span className="text-gray-600">{fieldName}</span>
+                                  <span className="font-medium text-gray-700 text-left break-words">{value}</span>
+                                </div>
+                              ))
+                            }
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Revenue Offices - Accordion */}
+                    <div className="border-b border-gray-200">
+                      <button
+                        onClick={() => toggleAccordion('revenueOffices')}
+                        className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
+                      >
+                        <h2 className="font-semibold text-gray-800 text-base">Revenue Offices</h2>
+                        {openAccordions.revenueOffices ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                      </button>
+
+                      {openAccordions.revenueOffices && (
+                        <div className="pb-4">
+                          <div className="space-y-4 text-md">
+                            {/* SRO Information */}
+                            <div className="space-y-2">
+                              <div className="grid grid-cols-2 gap-2 py-1">
+                                <span className="text-gray-600">SRO</span>
+                                <span className="font-medium text-gray-700 text-left break-words">{locationInfo.revenueOffices.SRO}</span>
+                              </div>
+                              <div className="grid grid-cols-2 gap-2 py-1 items-start">
+                                <span className="text-gray-600">Address</span>
+                                <div className="flex flex-col text-left">
+                                  <span className="text-gray-700 break-words">{locationInfo.revenueOffices['SRO Address']}</span>
+                                  {locationInfo.revenueOffices['SRO Maps Link'] && (
+                                    <a
+                                      href={locationInfo.revenueOffices['SRO Maps Link']}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="text-blue-600 hover:text-blue-800 flex items-center mt-1"
+                                    >
+                                      <ExternalLink size={14} className="mr-1 flex-shrink-0" /> Google Maps
+                                    </a>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* DRO Information */}
+                            <div className="space-y-2 mt-4">
+                              <div className="grid grid-cols-2 gap-2 py-1">
+                                <span className="text-gray-600">DRO</span>
+                                <span className="font-medium text-gray-700 text-left break-words">{locationInfo.revenueOffices.DRO}</span>
+                              </div>
+                              <div className="grid grid-cols-2 gap-2 py-1 items-start">
+                                <span className="text-gray-600">Address</span>
+                                <div className="flex flex-col text-left">
+                                  <span className="text-gray-700 break-words">{locationInfo.revenueOffices['DRO Address']}</span>
+                                  {locationInfo.revenueOffices['DRO Maps Link'] && (
+                                    <a
+                                      href={locationInfo.revenueOffices['DRO Maps Link']}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="text-blue-600 hover:text-blue-800 flex items-center mt-1"
+                                    >
+                                      <ExternalLink size={14} className="mr-1 flex-shrink-0" /> Google Maps
+                                    </a>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* BESCOM Information - Accordion */}
+                    <div className="border-b border-gray-200">
+                      <button
+                          onClick={() => toggleAccordion('bescomInfo')}
+                          className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
+                      >
+                        <h2 className="font-semibold text-gray-800 text-base">Electricity (BESCOM)</h2>
+                        {openAccordions.bescomInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                      </button>
+
+                      {openAccordions.bescomInfo && (
+                          <div className="pb-4">
+                            <div className="space-y-1 text-md">
+                              {Object.entries(locationInfo.bescomInfo)
+                                  .filter(([key]) => key !== 'O&M Office Address' && key !== 'O&M Office Maps Link')
+                                  .map(([fieldName, value]) => (
+                                  <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
+                                    <span className="text-gray-600">{fieldName}</span>
+                                    <span className="font-medium text-gray-700 text-left break-words">{value}</span>
+                                  </div>
+                              ))}
+
+                              {/* O&M Office Address */}
+                              {locationInfo.bescomInfo['O&M Office Address'] !== "Address not available" && (
+                                  <div className="grid grid-cols-2 py-1">
+                                    <span className="text-gray-600">O&M Office Address</span>
+                                    <div className="flex flex-col">
+                                      <span className="text-md">{locationInfo.bescomInfo['O&M Office Address']}</span>
+                                      {locationInfo.bescomInfo['O&M Office Maps Link'] && (
+                                          <a
+                                              href={locationInfo.bescomInfo['O&M Office Maps Link']}
+                                              target="_blank"
+                                              rel="noopener noreferrer"
+                                              className="text-blue-600 hover:text-blue-800 text-md flex items-center mt-1"
+                                          >
+                                            <ExternalLink size={14} className="mr-1" /> Google Maps
+                                          </a>
+                                      )}
+                                    </div>
+                                  </div>
+                              )}
+
+                              {/* Warning message at the bottom */}
+                              {locationInfo.bescomInfo['O&M Office'] !== "Unknown" && (
+                                  <div className="mt-3 text-xs text-amber-600 flex items-center">
+                                    <svg
+                                        xmlns="http://www.w2.org/2000/svg"
+                                        className="h-5 w-4 mr-1 text-amber-500"
+                                        fill="none"
+                                        viewBox="-1 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                    </svg>
+                                    O&M data may not be accurate
+                                  </div>
+                              )}
+                            </div>
+                          </div>
+                      )}
+                    </div>
+
+                    {/* BWSSB Information - Accordion */}
+                    <div className="border-b border-gray-200">
+                      <button
+                        onClick={() => toggleAccordion('bwssbInfo')}
+                        className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
+                      >
+                        <h2 className="font-semibold text-gray-800 text-base">Water Supply (BWSSB)</h2>
+                        {openAccordions.bwssbInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                      </button>
+
+                      {openAccordions.bwssbInfo && (
+                        <div className="pb-4">
+                          <div className="space-y-1 text-md">
+                            {Object.entries(locationInfo.bwssbInfo).map(([fieldName, value]) => (
+                              <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
+                                <span className="text-gray-600">{fieldName}</span>
+                                <span className="font-medium text-gray-700 text-left break-words">{value}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Police Jurisdiction - Accordion */}
+                    <div>
+                    <button
+                        onClick={() => toggleAccordion('policeJurisdiction')}
+                        className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
+                      >
+                        <h2 className="font-semibold text-gray-800 text-base">Police Jurisdiction</h2>
+                        {openAccordions.policeJurisdiction ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                      </button>
+
+                      {openAccordions.policeJurisdiction && (
+                        <div className="pb-4">
+                          <div className="space-y-4 text-md">
+                            {/* Police Station Information */}
+                            <div className="space-y-2">
+                              <div className="grid grid-cols-2 gap-2 py-1">
+                                <span className="text-gray-600">Police station</span>
+                                <span className="font-medium text-gray-700 text-left break-words">{locationInfo.policeJurisdiction['Police station']}</span>
+                              </div>
+                              <div className="grid grid-cols-2 gap-2 py-1 items-start">
+                                <span className="text-gray-600">Address</span>
+                                <div className="flex flex-col text-left">
+                                  <span className="text-gray-700 break-words">{locationInfo.policeJurisdiction['Police station Address']}</span>
+                                  {locationInfo.policeJurisdiction['Police station Maps Link'] && (
+                                    <a
+                                      href={locationInfo.policeJurisdiction['Police station Maps Link']}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="text-blue-600 hover:text-blue-800 flex items-center mt-1"
+                                    >
+                                      <ExternalLink size={14} className="mr-1 flex-shrink-0" /> Google Maps
+                                    </a>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Traffic Police Station Information */}
+                            <div className="space-y-2 mt-4">
+                              <div className="grid grid-cols-2 gap-2 py-1">
+                                <span className="text-gray-600">Traffic station</span>
+                                <span className="font-medium text-gray-700 text-left break-words">{locationInfo.policeJurisdiction['Traffic station']}</span>
+                              </div>
+                              <div className="grid grid-cols-2 gap-2 py-1 items-start">
+                                <span className="text-gray-600">Address</span>
+                                <div className="flex flex-col text-left">
+                                  <span className="text-gray-700 break-words">{locationInfo.policeJurisdiction['Traffic station Address']}</span>
+                                  {locationInfo.policeJurisdiction['Traffic station Maps Link'] && (
+                                    <a
+                                      href={locationInfo.policeJurisdiction['Traffic station Maps Link']}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="text-blue-600 hover:text-blue-800 flex items-center mt-1"
+                                    >
+                                      <ExternalLink size={14} className="mr-1 flex-shrink-0" /> Google Maps
+                                    </a>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                </div> {/* End Accordions Container */}
+              </div>
+            ) : null} {/* Render nothing if no selection and not intro */}
+
+            <div className="mt-auto pt-4 border-t border-gray-200 flex-shrink-0"> {/* Footer stick to bottom */}
+              <div className="flex justify-between items-center text-sm">
+                <a href="https://zencitizen.in/contact-us/" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80">Report an Error</a>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLScQS_-VgUFQZJedyu6iIlpoYymsKSyGUhrvPoJX1WkZGQqfLQ/viewform" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80">Volunteer with Us</a>
+                <a href="https://github.com/zen-citizen/civic-compass" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80">Open Source</a>
               </div>
             </div>
-          ) : selectedLocation ? (
-            <div className="p-4 flex flex-col flex-grow h-full dark:bg-gray-900 dark:text-gray-300"> {/* Dark mode */}
-              {/* Back Button */}
-              <button
-                onClick={handleGoBack}
-                className="flex items-center text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 mb-4 focus:outline-none flex-shrink-0" // Dark mode
-              >
-                <ArrowLeft size={16} className="mr-1" /> Go back
-              </button>
-
-              {/* Location Details Header */}
-              <div className="flex-shrink-0 mb-4">
-                <h2 className="text-lg font-semibold text-gray-800 mb-1">Location Details</h2>
-                <p className="text-sm text-gray-600 break-words">
-                  {selectedLocation.display_name}
-                </p>
-              </div>
-
-              {/* Accordions Container */}
-              <div className="space-y-1 flex-grow overflow-y-auto pr-1"> {/* Scrollable accordion area */}
-                 {/* BBMP Information */}
-                 <div className="border-b border-gray-200">
-                   <button
-                      onClick={() => toggleAccordion('bbmpInfo')}
-                      className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
-                   >
-                     <h2 className="font-semibold text-gray-800 text-base">BBMP Information</h2>
-                      {openAccordions.bbmpInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                   </button>
-
-                   {openAccordions.bbmpInfo && (
-                     <div className="pb-3">
-                       <div className="space-y-1 text-sm">
-                         {Object.entries(locationInfo.bbmpInfo).map(([fieldName, value]) => (
-                           <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
-                             <span className="text-gray-600">{fieldName}</span>
-                             <span className="font-medium text-gray-800 text-left break-words">{value}</span>
-                           </div>
-                         ))}
-                       </div>
-                     </div>
-                   )}
-                 </div>
-
-                  {/* Revenue Classification - Accordion */}
-                  <div className="border-b border-gray-200">
-                     <button
-                        onClick={() => toggleAccordion('revenueClassification')}
-                        className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
-                     >
-                       <h2 className="font-semibold text-gray-800 text-base">Revenue Classification</h2>
-                       {openAccordions.revenueClassification ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                     </button>
-
-                     {openAccordions.revenueClassification && (
-                       <div className="pb-3">
-                         <div className="space-y-1 text-sm">
-                           {Object.entries(locationInfo.revenueClassification)
-                             .filter(([key]) => key !== 'htmlDescription')
-                             .map(([fieldName, value]) => (
-                               <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
-                                 <span className="text-gray-600">{fieldName}</span>
-                                 <span className="font-medium text-gray-800 text-left break-words">{value}</span>
-                               </div>
-                             ))
-                           }
-                         </div>
-                       </div>
-                     )}
-                   </div>
-
-                  {/* Revenue Offices - Accordion */}
-                  <div className="border-b border-gray-200">
-                    <button
-                      onClick={() => toggleAccordion('revenueOffices')}
-                      className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
-                    >
-                      <h2 className="font-semibold text-gray-800 text-base">Revenue Offices</h2>
-                       {openAccordions.revenueOffices ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                    </button>
-
-                    {openAccordions.revenueOffices && (
-                      <div className="pb-3">
-                        <div className="space-y-4 text-sm">
-                          {/* SRO Information */}
-                          <div className="space-y-2">
-                            <div className="grid grid-cols-2 gap-2 py-1">
-                              <span className="text-gray-600">SRO</span>
-                              <span className="font-medium text-gray-800 text-left break-words">{locationInfo.revenueOffices.SRO}</span>
-                            </div>
-                            <div className="grid grid-cols-2 gap-2 py-1 items-start">
-                              <span className="text-gray-600">Address</span>
-                              <div className="flex flex-col text-left">
-                                <span className="text-gray-800 break-words">{locationInfo.revenueOffices['SRO Address']}</span>
-                                {locationInfo.revenueOffices['SRO Maps Link'] && (
-                                  <a
-                                    href={locationInfo.revenueOffices['SRO Maps Link']}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-blue-600 hover:text-blue-800 flex items-center mt-1"
-                                  >
-                                    <ExternalLink size={14} className="mr-1 flex-shrink-0" /> Google Maps
-                                  </a>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* DRO Information */}
-                          <div className="space-y-2 mt-4">
-                            <div className="grid grid-cols-2 gap-2 py-1">
-                              <span className="text-gray-600">DRO</span>
-                              <span className="font-medium text-gray-800 text-left break-words">{locationInfo.revenueOffices.DRO}</span>
-                            </div>
-                            <div className="grid grid-cols-2 gap-2 py-1 items-start">
-                              <span className="text-gray-600">Address</span>
-                              <div className="flex flex-col text-left">
-                                <span className="text-gray-800 break-words">{locationInfo.revenueOffices['DRO Address']}</span>
-                                {locationInfo.revenueOffices['DRO Maps Link'] && (
-                                  <a
-                                    href={locationInfo.revenueOffices['DRO Maps Link']}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-blue-600 hover:text-blue-800 flex items-center mt-1"
-                                  >
-                                    <ExternalLink size={14} className="mr-1 flex-shrink-0" /> Google Maps
-                                  </a>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Police Jurisdiction - Accordion */}
-                  <div className="border-b border-gray-200">
-                   <button
-                      onClick={() => toggleAccordion('policeJurisdiction')}
-                      className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
-                    >
-                      <h2 className="font-semibold text-gray-800 text-base">Police Jurisdiction</h2>
-                      {openAccordions.policeJurisdiction ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                    </button>
-
-                    {openAccordions.policeJurisdiction && (
-                      <div className="pb-3">
-                        <div className="space-y-4 text-sm">
-                          {/* Police Station Information */}
-                          <div className="space-y-2">
-                            <div className="grid grid-cols-2 gap-2 py-1">
-                              <span className="text-gray-600">Police station</span>
-                              <span className="font-medium text-gray-800 text-left break-words">{locationInfo.policeJurisdiction['Police station']}</span>
-                            </div>
-                            <div className="grid grid-cols-2 gap-2 py-1 items-start">
-                              <span className="text-gray-600">Address</span>
-                              <div className="flex flex-col text-left">
-                                <span className="text-gray-800 break-words">{locationInfo.policeJurisdiction['Police station Address']}</span>
-                                {locationInfo.policeJurisdiction['Police station Maps Link'] && (
-                                  <a
-                                    href={locationInfo.policeJurisdiction['Police station Maps Link']}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-blue-600 hover:text-blue-800 flex items-center mt-1"
-                                  >
-                                    <ExternalLink size={14} className="mr-1 flex-shrink-0" /> Google Maps
-                                  </a>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* Traffic Police Station Information */}
-                          <div className="space-y-2 mt-4">
-                            <div className="grid grid-cols-2 gap-2 py-1">
-                              <span className="text-gray-600">Traffic station</span>
-                              <span className="font-medium text-gray-800 text-left break-words">{locationInfo.policeJurisdiction['Traffic station']}</span>
-                            </div>
-                            <div className="grid grid-cols-2 gap-2 py-1 items-start">
-                              <span className="text-gray-600">Address</span>
-                              <div className="flex flex-col text-left">
-                                <span className="text-gray-800 break-words">{locationInfo.policeJurisdiction['Traffic station Address']}</span>
-                                {locationInfo.policeJurisdiction['Traffic station Maps Link'] && (
-                                  <a
-                                    href={locationInfo.policeJurisdiction['Traffic station Maps Link']}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-blue-600 hover:text-blue-800 flex items-center mt-1"
-                                  >
-                                    <ExternalLink size={14} className="mr-1 flex-shrink-0" /> Google Maps
-                                  </a>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* BESCOM Information - Accordion */}
-                  <div className="border-b border-gray-200">
-                    <button
-                      onClick={() => toggleAccordion('bescomInfo')}
-                      className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
-                    >
-                      <h2 className="font-semibold text-gray-800 text-base">Electricity (BESCOM)</h2>
-                      {openAccordions.bescomInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                    </button>
-
-                    {openAccordions.bescomInfo && (
-                      <div className="pb-3">
-                        <div className="space-y-1 text-sm">
-                          {Object.entries(locationInfo.bescomInfo).map(([fieldName, value]) => (
-                             <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
-                              <span className="text-gray-600">{fieldName}</span>
-                              <span className="font-medium text-gray-800 text-left break-words">{value}</span>
-                            </div>
-
-                            {/* Subdivision Information */}
-                            <div className="grid grid-cols-3 py-1">
-                              <span className="text-gray-601">Subdivision</span>
-                              <span className="font-medium">{locationInfo.bescomInfo.Subdivision}</span>
-                            </div>
-
-                            {/* Section Information */}
-                            <div className="grid grid-cols-3 py-1">
-                              <span className="text-gray-601">Section</span>
-                              <span className="font-medium">{locationInfo.bescomInfo.Section}</span>
-                            </div>
-
-                            {/* O&M Office Information */}
-                            {locationInfo.bescomInfo['O&M Office'] !== "Unknown" && (
-                                <div className="grid grid-cols-3 py-1">
-                                  <span className="text-gray-601">O&M Office</span>
-                                  <span className="font-medium">{locationInfo.bescomInfo['O&M Office']}</span>
-                                </div>
-                            )}
-
-                            {/* O&M Office Address */}
-                            {locationInfo.bescomInfo['O&M Office Address'] !== "Address not available" && (
-                                <div className="grid grid-cols-2 py-1">
-                                  <span className="text-gray-600">Address</span>
-                                  <div className="flex flex-col">
-                                    <span className="text-sm">{locationInfo.bescomInfo['O&M Office Address']}</span>
-                                    {locationInfo.bescomInfo['O&M Office Maps Link'] && (
-                                        <a
-                                            href={locationInfo.bescomInfo['O&M Office Maps Link']}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="text-blue-600 hover:text-blue-800 text-sm flex items-center mt-1"
-                                        >
-                                          <ExternalLink size={14} className="mr-1" /> Google Maps
-                                        </a>
-                                    )}
-                                  </div>
-                                </div>
-                            )}
-
-                            {/* Warning message at the bottom */}
-                            {locationInfo.bescomInfo['O&M Office'] !== "Unknown" && (
-                                <div className="mt-3 text-xs text-amber-600 flex items-center">
-                                  <svg
-                                      xmlns="http://www.w2.org/2000/svg"
-                                      className="h-5 w-4 mr-1 text-amber-500"
-                                      fill="none"
-                                      viewBox="-1 0 24 24"
-                                      stroke="currentColor"
-                                  >
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                  </svg>
-                                  O&M data may not be accurate
-                                </div>
-                            )}
-                          </div>
-                        </div>
-                    )}
-                  </div>
-
-                  {/* BWSSB Information - Accordion */}
-                  <div className="border-b border-gray-200">
-                    <button
-                      onClick={() => toggleAccordion('bwssbInfo')}
-                      className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
-                    >
-                      <h2 className="font-semibold text-gray-800 text-base">Water Supply (BWSSB)</h2>
-                       {openAccordions.bwssbInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                    </button>
-
-                    {openAccordions.bwssbInfo && (
-                       <div className="pb-3">
-                        <div className="space-y-1 text-sm">
-                          {Object.entries(locationInfo.bwssbInfo).map(([fieldName, value]) => (
-                             <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
-                              <span className="text-gray-600">{fieldName}</span>
-                              <span className="font-medium text-gray-800 text-left break-words">{value}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* BDA Information - Accordion */}
-                   <div> {/* Removed border-b */}
-                    <button
-                      onClick={() => toggleAccordion('bdaInfo')}
-                      className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
-                    >
-                      <h2 className="font-semibold text-gray-800 text-base">BDA Information</h2>
-                      {openAccordions.bdaInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                    </button>
-                    {openAccordions.bdaInfo && (
-                      <div className="pb-3">
-                         <div className="space-y-1 text-sm">
-                          {Object.entries(locationInfo.bdaInfo).map(([fieldName, value]) => (
-                             <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
-                              <span className="text-gray-600">{fieldName}</span>
-                              <span className="font-medium text-gray-800 text-left break-words">{value}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div> {/* End Accordions Container */}
-
-                {/* Footer in sidebar */}
-                <div className="mt-auto pt-4 border-t border-gray-200 dark:border-gray-700 flex-shrink-0"> {/* Dark mode */}
-                  <div className="flex justify-between items-center text-sm">
-                     <a
-                        href="https://zencitizen.in"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-300 font-medium" // Dark mode
-                      >
-                        Zen Citizen
-                      </a>
-                    <button className="text-blue-600 hover:underline">Share Feedback</button>
-                  </div>
-                </div>
-              </div>
-          ) : null} {/* Render nothing if no selection and not intro */}
+          </div>
         </div>
       )}
 
