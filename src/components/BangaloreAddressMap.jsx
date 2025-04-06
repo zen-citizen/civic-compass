@@ -267,9 +267,10 @@ const BangaloreAddressMap = () => {
     // Bangalore coordinates
     const bangaloreCoordinates = [12.9716, 77.5946]; // [latitude, longitude]
     
-    // Prevent multiple initializations
+    // Cleanup previous map instance if exists
     if (mapInstanceRef.current) {
-      return;
+      mapInstanceRef.current.remove();
+      mapInstanceRef.current = null;
     }
     
     // Only load Leaflet if we're in the browser
@@ -406,10 +407,30 @@ const BangaloreAddressMap = () => {
           zoomControl: false // Disable default zoom control
         }).setView(bangaloreCoordinates, 12);
         
-        // Add OpenStreetMap tiles
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
+        // Create tile layer options
+        const tileLayerOptions = {
+          minZoom: 0,
+          maxZoom: 20,
+          attribution: '&copy; <a href="https://carto.com/attributions">CARTO</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+          ext: 'png'
+        };
+        
+        // Dark mode tile layer
+        const darkTileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', tileLayerOptions);
+        
+        // Light mode tile layer
+        const lightTileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', tileLayerOptions);
+        
+        // Add the appropriate tile layer based on dark mode state
+        if (isDarkMode) {
+          darkTileLayer.addTo(map);
+        } else {
+          lightTileLayer.addTo(map);
+        }
+        
+        // Store tile layers for later switching
+        map.darkTileLayer = darkTileLayer;
+        map.lightTileLayer = lightTileLayer;
         
         // Add click event to map for reverse geocoding
         map.on('click', handleMapClick);
@@ -448,7 +469,31 @@ const BangaloreAddressMap = () => {
         document.body.removeChild(tooltipPortal);
       }
     };
-  }, [mapContainerRef]);
+  }, [mapContainerRef, isDarkMode]);
+
+  // Effect to switch map tile layers when dark mode changes
+  useEffect(() => {
+    const map = mapInstanceRef.current;
+    if (!map || !map.lightTileLayer || !map.darkTileLayer) return;
+    
+    if (isDarkMode) {
+      // Switch to dark mode tiles
+      if (map.hasLayer(map.lightTileLayer)) {
+        map.removeLayer(map.lightTileLayer);
+      }
+      if (!map.hasLayer(map.darkTileLayer)) {
+        map.darkTileLayer.addTo(map);
+      }
+    } else {
+      // Switch to light mode tiles
+      if (map.hasLayer(map.darkTileLayer)) {
+        map.removeLayer(map.darkTileLayer);
+      }
+      if (!map.hasLayer(map.lightTileLayer)) {
+        map.lightTileLayer.addTo(map);
+      }
+    }
+  }, [isDarkMode]);
 
   // Function to find BBMP information for a location
   const findBBMPInfo = (lat, lng) => {
@@ -2197,30 +2242,53 @@ const BangaloreAddressMap = () => {
     }
   }, [selectedLocation]);
 
-  // Load dark mode preference from localStorage
-  // useEffect(() => {
-  //   const savedMode = localStorage.getItem('darkMode');
-  //   if (savedMode) {
-  //     const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  //     setIsDarkMode(JSON.parse(savedMode) ?? prefersDark); // Default to system preference if no saved value
-  //   } else {
-  //      // Set initial state based on system preference if no localStorage value
-  //      setIsDarkMode(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
-  //   }
-  // }, []);
-
-  // Save dark mode preference to localStorage and update root class
-  // useEffect(() => {
-  //   console.log('Dark mode effect running. isDarkMode:', isDarkMode);
-  //   localStorage.setItem('darkMode', JSON.stringify(isDarkMode));
-  //   if (isDarkMode) {
-  //     console.log('Adding dark class');
-  //     document.documentElement.classList.add('dark');
-  //   } else {
-  //     console.log('Removing dark class');
-  //     document.documentElement.classList.remove('dark');
-  //   }
-  // }, [isDarkMode]);
+  // Dark mode initialization effect - only runs once on component mount
+  useEffect(() => {
+    // Check if user has a saved preference
+    const savedMode = localStorage.getItem('darkMode');
+    console.log('Initial load - Dark mode from localStorage:', savedMode);
+    
+    // Check system preference as fallback
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    console.log('System prefers dark mode:', prefersDark);
+    
+    // Set initial dark mode state (only on first render)
+    if (savedMode !== null) {
+      try {
+        const parsedMode = JSON.parse(savedMode);
+        console.log('Setting initial dark mode to saved preference:', parsedMode);
+        setIsDarkMode(parsedMode);
+      } catch (error) {
+        console.error('Error parsing saved dark mode:', error);
+        console.log('Falling back to system preference');
+        setIsDarkMode(prefersDark);
+      }
+    } else {
+      console.log('No saved preference, using system preference:', prefersDark);
+      setIsDarkMode(prefersDark);
+    }
+  }, []); // Empty dependency array means this only runs once on mount
+  
+  // Dark mode update effect - runs when isDarkMode changes
+  useEffect(() => {
+    // Only run this effect after initialization
+    // Apply dark mode class to document
+    console.log('Dark mode changed to:', isDarkMode);
+    
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    
+    // Save preference to localStorage when changed
+    try {
+      localStorage.setItem('darkMode', JSON.stringify(isDarkMode));
+      console.log('Saved dark mode preference to localStorage:', isDarkMode);
+    } catch (error) {
+      console.error('Error saving dark mode preference:', error);
+    }
+  }, [isDarkMode]);
 
   // Toggle dark mode
   const toggleDarkMode = () => {
@@ -2251,7 +2319,7 @@ const BangaloreAddressMap = () => {
       <div className="relative w-full h-screen"> {/* Map container wrapper */}
         {/* Search Bar Overlay */}
         <div className="absolute top-4 z-20 w-full px-5 md:pl-10 md:pr-24">
-           <div className="flex items-center gap-3">
+           <div className="flex items-center gap-1">
              <form onSubmit={handleSearch} className="relative flex-grow">
                <input
                  type="search"
@@ -2272,23 +2340,23 @@ const BangaloreAddressMap = () => {
 
                {/* Search suggestions */}
                {showSuggestions && (
-                 <div className="absolute text-left mt-1 w-full bg-white border border-gray-200 rounded-lg max-h-60 overflow-y-auto">
+                 <div className="absolute text-left mt-1 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg max-h-60 overflow-y-auto">
                    {searchResults.map((result, index) => (
                      <div
                        key={index}
-                       className={`p-2 cursor-pointer border-b border-gray-100 last:border-0 ${
-                         index === activeSuggestionIndex ? 'bg-blue-100' : 'hover:bg-gray-100'
+                       className={`p-2 cursor-pointer border-b border-gray-100 dark:border-gray-700 last:border-0 ${
+                         index === activeSuggestionIndex ? 'bg-blue-100 dark:bg-blue-700' : 'hover:bg-gray-100 dark:hover:bg-gray-700'
                        }`}
                        onClick={() => handleLocationSelect(result)}
                      >
-                       <div className="text-sm font-medium text-gray-800 truncate">{result.display_name}</div>
+                       <div className="text-sm font-medium text-gray-800 dark:text-gray-200 truncate">{result.display_name}</div>
                      </div>
                    ))}
                    {searchResults.length === 0 && !isSearching && (
-                     <div className="p-2 text-gray-500 text-sm">No results found</div>
+                     <div className="p-2 text-gray-500 dark:text-gray-400 text-sm">No results found</div>
                    )}
                    {isSearching && (
-                     <div className="p-2 text-gray-500 flex items-center text-sm">
+                     <div className="p-2 text-gray-500 dark:text-gray-400 flex items-center text-sm">
                        <Loader size={16} className="animate-spin mr-2" /> Searching...
                      </div>
                    )}
@@ -2300,10 +2368,10 @@ const BangaloreAddressMap = () => {
              <button
                type="button"
                onClick={setCurrentLocation}
-               className="bg-white p-2 rounded-lg border-2 border-gray-300 text-blue-600 dark:text-blue-400 hover:bg-gray-100 transition-colors flex-shrink-0 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 relative group" // Added 'relative group' for tooltip positioning
+               className="bg-white p-1.5 rounded-lg border-2 border-gray-300 text-blue-600 dark:text-blue-400 hover:bg-gray-100 transition-colors flex-shrink-0 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 relative group" // Added 'relative group' for tooltip positioning
                aria-label="Use your current location"
              >
-               <LocateFixed size={22} />
+               <LocateFixed size={20} />
                {/* Tooltip */}
                <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
                  Find your current location
@@ -2311,15 +2379,19 @@ const BangaloreAddressMap = () => {
              </button>
 
              {/* Dark Mode Toggle Button */}
-             {/* <button
+             <button
                type="button"
                onClick={toggleDarkMode}
-               className="bg-white dark:bg-gray-800 p-2 rounded-lg border border-gray-300 dark:border-gray-600 text-yellow-500 dark:text-yellow-400 hover:text-yellow-600 dark:hover:text-yellow-300 hover:border-yellow-300 dark:hover:border-yellow-500 transition-colors flex-shrink-0 shadow-md" // Add dark mode styles
+               className="bg-white dark:bg-gray-800 p-1.5 rounded-lg border-2 border-gray-300 dark:border-gray-600 text-yellow-500 dark:text-blue-400 hover:text-yellow-600 dark:hover:text-blue-300 hover:border-yellow-300 dark:hover:border-yellow-500 transition-colors flex-shrink-0 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 relative group"
                title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
                aria-label={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
              >
                {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
-             </button> */}
+               {/* Tooltip */}
+               <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
+                 {isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+               </div>
+             </button>
            </div>
         </div>
 

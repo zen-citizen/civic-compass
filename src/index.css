@@ -14,3 +14,129 @@ body {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Dark mode styles */
+.dark {
+  color-scheme: dark;
+}
+
+.dark body {
+  background-color: #121212;
+  color: #f5f5f5;
+}
+
+/* Dark mode component styles */
+.dark .bg-white {
+  background-color: #1f1f1f !important;
+}
+
+.dark .text-gray-600,
+.dark .text-gray-500 {
+  color: #d1d5db !important;
+}
+
+.dark .text-gray-800 {
+  color: #f3f4f6 !important;
+}
+
+.dark .border-gray-200,
+.dark .border-gray-300 {
+  border-color: #374151 !important;
+}
+
+/* Accordion and info panel dark mode */
+.dark .bg-blue-50 {
+  background-color: #312e81 !important;
+}
+
+.dark .bg-gray-50 {
+  background-color: #1f1f1f !important;
+}
+
+/* Ensure map container works with dark theme */
+.dark .leaflet-container {
+  background-color: #121212 !important;
+}
+
+/* Make map attribution text readable in dark mode */
+.dark .leaflet-control-attribution {
+  background-color: rgba(0, 0, 0, 0.7) !important;
+  color: #e5e7eb !important;
+}
+
+.dark .leaflet-control-attribution a {
+  color: #60a5fa !important;
+}
+
+/* Fix info panel text colors in dark mode */
+.dark .text-gray-600 {
+  color: #e5e7eb !important;
+}
+
+/* Improve contrast for all text elements in dark mode */
+.dark p, 
+.dark span,
+.dark div,
+.dark a:not(.text-blue-600) {
+  color: #e5e7eb !important;
+}
+
+/* Keep blue text elements visible but slightly lighter in dark mode */
+.dark .text-blue-600 {
+  color: #60a5fa !important;
+}
+
+/* Keep dark headings distinct */
+.dark h1, 
+.dark h2, 
+.dark h3,
+.dark .font-semibold,
+.dark .font-bold {
+  color: #f9fafb !important;
+}
+
+/* Ensure accordions are readable */
+.dark [data-accordion-section] {
+  background-color: #1f1f1f !important;
+  color: #e5e7eb !important;
+}
+
+.dark .leaflet-layer,
+.dark .leaflet-control-zoom-in,
+.dark .leaflet-control-zoom-out,
+.dark .leaflet-control-attribution {
+  filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+}
+
+/* Ensure accordion rows are readable */
+.dark [data-accordion-section] {
+  background-color: #1f1f1f !important;
+  color: #e5e7eb !important;
+}
+
+/* Fix search suggestion hover in dark mode */
+.dark .bg-blue-100 {
+  background-color: #3b82f6 !important; /* Bright blue in dark mode */
+  color: white !important;
+}
+
+.dark .hover\:bg-gray-100:hover {
+  background-color: #374151 !important; /* Darker gray for hover in dark mode */
+  color: white !important;
+}
+
+/* Fix search suggestion text in dark mode */
+.dark .absolute.text-left.mt-1.w-full {
+  background-color: #1f1f1f !important;
+  border-color: #4b5563 !important;
+}
+
+.dark .absolute.text-left.mt-1.w-full .text-gray-800 {
+  color: #e5e7eb !important; /* Light text color */
+}
+
+/* Ensure the active suggestion text is readable */
+.dark .bg-blue-100 .text-gray-800,
+.dark .hover\:bg-gray-100:hover .text-gray-800 {
+  color: white !important;
+}
