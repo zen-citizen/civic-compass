@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { LocateFixed, Search, Info, Loader, ExternalLink, ChevronDown, ChevronUp, ArrowLeft, Sun, Moon, Plus, Minus } from 'lucide-react';
+import { LocateFixed, Search, Loader, ExternalLink, ChevronDown, ChevronUp, ArrowLeft, Sun, Moon, Plus, Minus } from 'lucide-react';
 import policeJurisdiction from '../layers/PoliceJurisdiction_5.json'
 import BBMPInformation from '../layers/BBMPInformation_11.json'
 import Constituencies from '../layers/Constituencies_3.json'
@@ -8,7 +8,6 @@ import RevenueClassification from '../layers/RevenueClassification_10.json'
 import bescomSectionBoundary from '../layers/bescom-section-boundary.json'
 import bescomDivisionBoundary from '../layers/bescom-division-boundary.json'
 import bescomSubdivisionBoundary from '../layers/bescom-subdivision-boundary.json'
-import bescomOffices from '../layers/bescom-offices.json'
 import bwssbDivisions from '../layers/bwssb_divisions.json'
 import bwssbSubDivisions from '../layers/bwssb_sub_divisions.json'
 import bwssbServiceStations from '../layers/bwssb_service_station_divisions.json'
@@ -71,7 +70,7 @@ const BangaloreAddressMap = () => {
       'Division': "Unknown",
       'Subdivision': "Unknown",
       'Section': "Unknown",
-      'O&M Office': "Unknown",
+      'O&M Office': "Not available",
       'O&M Office Address': "Loading...",
       'O&M Office Maps Link': null
     },
@@ -254,7 +253,6 @@ const BangaloreAddressMap = () => {
     console.log("BESCOM Division Boundary data loaded:", bescomDivisionBoundary);
     console.log("BESCOM Subdivision Boundary data loaded:", bescomSubdivisionBoundary);
     console.log("BESCOM Section Boundary data loaded:", bescomSectionBoundary);
-    console.log("BESCOM Offices data loaded:", bescomOffices);
     console.log("BWSSB Divisions data loaded:", bwssbDivisions);
     console.log("BWSSB Sub Divisions data loaded:", bwssbSubDivisions);
     console.log("BWSSB Service Stations data loaded:", bwssbServiceStations);
@@ -445,6 +443,48 @@ const BangaloreAddressMap = () => {
     };
   }, [mapContainerRef]);
 
+  // Helper function for handling different geometry types
+  const processGeometry = (geometry, point, L) => {
+    try {
+      if (!geometry) return false;
+
+      if (geometry.type === "Polygon") {
+        const polygonCoords = geometry.coordinates[0].map(coord => [coord[1], coord[0]]);
+        const polygon = L.polygon(polygonCoords);
+        const polygonLatLngs = polygon.getLatLngs()[0];
+
+        if (polygon.getBounds().contains(point)) {
+          return isMarkerInsidePolygon(point, polygonLatLngs);
+        }
+      }
+      else if (geometry.type === "MultiPolygon") {
+        for (const polyCoords of geometry.coordinates) {
+          const polygonCoords = polyCoords[0].map(coord => [coord[1], coord[0]]);
+          const polygon = L.polygon(polygonCoords);
+          const polygonLatLngs = polygon.getLatLngs()[0];
+
+          if (polygon.getBounds().contains(point)) {
+            if (isMarkerInsidePolygon(point, polygonLatLngs)) {
+              return true;
+            }
+          }
+        }
+      }
+      else if (geometry.type === "GeometryCollection") {
+        for (const geom of geometry.geometries) {
+          if (processGeometry(geom, point, L)) {
+            return true;
+          }
+        }
+      }
+
+      return false;
+    } catch (error) {
+      console.error('Error processing geometry:', error);
+      return false;
+    }
+  };
+
   // Function to find BBMP information for a location
   const findBBMPInfo = (lat, lng) => {
     if (!BBMPInformation || !BBMPInformation.features) {
@@ -466,81 +506,46 @@ const BangaloreAddressMap = () => {
       'Ward number': "Missing data"
     };
 
-    // Create a point for the clicked location
     const point = L.latLng(lat, lng);
-    
-    // Log the first feature to see its properties structure
+
     if (BBMPInformation.features.length > 0 && lng === 77.5946 && lat === 12.9716) {
-      // Only log for the initial Bangalore coordinates to avoid excessive logging
       console.log("BBMP feature example:", BBMPInformation.features[0]);
     }
-    
-    // Check each BBMP polygon
+
     for (const feature of BBMPInformation.features) {
-      if (feature.geometry && (feature.geometry.type === "Polygon" || feature.geometry.type === "MultiPolygon")) {
-        try {
-          let polygon = null;
-          let polygonLatLngs = [];
-          
-          if (feature.geometry.type === "Polygon") {
-            // Single polygon
-            const polygonCoords = feature.geometry.coordinates[0].map(coord => [coord[1], coord[0]]);
-            polygon = L.polygon(polygonCoords);
-            polygonLatLngs = polygon.getLatLngs()[0]; // Get array of LatLng objects
-          } else if (feature.geometry.type === "MultiPolygon") {
-            // Multiple polygons
-            const multiPolygonCoords = feature.geometry.coordinates.map(poly => {
-              // Each polygon in the multi-polygon
-              return poly[0].map(coord => [coord[1], coord[0]]);
-            });
-            polygon = L.polygon(multiPolygonCoords);
-            
-            // For MultiPolygon, we need to check each ring
-            polygonLatLngs = polygon.getLatLngs().flat();
-          }
-          
-          // First do a quick bounds check (for performance)
-          if (polygon && polygon.getBounds().contains(point)) {
-            // Then do a precise point-in-polygon check
-            const isInside = isMarkerInsidePolygon(point, polygonLatLngs);
-            
-            if (isInside) {
-              // Log the matching feature to see its properties
-              console.log("Matching BBMP feature:", feature);
-              
-              // Extract BBMP information from properties
-              // Try different possible property names based on the JSON structure
-              const wardName = feature.properties["Ward Name"] || 
-                              feature.properties.Name || 
-                              "Unknown";
-                              
-              const wardNumber = feature.properties.Name || 
-                                "Unknown";
-                                
-              const zone = feature.properties.Zone || 
-                          "Unknown";
-                          
-              const division = feature.properties.Division || 
-                              "Unknown";
-                              
-              const subdivision = feature.properties.Subdivision || 
-                                 "Unknown";
-              
-              return {
-                'Zone': zone,
-                'Division': division,
-                'Subdivision': subdivision,
-                'Ward name': wardName,
-                'Ward number': wardNumber
-              };
-            }
-          }
-        } catch (error) {
-          console.error('Error checking BBMP polygon:', error);
+      if (feature.geometry) {
+        const isInside = processGeometry(feature.geometry, point, L);
+
+        if (isInside) {
+          console.log("Matching BBMP feature:", feature);
+
+          const wardName = feature.properties["Ward Name"] ||
+              feature.properties.Name ||
+              "Unknown";
+
+          const wardNumber = feature.properties.Name ||
+              "Unknown";
+
+          const zone = feature.properties.Zone ||
+              "Unknown";
+
+          const division = feature.properties.Division ||
+              "Unknown";
+
+          const subdivision = feature.properties.Subdivision ||
+              "Unknown";
+
+          return {
+            'Zone': zone,
+            'Division': division,
+            'Subdivision': subdivision,
+            'Ward name': wardName,
+            'Ward number': wardNumber
+          };
         }
       }
     }
-    
+
     return {
       Zone: "Missing data",
       Division: "Missing data",
@@ -573,88 +578,52 @@ const BangaloreAddressMap = () => {
       'Traffic station Maps Link': null
     };
 
-    // Create a point for the clicked location
     const point = L.latLng(lat, lng);
-    
-    // Log the first feature to see its properties structure
+
     if (policeJurisdiction.features.length > 0 && lng === 77.5946 && lat === 12.9716) {
-      // Only log for the initial Bangalore coordinates to avoid excessive logging
       console.log("Police jurisdiction feature example:", policeJurisdiction.features[0]);
     }
-    
-    // Check each police jurisdiction polygon
+
     for (const feature of policeJurisdiction.features) {
-      if (feature.geometry && (feature.geometry.type === "Polygon" || feature.geometry.type === "MultiPolygon")) {
-        try {
-          let polygon = null;
-          let polygonLatLngs = [];
-          
-          if (feature.geometry.type === "Polygon") {
-            // Single polygon
-            const polygonCoords = feature.geometry.coordinates[0].map(coord => [coord[1], coord[0]]);
-            polygon = L.polygon(polygonCoords);
-            polygonLatLngs = polygon.getLatLngs()[0]; // Get array of LatLng objects
-          } else if (feature.geometry.type === "MultiPolygon") {
-            // Multiple polygons
-            const multiPolygonCoords = feature.geometry.coordinates.map(poly => {
-              // Each polygon in the multi-polygon
-              return poly[0].map(coord => [coord[1], coord[0]]);
-            });
-            polygon = L.polygon(multiPolygonCoords);
-            
-            // For MultiPolygon, we need to check each ring
-            polygonLatLngs = polygon.getLatLngs().flat();
+      if (feature.geometry) {
+        const isInside = processGeometry(feature.geometry, point, L);
+
+        if (isInside) {
+          const policeStation = feature.properties["Police Station"] ||
+              feature.properties.Name ||
+              "Unknown";
+
+          const trafficStation = policeStation.replace(' PS', ' Traffic PS');
+
+          let psAddress = "Address not available";
+          let psMapsLink = null;
+          let tpAddress = "Address not available";
+          let tpMapsLink = null;
+
+          if (psLocations[policeStation.trim()] && psLocations[policeStation.trim()].places && psLocations[policeStation.trim()].places.length > 0) {
+            const psInfo = psLocations[policeStation.trim()].places[0];
+            psAddress = psInfo.formattedAddress;
+            psMapsLink = psInfo.googleMapsUri;
           }
-          
-          // First do a quick bounds check (for performance)
-          if (polygon && polygon.getBounds().contains(point)) {
-            // Then do a precise point-in-polygon check
-            const isInside = isMarkerInsidePolygon(point, polygonLatLngs);
-            
-            if (isInside) {
-              // Extract police jurisdiction information from properties
-              const policeStation = feature.properties["Police Station"] || 
-                                   feature.properties.Name || 
-                                   "Unknown";
-                                   
-              const trafficStation = policeStation.replace(' PS', ' Traffic PS');
-              
-              // Get additional information from our data files
-              let psAddress = "Address not available";
-              let psMapsLink = null;
-              let tpAddress = "Address not available";
-              let tpMapsLink = null;
-              
-              // Look up police station information
-              if (psLocations[policeStation.trim()] && psLocations[policeStation.trim()].places && psLocations[policeStation.trim()].places.length > 0) {
-                const psInfo = psLocations[policeStation.trim()].places[0];
-                psAddress = psInfo.formattedAddress;
-                psMapsLink = psInfo.googleMapsUri;
-              }
-              
-              // Look up traffic police station information
-              if (tpLocations[trafficStation.trim()] && tpLocations[trafficStation.trim()].places && tpLocations[trafficStation.trim()].places.length > 0) {
-                const tpInfo = tpLocations[trafficStation.trim()].places[0];
-                tpAddress = tpInfo.formattedAddress;
-                tpMapsLink = tpInfo.googleMapsUri;
-              }
-              
-              return {
-                'Police station': policeStation,
-                'Traffic station': trafficStation,
-                'Police station Address': psAddress,
-                'Traffic station Address': tpAddress,
-                'Police station Maps Link': psMapsLink,
-                'Traffic station Maps Link': tpMapsLink
-              };
-            }
+
+          if (tpLocations[trafficStation.trim()] && tpLocations[trafficStation.trim()].places && tpLocations[trafficStation.trim()].places.length > 0) {
+            const tpInfo = tpLocations[trafficStation.trim()].places[0];
+            tpAddress = tpInfo.formattedAddress;
+            tpMapsLink = tpInfo.googleMapsUri;
           }
-        } catch (error) {
-          console.error('Error checking police jurisdiction polygon:', error);
+
+          return {
+            'Police station': policeStation,
+            'Traffic station': trafficStation,
+            'Police station Address': psAddress,
+            'Traffic station Address': tpAddress,
+            'Police station Maps Link': psMapsLink,
+            'Traffic station Maps Link': tpMapsLink
+          };
         }
       }
     }
-    
+
     return {
       'Police station': "Unknown",
       'Traffic station': "Unknown",
@@ -673,7 +642,7 @@ const BangaloreAddressMap = () => {
         Taluk: "Unknown",
         Hobli: "Unknown",
         Village: "Unknown",
-      htmlDescription: null
+        htmlDescription: null
       };
     }
 
@@ -686,112 +655,68 @@ const BangaloreAddressMap = () => {
       htmlDescription: null
     };
 
-    // Create a point for the clicked location
     const point = L.latLng(lat, lng);
-    
-    // Log the first feature to see its properties structure
+
     if (RevenueClassification.features.length > 0 && lng === 77.5946 && lat === 12.9716) {
-      // Only log for the initial Bangalore coordinates to avoid excessive logging
       console.log("Revenue classification feature example:", RevenueClassification.features[0]);
     }
-    
-    // Check each revenue classification polygon
+
     for (const feature of RevenueClassification.features) {
-      if (feature.geometry && (feature.geometry.type === "Polygon" || feature.geometry.type === "MultiPolygon")) {
-        try {
-          let polygon = null;
-          let polygonLatLngs = [];
-          
-          if (feature.geometry.type === "Polygon") {
-            // Single polygon
-            const polygonCoords = feature.geometry.coordinates[0].map(coord => [coord[1], coord[0]]);
-            polygon = L.polygon(polygonCoords);
-            polygonLatLngs = polygon.getLatLngs()[0]; // Get array of LatLng objects
-          } else if (feature.geometry.type === "MultiPolygon") {
-            // Multiple polygons
-            const multiPolygonCoords = feature.geometry.coordinates.map(poly => {
-              // Each polygon in the multi-polygon
-              return poly[0].map(coord => [coord[1], coord[0]]);
-            });
-            polygon = L.polygon(multiPolygonCoords);
-            
-            // For MultiPolygon, we need to check each ring
-            polygonLatLngs = polygon.getLatLngs().flat();
-          }
-          
-          // First do a quick bounds check (for performance)
-          if (polygon && polygon.getBounds().contains(point)) {
-            // Then do a precise point-in-polygon check
-            const isInside = isMarkerInsidePolygon(point, polygonLatLngs);
-            
-            if (isInside) {
-              // Extract village name from properties
-              const villageName = feature.properties.Name || "Unknown";
-              
-              // Extract HTML description for detailed information
-              const htmlDescription = feature.properties.description || null;
-              
-              // Extract district, taluk, hobli from HTML description using regex
-              let district = "Unknown";
-              let taluk = "Unknown";
-              let hobli = "Unknown";
-              
-              if (htmlDescription) {
-                // Extract KGISVillageCode
-                const villageCodeMatch = htmlDescription.match(/KGISVillageCode<\/td>\s*<td>(\d+)<\/td>/);
-                const villageCode = villageCodeMatch ? villageCodeMatch[1] : null;
-                
-                // Extract KGISHobliID
-                const hobliIdMatch = htmlDescription.match(/KGISHobliID<\/td>\s*<td>(\d+)<\/td>/);
-                const hobliId = hobliIdMatch ? hobliIdMatch[1] : null;
-                
-                // Extract Bhucode (contains district, taluk, hobli codes)
-                const bhuCodeMatch = htmlDescription.match(/Bhucode<\/td>\s*<td>(\d+)<\/td>/);
-                const bhuCode = bhuCodeMatch ? bhuCodeMatch[1] : null;
-                
-                // Map district code to name (example mapping)
-                const districtCodeToName = { "20": "Bengaluru (Urban)" };
-                
-                // Map taluk code to name (example mapping)
-                const talukCodeToName = {};
-                
-                // Map hobli code to name (example mapping)
-                const hobliCodeToName = {};
-                
-                // Extract district code (first 2 digits of bhuCode)
-                if (bhuCode && bhuCode.length >= 2) {
-                  const districtCode = bhuCode.substring(0, 2);
-                  district = districtCodeToName[districtCode] || `District Code: ${districtCode}`;
-                }
-                
-                // Extract taluk code (digits 3-4 of bhuCode)
-                if (bhuCode && bhuCode.length >= 4) {
-                  const talukCode = bhuCode.substring(2, 4);
-                  taluk = talukCodeToName[talukCode] || `Taluk Code: ${talukCode}`;
-                }
-                
-                // Extract hobli code (digits 5-6 of bhuCode)
-                if (bhuCode && bhuCode.length >= 6) {
-                  const hobliCode = bhuCode.substring(4, 6);
-                  hobli = hobliCodeToName[hobliCode] || `Hobli Code: ${hobliCode}`;
-                }
-              }
-              
-              return {
-                District: district,
-                Taluk: taluk,
-                Hobli: hobli,
-                Village: villageName,
-                htmlDescription: htmlDescription
-              };
+      if (feature.geometry) {
+        const isInside = processGeometry(feature.geometry, point, L);
+
+        if (isInside) {
+          const villageName = feature.properties.Name || "Unknown";
+
+          const htmlDescription = feature.properties.description || null;
+
+          let district = "Unknown";
+          let taluk = "Unknown";
+          let hobli = "Unknown";
+
+          if (htmlDescription) {
+            const villageCodeMatch = htmlDescription.match(/KGISVillageCode<\/td>\s*<td>(\d+)<\/td>/);
+            const villageCode = villageCodeMatch ? villageCodeMatch[1] : null;
+
+            const hobliIdMatch = htmlDescription.match(/KGISHobliID<\/td>\s*<td>(\d+)<\/td>/);
+            const hobliId = hobliIdMatch ? hobliIdMatch[1] : null;
+
+            const bhuCodeMatch = htmlDescription.match(/Bhucode<\/td>\s*<td>(\d+)<\/td>/);
+            const bhuCode = bhuCodeMatch ? bhuCodeMatch[1] : null;
+
+            const districtCodeToName = { "20": "Bengaluru (Urban)" };
+
+            const talukCodeToName = {};
+
+            const hobliCodeToName = {};
+
+            if (bhuCode && bhuCode.length >= 2) {
+              const districtCode = bhuCode.substring(0, 2);
+              district = districtCodeToName[districtCode] || `District Code: ${districtCode}`;
+            }
+
+            if (bhuCode && bhuCode.length >= 4) {
+              const talukCode = bhuCode.substring(2, 4);
+              taluk = talukCodeToName[talukCode] || `Taluk Code: ${talukCode}`;
+            }
+
+            if (bhuCode && bhuCode.length >= 6) {
+              const hobliCode = bhuCode.substring(4, 6);
+              hobli = hobliCodeToName[hobliCode] || `Hobli Code: ${hobliCode}`;
             }
           }
-        } catch (error) {
-          console.error('Error checking revenue classification polygon:', error);
+
+          return {
+            District: district,
+            Taluk: taluk,
+            Hobli: hobli,
+            Village: villageName,
+            htmlDescription: htmlDescription
+          };
         }
       }
     }
-    
+
     return {
       District: "Missing data",
       Taluk: "Missing data",
@@ -824,89 +749,53 @@ const BangaloreAddressMap = () => {
       'DRO Maps Link': null
     };
 
-    // Create a point for the clicked location
     const point = L.latLng(lat, lng);
-    
-    // Log the first feature to see its properties structure
+
     if (RevenueOffices.features.length > 0 && lng === 77.5946 && lat === 12.9716) {
-      // Only log for the initial Bangalore coordinates to avoid excessive logging
       console.log("Revenue office feature example:", RevenueOffices.features[0]);
     }
-    
-    // Check each revenue office polygon
+
     for (const feature of RevenueOffices.features) {
-      if (feature.geometry && (feature.geometry.type === "Polygon" || feature.geometry.type === "MultiPolygon")) {
-        try {
-          let polygon = null;
-          let polygonLatLngs = [];
-          
-          if (feature.geometry.type === "Polygon") {
-            // Single polygon
-            const polygonCoords = feature.geometry.coordinates[0].map(coord => [coord[1], coord[0]]);
-            polygon = L.polygon(polygonCoords);
-            polygonLatLngs = polygon.getLatLngs()[0]; // Get array of LatLng objects
-          } else if (feature.geometry.type === "MultiPolygon") {
-            // Multiple polygons
-            const multiPolygonCoords = feature.geometry.coordinates.map(poly => {
-              // Each polygon in the multi-polygon
-              return poly[0].map(coord => [coord[1], coord[0]]);
-            });
-            polygon = L.polygon(multiPolygonCoords);
-            
-            // For MultiPolygon, we need to check each ring
-            polygonLatLngs = polygon.getLatLngs().flat();
+      if (feature.geometry) {
+        const isInside = processGeometry(feature.geometry, point, L);
+
+        if (isInside) {
+          const sroName = feature.properties.SRO_Name ||
+              feature.properties.Name ||
+              "Unknown";
+
+          const droName = feature.properties.DRO_Name ||
+              "Unknown";
+
+          let sroAddress = "Address not available";
+          let sroMapsLink = null;
+          let droAddress = "Address not available";
+          let droMapsLink = null;
+
+          if (sroLocations[sroName] && sroLocations[sroName].places && sroLocations[sroName].places.length > 0) {
+            const sroInfo = sroLocations[sroName].places[0];
+            sroAddress = sroInfo.formattedAddress;
+            sroMapsLink = sroInfo.googleMapsUri;
           }
-          
-          // First do a quick bounds check (for performance)
-          if (polygon && polygon.getBounds().contains(point)) {
-            // Then do a precise point-in-polygon check
-            const isInside = isMarkerInsidePolygon(point, polygonLatLngs);
-            
-            if (isInside) {
-              // Extract both SRO and DRO information from properties
-              const sroName = feature.properties.SRO_Name || 
-                             feature.properties.Name || 
-                             "Unknown";
-              
-              const droName = feature.properties.DRO_Name ||
-                             "Unknown";
-              
-              // Get additional information from our data files
-              let sroAddress = "Address not available";
-              let sroMapsLink = null;
-              let droAddress = "Address not available";
-              let droMapsLink = null;
-              
-              // Look up SRO information
-              if (sroLocations[sroName] && sroLocations[sroName].places && sroLocations[sroName].places.length > 0) {
-                const sroInfo = sroLocations[sroName].places[0];
-                sroAddress = sroInfo.formattedAddress;
-                sroMapsLink = sroInfo.googleMapsUri;
-              }
-              
-              // Look up DRO information
-              if (droLocations[droName] && droLocations[droName].places && droLocations[droName].places.length > 0) {
-                const droInfo = droLocations[droName].places[0];
-                droAddress = droInfo.formattedAddress;
-                droMapsLink = droInfo.googleMapsUri;
-              }
-              
-              return {
-                'SRO': sroName,
-                'DRO': droName,
-                'SRO Address': sroAddress,
-                'DRO Address': droAddress,
-                'SRO Maps Link': sroMapsLink,
-                'DRO Maps Link': droMapsLink
-              };
-            }
+
+          if (droLocations[droName] && droLocations[droName].places && droLocations[droName].places.length > 0) {
+            const droInfo = droLocations[droName].places[0];
+            droAddress = droInfo.formattedAddress;
+            droMapsLink = droInfo.googleMapsUri;
           }
-        } catch (error) {
-          console.error('Error checking revenue office polygon:', error);
+
+          return {
+            'SRO': sroName,
+            'DRO': droName,
+            'SRO Address': sroAddress,
+            'DRO Address': droAddress,
+            'SRO Maps Link': sroMapsLink,
+            'DRO Maps Link': droMapsLink
+          };
         }
       }
     }
-    
+
     return {
       'SRO': "Unknown",
       'DRO': "Unknown",
@@ -932,65 +821,32 @@ const BangaloreAddressMap = () => {
       'Constituency Type': "Unknown"
     };
 
-    // Create a point for the clicked location
     const point = L.latLng(lat, lng);
-    
-    // Log the first feature to see its properties structure
+
     if (Constituencies.features.length > 0 && lng === 77.5946 && lat === 12.9716) {
-      // Only log for the initial Bangalore coordinates to avoid excessive logging
       console.log("Constituency feature example:", Constituencies.features[0]);
     }
-    
-    // Check each constituency polygon
+
     for (const feature of Constituencies.features) {
-      if (feature.geometry && (feature.geometry.type === "Polygon" || feature.geometry.type === "MultiPolygon")) {
-        try {
-          let polygon = null;
-          let polygonLatLngs = [];
-          
-          if (feature.geometry.type === "Polygon") {
-            // Single polygon
-            const polygonCoords = feature.geometry.coordinates[0].map(coord => [coord[1], coord[0]]);
-            polygon = L.polygon(polygonCoords);
-            polygonLatLngs = polygon.getLatLngs()[0]; // Get array of LatLng objects
-          } else if (feature.geometry.type === "MultiPolygon") {
-            // Multiple polygons
-            const multiPolygonCoords = feature.geometry.coordinates.map(poly => {
-              // Each polygon in the multi-polygon
-              return poly[0].map(coord => [coord[1], coord[0]]);
-            });
-            polygon = L.polygon(multiPolygonCoords);
-            
-            // For MultiPolygon, we need to check each ring
-            polygonLatLngs = polygon.getLatLngs().flat();
-          }
-          
-          // First do a quick bounds check (for performance)
-          if (polygon && polygon.getBounds().contains(point)) {
-            // Then do a precise point-in-polygon check
-            const isInside = isMarkerInsidePolygon(point, polygonLatLngs);
-            
-            if (isInside) {
-              // Extract constituency information from properties
-              const constituencyName = feature.properties["AC_NAME"] || 
-                                      feature.properties.Name || 
-                                      "Unknown";
-                                      
-              const constituencyType = feature.properties["Constituency Type"] || 
-                                      "Assembly"; // Default to Assembly
-              
-              return {
-                'Constituency Name': constituencyName,
-                'Constituency Type': constituencyType
-              };
-            }
-          }
-        } catch (error) {
-          console.error('Error checking constituency polygon:', error);
+      if (feature.geometry) {
+        const isInside = processGeometry(feature.geometry, point, L);
+
+        if (isInside) {
+          const constituencyName = feature.properties["AC_NAME"] ||
+              feature.properties.Name ||
+              "Unknown";
+
+          const constituencyType = feature.properties["Constituency Type"] ||
+              "Assembly";
+
+          return {
+            'Constituency Name': constituencyName,
+            'Constituency Type': constituencyType
+          };
         }
       }
     }
-    
+
     return {
       'Constituency Name': "Unknown",
       'Constituency Type': "Unknown"
@@ -1022,143 +878,53 @@ const BangaloreAddressMap = () => {
       'O&M Office Maps Link': null
     };
 
-    // Create a point for the clicked location
     const point = L.latLng(lat, lng);
 
-    // Find the BESCOM division
     let divisionName = "Unknown";
     for (const feature of bescomDivisionBoundary.features) {
-      if (feature.geometry && (feature.geometry.type === "Polygon" || feature.geometry.type === "MultiPolygon")) {
-        try {
-          let polygon = null;
-          let polygonLatLngs = [];
+      if (feature.geometry) {
+        const isInside = processGeometry(feature.geometry, point, L);
 
-          if (feature.geometry.type === "Polygon") {
-            // Single polygon
-            const polygonCoords = feature.geometry.coordinates[0].map(coord => [coord[1], coord[0]]);
-            polygon = L.polygon(polygonCoords);
-            polygonLatLngs = polygon.getLatLngs()[0]; // Get array of LatLng objects
-          } else if (feature.geometry.type === "MultiPolygon") {
-            // Multiple polygons
-            const multiPolygonCoords = feature.geometry.coordinates.map(poly => {
-              // Each polygon in the multi-polygon
-              return poly[0].map(coord => [coord[1], coord[0]]);
-            });
-            polygon = L.polygon(multiPolygonCoords);
-
-            // For MultiPolygon, we need to check each ring
-            polygonLatLngs = polygon.getLatLngs().flat();
-          }
-
-          // First do a quick bounds check (for performance)
-          if (polygon && polygon.getBounds().contains(point)) {
-            // Then do a precise point-in-polygon check
-            const isInside = isMarkerInsidePolygon(point, polygonLatLngs);
-
-            if (isInside) {
-              divisionName = feature.properties.DivisionName || "Unknown";
-              console.log("Found BESCOM Division:", divisionName, feature.properties);
-              break;
-            }
-          }
-        } catch (error) {
-          console.error('Error checking BESCOM division polygon:', error);
+        if (isInside) {
+          divisionName = feature.properties.DivisionName || "Unknown";
+          console.log("Found BESCOM Division:", divisionName, feature.properties);
+          break;
         }
       }
     }
 
-    // Find the BESCOM subdivision
     let subdivisionName = "Unknown";
     for (const feature of bescomSubdivisionBoundary.features) {
-      if (feature.geometry && (feature.geometry.type === "Polygon" || feature.geometry.type === "MultiPolygon")) {
-        try {
-          let polygon = null;
-          let polygonLatLngs = [];
+      if (feature.geometry) {
+        const isInside = processGeometry(feature.geometry, point, L);
 
-          if (feature.geometry.type === "Polygon") {
-            // Single polygon
-            const polygonCoords = feature.geometry.coordinates[0].map(coord => [coord[1], coord[0]]);
-            polygon = L.polygon(polygonCoords);
-            polygonLatLngs = polygon.getLatLngs()[0]; // Get array of LatLng objects
-          } else if (feature.geometry.type === "MultiPolygon") {
-            // Multiple polygons
-            const multiPolygonCoords = feature.geometry.coordinates.map(poly => {
-              // Each polygon in the multi-polygon
-              return poly[0].map(coord => [coord[1], coord[0]]);
-            });
-            polygon = L.polygon(multiPolygonCoords);
-
-            // For MultiPolygon, we need to check each ring
-            polygonLatLngs = polygon.getLatLngs().flat();
-          }
-
-          // First do a quick bounds check (for performance)
-          if (polygon && polygon.getBounds().contains(point)) {
-            // Then do a precise point-in-polygon check
-            const isInside = isMarkerInsidePolygon(point, polygonLatLngs);
-
-            if (isInside) {
-              subdivisionName = feature.properties.Sub_DivisionName || "Unknown";
-              console.log("Found BESCOM Subdivision:", subdivisionName, feature.properties);
-              break;
-            }
-          }
-        } catch (error) {
-          console.error('Error checking BESCOM subdivision polygon:', error);
+        if (isInside) {
+          subdivisionName = feature.properties.Sub_DivisionName || "Unknown";
+          console.log("Found BESCOM Subdivision:", subdivisionName, feature.properties);
+          break;
         }
       }
     }
 
-    // Find the BESCOM section
     let sectionName = "Unknown";
     let sectionId = null;
     for (const feature of bescomSectionBoundary.features) {
-      if (feature.geometry && (feature.geometry.type === "Polygon" || feature.geometry.type === "MultiPolygon")) {
-        try {
-          let polygon = null;
-          let polygonLatLngs = [];
+      if (feature.geometry) {
+        const isInside = processGeometry(feature.geometry, point, L);
 
-          if (feature.geometry.type === "Polygon") {
-            // Single polygon
-            const polygonCoords = feature.geometry.coordinates[0].map(coord => [coord[1], coord[0]]);
-            polygon = L.polygon(polygonCoords);
-            polygonLatLngs = polygon.getLatLngs()[0]; // Get array of LatLng objects
-          } else if (feature.geometry.type === "MultiPolygon") {
-            // Multiple polygons
-            const multiPolygonCoords = feature.geometry.coordinates.map(poly => {
-              // Each polygon in the multi-polygon
-              return poly[0].map(coord => [coord[1], coord[0]]);
-            });
-            polygon = L.polygon(multiPolygonCoords);
-
-            // For MultiPolygon, we need to check each ring
-            polygonLatLngs = polygon.getLatLngs().flat();
-          }
-
-          // First do a quick bounds check (for performance)
-          if (polygon && polygon.getBounds().contains(point)) {
-            // Then do a precise point-in-polygon check
-            const isInside = isMarkerInsidePolygon(point, polygonLatLngs);
-
-            if (isInside) {
-              sectionName = feature.properties.SectionName || "Unknown";
-              sectionId = feature.properties.KGISSectionID || null;
-              console.log("Found BESCOM Section:", sectionName, feature.properties);
-              break;
-            }
-          }
-        } catch (error) {
-          console.error('Error checking BESCOM section polygon:', error);
+        if (isInside) {
+          sectionName = feature.properties.SectionName || "Unknown";
+          sectionId = feature.properties.KGISSectionID || null;
+          console.log("Found BESCOM Section:", sectionName, feature.properties);
+          break;
         }
       }
     }
 
-    // Find O&M office details from bescomLocations data
     let omOfficeName = "Unknown";
     let omOfficeAddress = "Address not available";
     let omOfficeMapsLink = null;
 
-    // Check if we have office information for the section
     if (sectionId && bescomLocations[sectionId] &&
         bescomLocations[sectionId].places &&
         bescomLocations[sectionId].places.length > 0) {
@@ -1198,135 +964,47 @@ const BangaloreAddressMap = () => {
       'Service Station': "Unknown",
     };
 
-    // Create a point for the clicked location
     const point = L.latLng(lat, lng);
-    
-    // Find the BWSSB division
+
     let divisionName = "Unknown";
     for (const feature of bwssbDivisions.features) {
-      if (feature.geometry && (feature.geometry.type === "Polygon" || feature.geometry.type === "MultiPolygon")) {
-        try {
-          let polygon = null;
-          let polygonLatLngs = [];
-          
-          if (feature.geometry.type === "Polygon") {
-            // Single polygon
-            const polygonCoords = feature.geometry.coordinates[0].map(coord => [coord[1], coord[0]]);
-            polygon = L.polygon(polygonCoords);
-            polygonLatLngs = polygon.getLatLngs()[0]; // Get array of LatLng objects
-          } else if (feature.geometry.type === "MultiPolygon") {
-            // Multiple polygons
-            const multiPolygonCoords = feature.geometry.coordinates.map(poly => {
-              // Each polygon in the multi-polygon
-              return poly[0].map(coord => [coord[1], coord[0]]);
-            });
-            polygon = L.polygon(multiPolygonCoords);
-            
-            // For MultiPolygon, we need to check each ring
-            polygonLatLngs = polygon.getLatLngs().flat();
-          }
-          
-          // First do a quick bounds check (for performance)
-          if (polygon && polygon.getBounds().contains(point)) {
-            // Then do a precise point-in-polygon check
-            const isInside = isMarkerInsidePolygon(point, polygonLatLngs);
+      if (feature.geometry) {
+        const isInside = processGeometry(feature.geometry, point, L);
 
-            if (isInside) {
-              divisionName = feature.properties.DivisionName || "Unknown";
-              console.log("Found BWSSB Division:", divisionName, feature.properties);
-              break;
-            }
-          }
-        } catch (error) {
-          console.error('Error checking BWSSB division polygon:', error);
+        if (isInside) {
+          divisionName = feature.properties.DivisionName || "Unknown";
+          console.log("Found BWSSB Division:", divisionName, feature.properties);
+          break;
         }
       }
     }
-    
-    // Find the BWSSB subdivision
+
     let subdivisionName = "Unknown";
     for (const feature of bwssbSubDivisions.features) {
-      if (feature.geometry && (feature.geometry.type === "Polygon" || feature.geometry.type === "MultiPolygon")) {
-        try {
-          let polygon = null;
-          let polygonLatLngs = [];
-          
-          if (feature.geometry.type === "Polygon") {
-            // Single polygon
-            const polygonCoords = feature.geometry.coordinates[0].map(coord => [coord[1], coord[0]]);
-            polygon = L.polygon(polygonCoords);
-            polygonLatLngs = polygon.getLatLngs()[0]; // Get array of LatLng objects
-          } else if (feature.geometry.type === "MultiPolygon") {
-            // Multiple polygons
-            const multiPolygonCoords = feature.geometry.coordinates.map(poly => {
-              // Each polygon in the multi-polygon
-              return poly[0].map(coord => [coord[1], coord[0]]);
-            });
-            polygon = L.polygon(multiPolygonCoords);
-            
-            // For MultiPolygon, we need to check each ring
-            polygonLatLngs = polygon.getLatLngs().flat();
-          }
-          
-          // First do a quick bounds check (for performance)
-          if (polygon && polygon.getBounds().contains(point)) {
-            // Then do a precise point-in-polygon check
-            const isInside = isMarkerInsidePolygon(point, polygonLatLngs);
-            
-            if (isInside) {
-              subdivisionName = feature.properties.Sub_DivisionName || "Unknown";
-              console.log("Found BWSSB Subdivision:", subdivisionName, feature.properties);
-              break;
-            }
-          }
-        } catch (error) {
-          console.error('Error checking BWSSB subdivision polygon:', error);
+      if (feature.geometry) {
+        const isInside = processGeometry(feature.geometry, point, L);
+
+        if (isInside) {
+          subdivisionName = feature.properties.Sub_DivisionName || "Unknown";
+          console.log("Found BWSSB Subdivision:", subdivisionName, feature.properties);
+          break;
         }
       }
     }
-    
-    // Find the BWSSB service station
+
     let serviceStationName = "Unknown";
     for (const feature of bwssbServiceStations.features) {
-      if (feature.geometry && (feature.geometry.type === "Polygon" || feature.geometry.type === "MultiPolygon")) {
-        try {
-          let polygon = null;
-          let polygonLatLngs = [];
-          
-          if (feature.geometry.type === "Polygon") {
-            // Single polygon
-            const polygonCoords = feature.geometry.coordinates[0].map(coord => [coord[1], coord[0]]);
-            polygon = L.polygon(polygonCoords);
-            polygonLatLngs = polygon.getLatLngs()[0]; // Get array of LatLng objects
-          } else if (feature.geometry.type === "MultiPolygon") {
-            // Multiple polygons
-            const multiPolygonCoords = feature.geometry.coordinates.map(poly => {
-              // Each polygon in the multi-polygon
-              return poly[0].map(coord => [coord[1], coord[0]]);
-            });
-            polygon = L.polygon(multiPolygonCoords);
-            
-            // For MultiPolygon, we need to check each ring
-            polygonLatLngs = polygon.getLatLngs().flat();
-          }
-          
-          // First do a quick bounds check (for performance)
-          if (polygon && polygon.getBounds().contains(point)) {
-            // Then do a precise point-in-polygon check
-            const isInside = isMarkerInsidePolygon(point, polygonLatLngs);
-            
-            if (isInside) {
-              serviceStationName = feature.properties.Service_StationName || "Unknown";
-              console.log("Found BWSSB Service Station:", serviceStationName, feature.properties);
-              break;
-            }
-          }
-        } catch (error) {
-          console.error('Error checking BWSSB service station polygon:', error);
+      if (feature.geometry) {
+        const isInside = processGeometry(feature.geometry, point, L);
+
+        if (isInside) {
+          serviceStationName = feature.properties.Service_StationName || "Unknown";
+          console.log("Found BWSSB Service Station:", serviceStationName, feature.properties);
+          break;
         }
       }
     }
-    
+
     return {
       'Division': divisionName,
       'Sub Division': subdivisionName,
@@ -1336,12 +1014,11 @@ const BangaloreAddressMap = () => {
 
   // Function to find BDA (Bangalore Development Authority) information for a location
   const findBdaInfo = (lat, lng) => {
-    // Default return object with missing data
     const defaultInfo = {
       'BDA Layout Name': "Not applicable",
       'BDA Layout Number': "Not applicable"
     };
-    
+
     if (!bdaLayoutBoundaries || !bdaLayoutBoundaries.features) {
       return defaultInfo;
     }
@@ -1349,60 +1026,25 @@ const BangaloreAddressMap = () => {
     const L = window.L;
     if (!L) return defaultInfo;
 
-    // Create a point for the clicked location
     const point = L.latLng(lat, lng);
-    
-    // Log the first feature to see its properties structure (only once)
+
     if (bdaLayoutBoundaries.features.length > 0 && lng === 77.5946 && lat === 12.9716) {
-      // Only log for the initial Bangalore coordinates to avoid excessive logging
       console.log("BDA Layout feature example:", bdaLayoutBoundaries.features[0]);
     }
-    
-    // Check each BDA layout polygon
+
     for (const feature of bdaLayoutBoundaries.features) {
-      if (feature.geometry && (feature.geometry.type === "Polygon" || feature.geometry.type === "MultiPolygon")) {
-        try {
-          let polygon = null;
-          let polygonLatLngs = [];
-          
-          if (feature.geometry.type === "Polygon") {
-            // Single polygon
-            const polygonCoords = feature.geometry.coordinates[0].map(coord => [coord[1], coord[0]]);
-            polygon = L.polygon(polygonCoords);
-            polygonLatLngs = polygon.getLatLngs()[0]; // Get array of LatLng objects
-          } else if (feature.geometry.type === "MultiPolygon") {
-            // Multiple polygons
-            const multiPolygonCoords = feature.geometry.coordinates.map(poly => {
-              // Each polygon in the multi-polygon
-              return poly[0].map(coord => [coord[1], coord[0]]);
-            });
-            polygon = L.polygon(multiPolygonCoords);
-            
-            // For MultiPolygon, we need to check each ring
-            polygonLatLngs = polygon.getLatLngs().flat();
-          }
-          
-          // First do a quick bounds check (for performance)
-          if (polygon && polygon.getBounds().contains(point)) {
-            // Then do a precise point-in-polygon check
-            const isInside = isMarkerInsidePolygon(point, polygonLatLngs);
-            
-            if (isInside) {
-              // Extract BDA layout information from properties
-              // Only use LAYOUT_NAME and LAYOUT_NO properties
-              return {
-                'BDA Layout Name': feature.properties.LAYOUT_NAME || "Unknown",
-                'BDA Layout Number': feature.properties.LAYOUT_NO || "Unknown"
-              };
-            }
-          }
-        } catch (error) {
-          console.error('Error checking BDA layout polygon:', error);
+      if (feature.geometry) {
+        const isInside = processGeometry(feature.geometry, point, L);
+
+        if (isInside) {
+          return {
+            'BDA Layout Name': feature.properties.LAYOUT_NAME || "Unknown",
+            'BDA Layout Number': feature.properties.LAYOUT_NO || "Unknown"
+          };
         }
       }
     }
-    
-    // If no layout is found, return default info
+
     return defaultInfo;
   };
 
