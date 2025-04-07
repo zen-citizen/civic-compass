@@ -2361,8 +2361,7 @@ const BangaloreAddressMap = () => {
                 <p className="text-gray-600"> {/* Dark mode */}
                 If you're a Bengaluru resident, you can use Civic Compass to identify the BBMP, BDA, Revenue, BESCOM, BWSSB offices, and Police offices for your area.
                 </p>
-                <h2 className="text-lg font-semibold text-gray-800 mt-7 mb-1">Note</h2>
-                <p className="text-gray-600"> {/* Dark mode */}
+                <p className="text-gray-600 mt-2"> {/* Dark mode */}
                 Enter the <strong>exact address</strong> you need information for; a single pincode may include multiple wards.
                 </p>
                 <p className="text-gray-600 mt-2"><em>This tool is only for Bengaluru at this time.</em></p>
@@ -2391,7 +2390,7 @@ const BangaloreAddressMap = () => {
 
                 {/* Location Details Header */}
                 <div className="flex-shrink-0 mb-4">
-                  <h2 className="text-lg font-semibold text-gray-800 mb-1">Address</h2>
+                  <h2 className="text-lg font-semibold text-gray-800 mb-1">Address You Entered</h2>
                   <p className="text-md text-gray-600 break-words">
                     {selectedLocation.display_name}
                   </p>
@@ -2728,8 +2727,7 @@ const BangaloreAddressMap = () => {
                 <p className="text-gray-600"> {/* Dark mode */}
                 If you're a Bengaluru resident, you can use Civic Compass to identify the BBMP, BDA, Revenue, BESCOM, BWSSB offices, and Police offices for your area.
                 </p>
-                <h2 className="text-lg font-semibold text-gray-800 mt-7 mb-1">Note</h2>
-                <p className="text-gray-600"> {/* Dark mode */}
+                <p className="text-gray-600  mt-2"> {/* Dark mode */}
                 Enter the <strong>exact address</strong> you need information for; a single pincode may include multiple wards.
                 </p>
                 <p className="text-gray-600 mt-2"><em>This tool is only for Bengaluru at this time.</em></p>
@@ -2757,7 +2755,7 @@ const BangaloreAddressMap = () => {
 
                 {/* Location Details Header */}
                 <div className="flex-shrink-0 mb-4">
-                  <h2 className="text-lg font-semibold text-gray-800 mb-1">Address</h2>
+                  <h2 className="text-lg font-semibold text-gray-800 mb-1">Address You Entered</h2>
                   <p className="text-md text-gray-600 break-words">
                     {selectedLocation.display_name}
                   </p>
