@@ -2001,10 +2001,10 @@ const BangaloreAddressMap = () => {
               // Intro Content for Mobile
               <div className="flex-grow overflow-y-auto pr-1 text-md mt-4"> {/* Scrollable content area */}
                 <p className="text-gray-600"> {/* Dark mode */}
-                If you're a Bengaluru resident, you can use Civic Compass to identify the BBMP, BDA, Revenue, BESCOM, BWSSB offices, and Police offices for your area.
+                If you're a Bengaluru resident, you can use Civic Compass to identify the BBMP, BDA, Revenue, BESCOM, BWSSB offices, and Police stations for your area.
                 </p>
                 <p className="text-gray-600 mt-2"> {/* Dark mode */}
-                Enter the <strong>exact address</strong> you need information for; a single pincode may include multiple wards.
+                Enter the <strong>exact address</strong> you need information for.
                 </p>
                 <p className="text-gray-600 mt-2"><em>This tool is only for Bengaluru at this time.</em></p>
 
@@ -2376,10 +2376,10 @@ const BangaloreAddressMap = () => {
             {showIntroPanel && !selectedLocation ? (
               <div className="flex-grow overflow-y-auto pr-1 text-md mt-4"> {/* Scrollable content area */}
                 <p className="text-gray-600"> {/* Dark mode */}
-                If you're a Bengaluru resident, you can use Civic Compass to identify the BBMP, BDA, Revenue, BESCOM, BWSSB offices, and Police offices for your area.
+                If you're a Bengaluru resident, you can use Civic Compass to identify the BBMP, BDA, Revenue, BESCOM, BWSSB offices, and Police stations for your area.
                 </p>
                 <p className="text-gray-600  mt-2"> {/* Dark mode */}
-                Enter the <strong>exact address</strong> you need information for; a single pincode may include multiple wards.
+                Enter the <strong>exact address</strong> you need information for.
                 </p>
                 <p className="text-gray-600 mt-2"><em>This tool is only for Bengaluru at this time.</em></p>
 
