@@ -2050,8 +2050,8 @@ const BangaloreAddressMap = () => {
                         {openAccordions.bbmpInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                     </button>
 
-                    {openAccordions.bbmpInfo && (
-                      <div className="pb-4">
+                    {openAccordions.bbmpInfo && (                      
+                      <div className="pb-4">                      
                         <div className="space-y-1 text-md">
                           {Object.entries(locationInfo.bbmpInfo).map(([fieldName, value]) => (
                             <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
@@ -2060,6 +2060,12 @@ const BangaloreAddressMap = () => {
                             </div>
                           ))}
                         </div>
+                        <p className="text-xs text-gray-600 mt-4 mb-3">
+                        This information is based on the 198-ward classification, which BBMP still uses as a reference — even though it’s no longer the official structure.
+                        </p>
+                        <p className="text-xs text-gray-600 mb-3">
+                        'Not Available' usually means the area is outside BBMP limits.
+                        </p> 
                       </div>
                     )}
                   </div>
@@ -2074,7 +2080,7 @@ const BangaloreAddressMap = () => {
                         {openAccordions.bdaInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                       </button>
                       {openAccordions.bdaInfo && (
-                        <div className="pb-4">
+                        <div className="pb-4">                         
                           <div className="space-y-1 text-md">
                             {Object.entries(locationInfo.bdaInfo).map(([fieldName, value]) => (
                               <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
@@ -2083,6 +2089,9 @@ const BangaloreAddressMap = () => {
                               </div>
                             ))}
                           </div>
+                          <p className="text-xs text-gray-600 mt-4 mb-3">
+                        'Not Available' usually means the area does not fall under BDA.
+                        </p> 
                         </div>
                       )}
                     </div>
@@ -2206,7 +2215,7 @@ const BangaloreAddressMap = () => {
                                   <div className="grid grid-cols-2 py-1">
                                     <span className="text-gray-600">O&M Office Address</span>
                                     <div className="flex flex-col">
-                                      <span className="text-md">{locationInfo.bescomInfo['O&M Office Address']}</span>
+                                      <span className="text-gray-700 break-words">{locationInfo.bescomInfo['O&M Office Address']}</span>
                                       {locationInfo.bescomInfo['O&M Office Maps Link'] && (
                                           <a
                                           href={locationInfo.bescomInfo['O&M Office Maps Link']}
@@ -2223,17 +2232,17 @@ const BangaloreAddressMap = () => {
 
                               {/* Warning message at the bottom */}
                               {locationInfo.bescomInfo['O&M Office'] !== "Unknown" && (
-                                  <div className="mt-3 text-xs text-amber-600 flex items-center">
+                                  <div className="mt-3 text-xs text-yellow-600 flex items-center">
                                     <svg
                                         xmlns="http://www.w2.org/2000/svg"
-                                        className="h-5 w-4 mr-1 text-amber-500"
+                                        className="h-5 w-4 mr-1 text-yellow-500"
                                         fill="none"
                                         viewBox="-1 0 24 24"
                                         stroke="currentColor"
                                     >
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                                     </svg>
-                                    O&M data may not be accurate
+                                    O&M Office Address may not be accurate
                                   </div>
                               )}
                             </div>
@@ -2416,7 +2425,7 @@ const BangaloreAddressMap = () => {
                     </button>
 
                     {openAccordions.bbmpInfo && (
-                      <div className="pb-4">
+                      <div className="pb-4">                                                
                         <div className="space-y-1 text-md">
                           {Object.entries(locationInfo.bbmpInfo).map(([fieldName, value]) => (
                             <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
@@ -2425,6 +2434,12 @@ const BangaloreAddressMap = () => {
                             </div>
                           ))}
                         </div>
+                        <p className="text-xs text-gray-800 mt-4 mb-3 max-w-md">
+                        This information is based on the 198-ward classification, which BBMP still uses as a reference — even though it’s no longer the official structure.
+                        </p>
+                        <p className="text-xs text-gray-800 mb-3 max-w-md">
+                        'Not Available' usually means the area is outside BBMP limits.
+                        </p> 
                       </div>
                     )}
                   </div>
@@ -2439,7 +2454,7 @@ const BangaloreAddressMap = () => {
                         {openAccordions.bdaInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                       </button>
                       {openAccordions.bdaInfo && (
-                        <div className="pb-4">
+                        <div className="pb-4">                          
                           <div className="space-y-1 text-md">
                             {Object.entries(locationInfo.bdaInfo).map(([fieldName, value]) => (
                               <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
@@ -2448,6 +2463,9 @@ const BangaloreAddressMap = () => {
                               </div>
                             ))}
                           </div>
+                          <p className="text-xs text-gray-800 mt-4 mb-3 max-w-md">
+                        'Not Available' usually means the area does not fall under BDA.
+                        </p> 
                         </div>
                       )}
                     </div>
@@ -2571,7 +2589,7 @@ const BangaloreAddressMap = () => {
                                   <div className="grid grid-cols-2 py-1">
                                     <span className="text-gray-600">O&M Office Address</span>
                                     <div className="flex flex-col">
-                                      <span className="text-md">{locationInfo.bescomInfo['O&M Office Address']}</span>
+                                      <span className="text-gray-700 break-words">{locationInfo.bescomInfo['O&M Office Address']}</span>
                                       {locationInfo.bescomInfo['O&M Office Maps Link'] && (
                                           <a
                                               href={locationInfo.bescomInfo['O&M Office Maps Link']}
@@ -2588,17 +2606,17 @@ const BangaloreAddressMap = () => {
 
                               {/* Warning message at the bottom */}
                               {locationInfo.bescomInfo['O&M Office'] !== "Unknown" && (
-                                  <div className="mt-3 text-xs text-amber-600 flex items-center">
+                                  <div className="mt-3 text-xs text-yellow-600 flex items-center">
                                     <svg
                                         xmlns="http://www.w2.org/2000/svg"
-                                        className="h-5 w-4 mr-1 text-amber-500"
+                                        className="h-5 w-4 mr-1 text-yellow-500"
                                         fill="none"
                                         viewBox="-1 0 24 24"
                                         stroke="currentColor"
                                     >
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                                     </svg>
-                                    O&M data may not be accurate
+                                    O&M Office Address may not be accurate
                                   </div>
                               )}
                             </div>
