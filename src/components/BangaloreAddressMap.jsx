@@ -34,63 +34,63 @@ const BangaloreAddressMap = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [locationInfo, setLocationInfo] = useState({
     bbmpInfo: {
-      'Zone': 'Unknown',
-      'Division': 'Unknown',
-      'Subdivision': 'Unknown',
-      'Ward name': 'Unknown',
-      'Ward number': 'Unknown'
+      'Zone': 'Not Available',
+      'Division': 'Not Available',
+      'Subdivision': 'Not Available',
+      'Ward name': 'Not Available',
+      'Ward number': 'Not Available'
     },
     revenueClassification: {
-      'Hobli': 'Unknown',
-      'Taluk': 'Unknown',
-      'District': 'Unknown',
-      'Land zone': 'Unknown'
+      'Hobli': 'Not Available',
+      'Taluk': 'Not Available',
+      'District': 'Not Available',
+      'Land zone': 'Not Available'
     },
     revenueOffices: {
-      'Tahsildar Office': 'Unknown',
+      'Tahsildar Office': 'Not Available',
       'Tahsildar Office Address': 'Loading...',
       'Tahsildar Office Maps Link': null,
-      'SRO': 'Unknown',
+      'SRO': 'Not Available',
       'SRO Address': 'Loading...',
       'SRO Maps Link': null,
-      'DRO': 'Unknown',
+      'DRO': 'Not Available',
       'DRO Address': 'Loading...',
       'DRO Maps Link': null
     },
     policeJurisdiction: {
-      'Police station': 'Unknown',
-      'Traffic station': 'Unknown',
-      'Police station Address': 'Unknown',
-      'Traffic station Address': 'Unknown',
+      'Police station': 'Not Available',
+      'Traffic station': 'Not Available',
+      'Police station Address': 'Not Available',
+      'Traffic station Address': 'Not Available',
       'Police station Maps Link': null,
       'Traffic station Maps Link': null,
-      'Electicity station': 'Unknown'
+      'Electicity station': 'Not Available'
     },
     bescomInfo: {
-      'Division': "Unknown",
-      'Subdivision': "Unknown",
-      'Section': "Unknown",
+      'Division': "Not Available",
+      'Subdivision': "Not Available",
+      'Section': "Not Available",
       'O&M Office': "Not available",
       'O&M Office Address': "Loading...",
       'O&M Office Maps Link': null
     },
     bwssbInfo: {
-      'Division': 'Unknown',
-      'Division Office': 'Unknown',
+      'Division': 'Not Available',
+      'Division Office': 'Not Available',
       'Division Address': 'Loading...',
       'Division Contact': 'Loading...',
-      'Subdivision': 'Unknown',
-      'Subdivision Office': 'Unknown',
+      'Subdivision': 'Not Available',
+      'Subdivision Office': 'Not Available',
       'Subdivision Address': 'Loading...',
       'Subdivision Contact': 'Loading...',
-      'Service Station': 'Unknown',
-      'Service Station Office': 'Unknown',
+      'Service Station': 'Not Available',
+      'Service Station Office': 'Not Available',
       'Service Station Address': 'Loading...',
       'Service Station Contact': 'Loading...'
     },
     bdaInfo: {
-      'BDA Layout Name': "Not applicable",
-      'BDA Layout Number': "Not applicable"
+      'BDA Layout Name': "Not Available",
+      'BDA Layout Number': "Not Available"
     }
   });
   
@@ -521,19 +521,19 @@ const BangaloreAddressMap = () => {
 
           const wardName = feature.properties["Ward Name"] ||
               feature.properties.Name ||
-              "Unknown";
+              "Not Available";
 
           const wardNumber = feature.properties.Name ||
-              "Unknown";
+              "Not Available";
 
           const zone = feature.properties.Zone ||
-              "Unknown";
+              "Not Available";
 
           const division = feature.properties.Division ||
-              "Unknown";
+              "Not Available";
 
           const subdivision = feature.properties.Subdivision ||
-              "Unknown";
+              "Not Available";
 
           return {
             'Zone': zone,
@@ -559,10 +559,10 @@ const BangaloreAddressMap = () => {
   const findPoliceJurisdiction = (lat, lng) => {
     if (!policeJurisdiction || !policeJurisdiction.features) {
       return {
-        'Police station': "Unknown",
-        'Traffic station': "Unknown",
-        'Police station Address': "Unknown",
-        'Traffic station Address': "Unknown",
+        'Police station': "Not Available",
+        'Traffic station': "Not Available",
+        'Police station Address': "Not Available",
+        'Traffic station Address': "Not Available",
         'Police station Maps Link': null,
         'Traffic station Maps Link': null
       };
@@ -570,10 +570,10 @@ const BangaloreAddressMap = () => {
 
     const L = window.L;
     if (!L) return {
-      'Police station': "Unknown",
-      'Traffic station': "Unknown",
-      'Police station Address': "Unknown",
-      'Traffic station Address': "Unknown",
+      'Police station': "Not Available",
+      'Traffic station': "Not Available",
+      'Police station Address': "Not Available",
+      'Traffic station Address': "Not Available",
       'Police station Maps Link': null,
       'Traffic station Maps Link': null
     };
@@ -591,7 +591,7 @@ const BangaloreAddressMap = () => {
         if (isInside) {
           const policeStation = feature.properties["Police Station"] ||
               feature.properties.Name ||
-              "Unknown";
+              "Not Available";
 
           const trafficStation = policeStation.replace(' PS', ' Traffic PS');
 
@@ -625,10 +625,10 @@ const BangaloreAddressMap = () => {
     }
 
     return {
-      'Police station': "Unknown",
-      'Traffic station': "Unknown",
-      'Police station Address': "Unknown",
-      'Traffic station Address': "Unknown",
+      'Police station': "Not Available",
+      'Traffic station': "Not Available",
+      'Police station Address': "Not Available",
+      'Traffic station Address': "Not Available",
       'Police station Maps Link': null,
       'Traffic station Maps Link': null
     };
@@ -638,20 +638,20 @@ const BangaloreAddressMap = () => {
   const findRevenueClassification = (lat, lng) => {
     if (!RevenueClassification || !RevenueClassification.features) {
       return {
-        District: "Unknown",
-        Taluk: "Unknown",
-        Hobli: "Unknown",
-        Village: "Unknown",
+        District: "Not Available",
+        Taluk: "Not Available",
+        Hobli: "Not Available",
+        Village: "Not Available",
         htmlDescription: null
       };
     }
 
     const L = window.L;
     if (!L) return {
-      District: "Unknown",
-      Taluk: "Unknown",
-      Hobli: "Unknown",
-      Village: "Unknown",
+      District: "Not Available",
+      Taluk: "Not Available",
+      Hobli: "Not Available",
+      Village: "Not Available",
       htmlDescription: null
     };
 
@@ -666,13 +666,13 @@ const BangaloreAddressMap = () => {
         const isInside = processGeometry(feature.geometry, point, L);
 
         if (isInside) {
-          const villageName = feature.properties.Name || "Unknown";
+          const villageName = feature.properties.Name || "Not Available";
 
           const htmlDescription = feature.properties.description || null;
 
-          let district = "Unknown";
-          let taluk = "Unknown";
-          let hobli = "Unknown";
+          let district = "Not Available";
+          let taluk = "Not Available";
+          let hobli = "Not Available";
 
           if (htmlDescription) {
             const villageCodeMatch = htmlDescription.match(/KGISVillageCode<\/td>\s*<td>(\d+)<\/td>/);
@@ -730,10 +730,10 @@ const BangaloreAddressMap = () => {
   const findRevenueOffices = (lat, lng) => {
     if (!RevenueOffices || !RevenueOffices.features) {
       return {
-        'SRO': "Unknown",
-        'DRO': "Unknown",
-        'SRO Address': "Unknown",
-        'DRO Address': "Unknown",
+        'SRO': "Not Available",
+        'DRO': "Not Available",
+        'SRO Address': "Not Available",
+        'DRO Address': "Not Available",
         'SRO Maps Link': null,
         'DRO Maps Link': null
       };
@@ -741,10 +741,10 @@ const BangaloreAddressMap = () => {
 
     const L = window.L;
     if (!L) return {
-      'SRO': "Unknown",
-      'DRO': "Unknown",
-      'SRO Address': "Unknown",
-      'DRO Address': "Unknown",
+      'SRO': "Not Available",
+      'DRO': "Not Available",
+      'SRO Address': "Not Available",
+      'DRO Address': "Not Available",
       'SRO Maps Link': null,
       'DRO Maps Link': null
     };
@@ -762,10 +762,10 @@ const BangaloreAddressMap = () => {
         if (isInside) {
           const sroName = feature.properties.SRO_Name ||
               feature.properties.Name ||
-              "Unknown";
+              "Not Available";
 
           const droName = feature.properties.DRO_Name ||
-              "Unknown";
+              "Not Available";
 
           let sroAddress = "Address not available";
           let sroMapsLink = null;
@@ -797,10 +797,10 @@ const BangaloreAddressMap = () => {
     }
 
     return {
-      'SRO': "Unknown",
-      'DRO': "Unknown",
-      'SRO Address': "Unknown",
-      'DRO Address': "Unknown",
+      'SRO': "Not Available",
+      'DRO': "Not Available",
+      'SRO Address': "Not Available",
+      'DRO Address': "Not Available",
       'SRO Maps Link': null,
       'DRO Maps Link': null
     };
@@ -810,15 +810,15 @@ const BangaloreAddressMap = () => {
   const findConstituency = (lat, lng) => {
     if (!Constituencies || !Constituencies.features) {
       return {
-        'Constituency Name': "Unknown",
-        'Constituency Type': "Unknown"
+        'Constituency Name': "Not Available",
+        'Constituency Type': "Not Available"
       };
     }
 
     const L = window.L;
     if (!L) return {
-      'Constituency Name': "Unknown",
-      'Constituency Type': "Unknown"
+      'Constituency Name': "Not Available",
+      'Constituency Type': "Not Available"
     };
 
     const point = L.latLng(lat, lng);
@@ -834,7 +834,7 @@ const BangaloreAddressMap = () => {
         if (isInside) {
           const constituencyName = feature.properties["AC_NAME"] ||
               feature.properties.Name ||
-              "Unknown";
+              "Not Available";
 
           const constituencyType = feature.properties["Constituency Type"] ||
               "Assembly";
@@ -848,8 +848,8 @@ const BangaloreAddressMap = () => {
     }
 
     return {
-      'Constituency Name': "Unknown",
-      'Constituency Type': "Unknown"
+      'Constituency Name': "Not Available",
+      'Constituency Type': "Not Available"
     };
   };
 
@@ -859,10 +859,10 @@ const BangaloreAddressMap = () => {
         !bescomSubdivisionBoundary || !bescomSubdivisionBoundary.features ||
         !bescomSectionBoundary || !bescomSectionBoundary.features) {
       return {
-        'Division': "Unknown",
-        'Subdivision': "Unknown",
-        'Section': "Unknown",
-        'O&M Office': "Unknown",
+        'Division': "Not Available",
+        'Subdivision': "Not Available",
+        'Section': "Not Available",
+        'O&M Office': "Not Available",
         'O&M Office Address': "Address not available",
         'O&M Office Maps Link': null
       };
@@ -870,50 +870,50 @@ const BangaloreAddressMap = () => {
 
     const L = window.L;
     if (!L) return {
-      'Division': "Unknown",
-      'Subdivision': "Unknown",
-      'Section': "Unknown",
-      'O&M Office': "Unknown",
+      'Division': "Not Available",
+      'Subdivision': "Not Available",
+      'Section': "Not Available",
+      'O&M Office': "Not Available",
       'O&M Office Address': "Address not available",
       'O&M Office Maps Link': null
     };
 
     const point = L.latLng(lat, lng);
 
-    let divisionName = "Unknown";
+    let divisionName = "Not Available";
     for (const feature of bescomDivisionBoundary.features) {
       if (feature.geometry) {
         const isInside = processGeometry(feature.geometry, point, L);
 
         if (isInside) {
-          divisionName = feature.properties.DivisionName || "Unknown";
+          divisionName = feature.properties.DivisionName || "Not Available";
           console.log("Found BESCOM Division:", divisionName, feature.properties);
           break;
         }
       }
     }
 
-    let subdivisionName = "Unknown";
+    let subdivisionName = "Not Available";
     for (const feature of bescomSubdivisionBoundary.features) {
       if (feature.geometry) {
         const isInside = processGeometry(feature.geometry, point, L);
 
         if (isInside) {
-          subdivisionName = feature.properties.Sub_DivisionName || "Unknown";
+          subdivisionName = feature.properties.Sub_DivisionName || "Not Available";
           console.log("Found BESCOM Subdivision:", subdivisionName, feature.properties);
           break;
         }
       }
     }
 
-    let sectionName = "Unknown";
+    let sectionName = "Not Available";
     let sectionId = null;
     for (const feature of bescomSectionBoundary.features) {
       if (feature.geometry) {
         const isInside = processGeometry(feature.geometry, point, L);
 
         if (isInside) {
-          sectionName = feature.properties.SectionName || "Unknown";
+          sectionName = feature.properties.SectionName || "Not Available";
           sectionId = feature.properties.KGISSectionID || null;
           console.log("Found BESCOM Section:", sectionName, feature.properties);
           break;
@@ -921,7 +921,7 @@ const BangaloreAddressMap = () => {
       }
     }
 
-    let omOfficeName = "Unknown";
+    let omOfficeName = "Not Available";
     let omOfficeAddress = "Address not available";
     let omOfficeMapsLink = null;
 
@@ -951,54 +951,54 @@ const BangaloreAddressMap = () => {
         !bwssbSubDivisions || !bwssbSubDivisions.features ||
         !bwssbServiceStations || !bwssbServiceStations.features) {
       return {
-        'Division': "Unknown",
-        'Sub Division': "Unknown",
-        'Service Station': "Unknown",
+        'Division': "Not Available",
+        'Sub Division': "Not Available",
+        'Service Station': "Not Available",
       };
     }
 
     const L = window.L;
     if (!L) return {
-      'Division': "Unknown",
-      'Sub Division': "Unknown",
-      'Service Station': "Unknown",
+      'Division': "Not Available",
+      'Sub Division': "Not Available",
+      'Service Station': "Not Available",
     };
 
     const point = L.latLng(lat, lng);
 
-    let divisionName = "Unknown";
+    let divisionName = "Not Available";
     for (const feature of bwssbDivisions.features) {
       if (feature.geometry) {
         const isInside = processGeometry(feature.geometry, point, L);
 
         if (isInside) {
-          divisionName = feature.properties.DivisionName || "Unknown";
+          divisionName = feature.properties.DivisionName || "Not Available";
           console.log("Found BWSSB Division:", divisionName, feature.properties);
           break;
         }
       }
     }
 
-    let subdivisionName = "Unknown";
+    let subdivisionName = "Not Available";
     for (const feature of bwssbSubDivisions.features) {
       if (feature.geometry) {
         const isInside = processGeometry(feature.geometry, point, L);
 
         if (isInside) {
-          subdivisionName = feature.properties.Sub_DivisionName || "Unknown";
+          subdivisionName = feature.properties.Sub_DivisionName || "Not Available";
           console.log("Found BWSSB Subdivision:", subdivisionName, feature.properties);
           break;
         }
       }
     }
 
-    let serviceStationName = "Unknown";
+    let serviceStationName = "Not Available";
     for (const feature of bwssbServiceStations.features) {
       if (feature.geometry) {
         const isInside = processGeometry(feature.geometry, point, L);
 
         if (isInside) {
-          serviceStationName = feature.properties.Service_StationName || "Unknown";
+          serviceStationName = feature.properties.Service_StationName || "Not Available";
           console.log("Found BWSSB Service Station:", serviceStationName, feature.properties);
           break;
         }
@@ -1015,8 +1015,8 @@ const BangaloreAddressMap = () => {
   // Function to find BDA (Bangalore Development Authority) information for a location
   const findBdaInfo = (lat, lng) => {
     const defaultInfo = {
-      'BDA Layout Name': "Not applicable",
-      'BDA Layout Number': "Not applicable"
+      'BDA Layout Name': "Not Available",
+      'BDA Layout Number': "Not Available"
     };
 
     if (!bdaLayoutBoundaries || !bdaLayoutBoundaries.features) {
@@ -1038,8 +1038,8 @@ const BangaloreAddressMap = () => {
 
         if (isInside) {
           return {
-            'BDA Layout Name': feature.properties.LAYOUT_NAME || "Unknown",
-            'BDA Layout Number': feature.properties.LAYOUT_NO || "Unknown"
+            'BDA Layout Name': feature.properties.LAYOUT_NAME || "Not Available",
+            'BDA Layout Number': feature.properties.LAYOUT_NO || "Not Available"
           };
         }
       }
@@ -1161,7 +1161,7 @@ const BangaloreAddressMap = () => {
         revenueOffices: revenueOffices,
         policeJurisdiction: {
           ...policeStation,
-          'Electicity station': 'Unknown'
+          'Electicity station': 'Not Available'
         },
         bescomInfo: findBescomInfo(lat, lng),
         bwssbInfo: findBwssbInfo(lat, lng),
@@ -2231,7 +2231,7 @@ const BangaloreAddressMap = () => {
                               )}
 
                               {/* Warning message at the bottom */}
-                              {locationInfo.bescomInfo['O&M Office'] !== "Unknown" && (
+                              {locationInfo.bescomInfo['O&M Office'] !== "Not Available" && (
                                   <div className="mt-3 text-xs text-yellow-600 flex items-center">
                                     <svg
                                         xmlns="http://www.w2.org/2000/svg"
@@ -2605,7 +2605,7 @@ const BangaloreAddressMap = () => {
                               )}
 
                               {/* Warning message at the bottom */}
-                              {locationInfo.bescomInfo['O&M Office'] !== "Unknown" && (
+                              {locationInfo.bescomInfo['O&M Office'] !== "Not Available" && (
                                   <div className="mt-3 text-xs text-yellow-600 flex items-center">
                                     <svg
                                         xmlns="http://www.w2.org/2000/svg"
