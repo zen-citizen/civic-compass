@@ -111,6 +111,7 @@ const BangaloreAddressMap = () => {
   // State for panel expansion (start expanded on mobile if intro is showing)
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
   const [lastToggledAccordion, setLastToggledAccordion] = useState(null); // <-- State to track last opened accordion
+  const [useGoogleSearch, setUseGoogleSearch] = useState(process.env.REACT_APP_USE_GOOGLE_SEARCH === 'true');
 
   // First, add state for tracking open accordions
   const [openAccordions, setOpenAccordions] = useState({
@@ -442,6 +443,20 @@ const BangaloreAddressMap = () => {
       }
     };
   }, [mapContainerRef]);
+
+  const loadGoogleMapsScript = () => {
+    if (window.google) return Promise.resolve();
+
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}&libraries=places`;
+      script.async = true;
+      script.defer = true;
+      script.onload = resolve;
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
+  };
 
   // Helper function for handling different geometry types
   const processGeometry = (geometry, point, L) => {
@@ -1320,7 +1335,7 @@ const BangaloreAddressMap = () => {
   };
 
   // Search for locations using photon
-  const searchLocations = async (query) => {
+  const searchLocationsPhoton = async (query) => {
     if (!query || query.length < 2) {
       setSearchResults([]);
       setShowSuggestions(false);
@@ -1377,40 +1392,193 @@ const BangaloreAddressMap = () => {
     }
   };
 
-  // Handle location selection from suggestions
-  const handleLocationSelect = (location) => {
-    setSelectedLocation(location);
-    setSearchQuery(location.display_name); // Set the input to first part of location name
-    setShowSuggestions(false);
-    setShowInfoPanel(true);
-    setShowIntroPanel(false); // Hide intro panel
-    setIsPanelExpanded(false);
-    
-    if (mapInstanceRef.current) {
-      const { lat, lon } = location;
-      const latitude = parseFloat(lat);
-      const longitude = parseFloat(lon);
-      
-      // Find the police jurisdiction and revenue offices
-      const policeStation = findPoliceJurisdiction(latitude, longitude);
-      const revenueOffices = findRevenueOffices(latitude, longitude);
-      
-      // Update location info with dynamically calculated data
-      setLocationInfo({
-        bbmpInfo: findBBMPInfo(latitude, longitude),
-        revenueClassification: findRevenueClassification(latitude, longitude),
-        revenueOffices: revenueOffices,
-        policeJurisdiction: {
-          ...policeStation,
-          'Electicity station': 'Calculated from GeoJSON'
-        },
-        bescomInfo: findBescomInfo(latitude, longitude),
-        bwssbInfo: findBwssbInfo(latitude, longitude),
-        bdaInfo: findBdaInfo(latitude, longitude)
+  const searchLocationsGoogle = async (query) => {
+    if (!query || query.length < 2) {
+      setSearchResults([]);
+      setShowSuggestions(false);
+      return;
+    }
+
+    try {
+      setIsSearching(true);
+
+      // Make sure Google Maps is loaded
+      if (!window.google) {
+        await loadGoogleMapsScript();
+      }
+
+      // Create a bounds biased to Bangalore
+      const bangaloreBounds = new window.google.maps.LatLngBounds(
+          new window.google.maps.LatLng(12.8, 77.4), // SW corner
+          new window.google.maps.LatLng(13.2, 77.8)  // NE corner
+      );
+
+      // Create the places service
+      const service = new window.google.maps.places.AutocompleteService();
+
+      // Request predictions
+      service.getPlacePredictions({
+        input: query,
+        bounds: bangaloreBounds,
+        componentRestrictions: { country: 'in' },
+        types: ['geocode']
+      }, (predictions, status) => {
+        if (status !== window.google.maps.places.PlacesServiceStatus.OK || !predictions) {
+          setSearchResults([]);
+          setShowSuggestions(false);
+          setIsSearching(false);
+          return;
+        }
+
+        // We need a PlacesService to get details for each prediction
+        // Create a temporary div for the PlacesService
+        // const placesDiv = document.createElement('div');
+        // const placesService = new window.google.maps.places.PlacesService(placesDiv);
+
+        // Limit to 5 predictions to match photon behavior
+        const limitedPredictions = predictions.slice(0, 5);
+
+        // Transform predictions to match our expected format
+        const transformedResults = limitedPredictions.map(prediction => {
+          return {
+            display_name: prediction.description,
+            place_id: prediction.place_id,
+            lat: '', // Will be filled after getting place details
+            lon: '', // Will be filled after getting place details
+            address: prediction.structured_formatting,
+            google_result: true // Mark as Google result for later processing
+          };
+        });
+
+        setSearchResults(transformedResults);
+        setShowSuggestions(transformedResults.length > 0);
+        setIsSearching(false);
       });
-      
-      // When selecting from search results, DO center the map on the location
-      zoomToLocationFromSearch(latitude, longitude, location.display_name);
+    } catch (error) {
+      console.error('Google Places search error:', error);
+      setSearchResults([]);
+      setShowSuggestions(false);
+      setIsSearching(false);
+    }
+  };
+
+  const searchLocations = async (query) => {
+    const useGoogleSearch = process.env.REACT_APP_USE_GOOGLE_SEARCH === 'true';
+
+    if (useGoogleSearch) {
+      await searchLocationsGoogle(query);
+    } else {
+      await searchLocationsPhoton(query)
+    }
+  }
+
+  // Handle location selection from suggestions
+  const handleLocationSelect = async (location) => {
+    // Check if it's a Google result that needs details
+    if (location.google_result && location.place_id) {
+      setIsSearching(true);
+
+      try {
+        if (!window.google) {
+          await loadGoogleMapsScript();
+        }
+
+        // Create a temporary div for the PlacesService
+        const placesDiv = document.createElement('div');
+        const placesService = new window.google.maps.places.PlacesService(placesDiv);
+
+        // Get place details
+        placesService.getDetails({
+          placeId: location.place_id,
+          fields: ['name', 'formatted_address', 'geometry']
+        }, (place, status) => {
+          if (status === window.google.maps.places.PlacesServiceStatus.OK && place && place.geometry) {
+            const lat = place.geometry.location.lat();
+            const lng = place.geometry.location.lng();
+
+            // Create a complete location object
+            const completeLocation = {
+              display_name: place.name || place.formatted_address,
+              lat: lat.toString(),
+              lon: lng.toString(),
+              address: { formatted: place.formatted_address }
+            };
+
+            // Continue with the normal flow using the complete location
+            setSelectedLocation(completeLocation);
+            setSearchQuery(completeLocation.display_name);
+            setShowSuggestions(false);
+            setShowInfoPanel(true);
+            setShowIntroPanel(false);
+            setIsPanelExpanded(false);
+
+            if (mapInstanceRef.current) {
+              // Find the police jurisdiction and revenue offices
+              const policeStation = findPoliceJurisdiction(lat, lng);
+              const revenueOffices = findRevenueOffices(lat, lng);
+
+              // Update location info with dynamically calculated data
+              setLocationInfo({
+                bbmpInfo: findBBMPInfo(lat, lng),
+                revenueClassification: findRevenueClassification(lat, lng),
+                revenueOffices: revenueOffices,
+                policeJurisdiction: {
+                  ...policeStation,
+                  'Electicity station': 'Calculated from GeoJSON'
+                },
+                bescomInfo: findBescomInfo(lat, lng),
+                bwssbInfo: findBwssbInfo(lat, lng),
+                bdaInfo: findBdaInfo(lat, lng)
+              });
+
+              // When selecting from search results, DO center the map on the location
+              zoomToLocationFromSearch(lat, lng, completeLocation.display_name);
+            }
+          } else {
+            console.error('Place details error:', status);
+          }
+
+          setIsSearching(false);
+        });
+      } catch (error) {
+        console.error('Error getting place details:', error);
+        setIsSearching(false);
+      }
+    } else {
+      // Original code for non-Google results
+      setSelectedLocation(location);
+      setSearchQuery(location.display_name);
+      setShowSuggestions(false);
+      setShowInfoPanel(true);
+      setShowIntroPanel(false);
+      setIsPanelExpanded(false);
+
+      if (mapInstanceRef.current) {
+        const { lat, lon } = location;
+        const latitude = parseFloat(lat);
+        const longitude = parseFloat(lon);
+
+        // Find the police jurisdiction and revenue offices
+        const policeStation = findPoliceJurisdiction(latitude, longitude);
+        const revenueOffices = findRevenueOffices(latitude, longitude);
+
+        // Update location info with dynamically calculated data
+        setLocationInfo({
+          bbmpInfo: findBBMPInfo(latitude, longitude),
+          revenueClassification: findRevenueClassification(latitude, longitude),
+          revenueOffices: revenueOffices,
+          policeJurisdiction: {
+            ...policeStation,
+            'Electicity station': 'Calculated from GeoJSON'
+          },
+          bescomInfo: findBescomInfo(latitude, longitude),
+          bwssbInfo: findBwssbInfo(latitude, longitude),
+          bdaInfo: findBdaInfo(latitude, longitude)
+        });
+
+        // When selecting from search results, DO center the map on the location
+        zoomToLocationFromSearch(latitude, longitude, location.display_name);
+      }
     }
   };
 
@@ -1838,6 +2006,20 @@ const BangaloreAddressMap = () => {
     console.log('Toggling dark mode');
     setIsDarkMode(prevMode => !prevMode);
   };
+
+  useEffect(() => {
+    // Update your existing useEffect to include this
+    setUseGoogleSearch(process.env.REACT_APP_USE_GOOGLE_SEARCH === 'true');
+
+    if (process.env.REACT_APP_USE_GOOGLE_SEARCH === 'true') {
+      // Preload Google Maps API
+      loadGoogleMapsScript().catch(error => {
+        console.error('Failed to load Google Maps API:', error);
+      });
+    }
+
+    // Rest of your existing useEffect code...
+  }, []);
 
   // Update initial panel expansion state when mobile status changes or intro panel is shown/hidden
   useEffect(() => {
