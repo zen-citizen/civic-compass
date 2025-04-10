@@ -2297,12 +2297,18 @@ const BangaloreAddressMap = () => {
                           <div className="space-y-1 text-md">
                             {Object.entries(locationInfo.revenueClassification)
                               .filter(([key]) => key !== 'htmlDescription')
-                              .map(([fieldName, value]) => (
-                                <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
-                                  <span className="text-gray-600">{fieldName}</span>
-                                  <span className="font-medium text-gray-700 text-left break-words">{value}</span>
-                                </div>
-                              ))
+                              .every(([_, value]) => value === "Not Available" || value === "Missing data") ? (
+                                <p className="text-gray-700 py-1">This information is unavailable for this address</p>
+                              ) : (
+                                Object.entries(locationInfo.revenueClassification)
+                                  .filter(([key]) => key !== 'htmlDescription')
+                                  .map(([fieldName, value]) => (
+                                    <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
+                                      <span className="text-gray-600">{fieldName}</span>
+                                      <span className="font-medium text-gray-700 text-left break-words">{value}</span>
+                                    </div>
+                                  ))
+                              )
                             }
                           </div>
                         </div>
@@ -2322,53 +2328,62 @@ const BangaloreAddressMap = () => {
                       {openAccordions.revenueOffices && (
                         <div className="pb-4">
                           <div className="space-y-4 text-md">
-                            {/* SRO Information */}
-                            <div className="space-y-2">
-                              <div className="grid grid-cols-2 gap-2 py-1">
-                                <span className="text-gray-600">SRO</span>
-                                <span className="font-medium text-gray-700 text-left break-words">{locationInfo.revenueOffices.SRO}</span>
-                              </div>
-                              <div className="grid grid-cols-2 gap-2 py-1 items-start">
-                                <span className="text-gray-600">Address</span>
-                                <div className="flex flex-col text-left">
-                                  <span className="text-gray-700 break-words">{locationInfo.revenueOffices['SRO Address']}</span>
-                                  {locationInfo.revenueOffices['SRO Maps Link'] && (
-                                    <a
-                                      href={locationInfo.revenueOffices['SRO Maps Link']}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="text-blue-600 hover:text-blue-800 flex items-center mt-1"
-                                    >
-                                      <ExternalLink size={14} className="mr-1 flex-shrink-0" /> Google Maps
-                                    </a>
-                                  )}
-                                </div>
-                              </div>
-                            </div>
+                            {Object.entries(locationInfo.revenueOffices)
+                              .filter(([key]) => !key.includes('Maps Link'))
+                              .every(([_, value]) => value === "Not Available" || value === "Missing data") ? (
+                                <p className="text-gray-700 py-1">This information is unavailable for this address</p>
+                              ) : (
+                                <>
+                                  {/* SRO Information */}
+                                  <div className="space-y-2">
+                                    <div className="grid grid-cols-2 gap-2 py-1">
+                                      <span className="text-gray-600">SRO</span>
+                                      <span className="font-medium text-gray-700 text-left break-words">{locationInfo.revenueOffices.SRO}</span>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-2 py-1 items-start">
+                                      <span className="text-gray-600">Address</span>
+                                      <div className="flex flex-col text-left">
+                                        <span className="text-gray-700 break-words">{locationInfo.revenueOffices['SRO Address']}</span>
+                                        {locationInfo.revenueOffices['SRO Maps Link'] && (
+                                          <a
+                                            href={locationInfo.revenueOffices['SRO Maps Link']}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-blue-600 hover:text-blue-800 flex items-center mt-1"
+                                          >
+                                            <ExternalLink size={14} className="mr-1 flex-shrink-0" /> Google Maps
+                                          </a>
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
 
-                            {/* DRO Information */}
-                            <div className="space-y-2 mt-4">
-                              <div className="grid grid-cols-2 gap-2 py-1">
-                                <span className="text-gray-600">DRO</span>
-                                <span className="font-medium text-gray-700 text-left break-words">{locationInfo.revenueOffices.DRO}</span>
-                              </div>
-                              <div className="grid grid-cols-2 gap-2 py-1 items-start">
-                                <span className="text-gray-600">Address</span>
-                                <div className="flex flex-col text-left">
-                                  <span className="text-gray-700 break-words">{locationInfo.revenueOffices['DRO Address']}</span>
-                                  {locationInfo.revenueOffices['DRO Maps Link'] && (
-                                    <a
-                                      href={locationInfo.revenueOffices['DRO Maps Link']}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="text-blue-600 hover:text-blue-800 flex items-center mt-1"
-                                    >
-                                      <ExternalLink size={14} className="mr-1 flex-shrink-0" /> Google Maps
-                                    </a>
-                                  )}
-                                </div>
-                              </div>
-                            </div>
+                                  {/* DRO Information */}
+                                  <div className="space-y-2 mt-4">
+                                    <div className="grid grid-cols-2 gap-2 py-1">
+                                      <span className="text-gray-600">DRO</span>
+                                      <span className="font-medium text-gray-700 text-left break-words">{locationInfo.revenueOffices.DRO}</span>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-2 py-1 items-start">
+                                      <span className="text-gray-600">Address</span>
+                                      <div className="flex flex-col text-left">
+                                        <span className="text-gray-700 break-words">{locationInfo.revenueOffices['DRO Address']}</span>
+                                        {locationInfo.revenueOffices['DRO Maps Link'] && (
+                                          <a
+                                            href={locationInfo.revenueOffices['DRO Maps Link']}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-blue-600 hover:text-blue-800 flex items-center mt-1"
+                                          >
+                                            <ExternalLink size={14} className="mr-1 flex-shrink-0" /> Google Maps
+                                          </a>
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </>
+                              )
+                            }
                           </div>
                         </div>
                       )}
@@ -2389,48 +2404,57 @@ const BangaloreAddressMap = () => {
                             <div className="space-y-1 text-md">
                               {Object.entries(locationInfo.bescomInfo)
                                   .filter(([key]) => key !== 'O&M Office Address' && key !== 'O&M Office Maps Link')
-                                  .map(([fieldName, value]) => (
-                                  <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
-                                    <span className="text-gray-600">{fieldName}</span>
-                                    <span className="font-medium text-gray-700 text-left break-words">{value}</span>
-                                  </div>
-                              ))}
+                                  .every(([_, value]) => value === "Not Available" || value === "Not available") ? (
+                                    <p className="text-gray-700 py-1">This information is unavailable for this address. This could be because the area is outside BESCOM limits</p>
+                                  ) : (
+                                    <>
+                                      {Object.entries(locationInfo.bescomInfo)
+                                          .filter(([key]) => key !== 'O&M Office Address' && key !== 'O&M Office Maps Link')
+                                          .map(([fieldName, value]) => (
+                                          <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
+                                            <span className="text-gray-600">{fieldName}</span>
+                                            <span className="font-medium text-gray-700 text-left break-words">{value}</span>
+                                          </div>
+                                      ))}
 
-                              {/* O&M Office Address */}
-                              {locationInfo.bescomInfo['O&M Office Address'] !== "Address not available" && (
-                                  <div className="grid grid-cols-2 py-1">
-                                    <span className="text-gray-600">O&M Office Address</span>
-                                    <div className="flex flex-col">
-                                      <span className="text-gray-700 break-words">{locationInfo.bescomInfo['O&M Office Address']}</span>
-                                      {locationInfo.bescomInfo['O&M Office Maps Link'] && (
-                                          <a
-                                          href={locationInfo.bescomInfo['O&M Office Maps Link']}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-blue-600 hover:text-blue-800 text-md flex items-center mt-1"
-                                        >
-                                        <ExternalLink size={14} className="mr-1" /> Google Maps
-                                        </a>
-                                        )}
-                                    </div>
-                                  </div>
-                              )}
+                                      {/* O&M Office Address */}
+                                      {locationInfo.bescomInfo['O&M Office Address'] !== "Address not available" && (
+                                          <div className="grid grid-cols-2 py-1">
+                                            <span className="text-gray-600">O&M Office Address</span>
+                                            <div className="flex flex-col">
+                                              <span className="text-gray-700 break-words">{locationInfo.bescomInfo['O&M Office Address']}</span>
+                                              {locationInfo.bescomInfo['O&M Office Maps Link'] && (
+                                                  <a
+                                                      href={locationInfo.bescomInfo['O&M Office Maps Link']}
+                                                      target="_blank"
+                                                      rel="noopener noreferrer"
+                                                      className="text-blue-600 hover:text-blue-800 text-md flex items-center mt-1"
+                                                  >
+                                                    <ExternalLink size={14} className="mr-1" /> Google Maps
+                                                  </a>
+                                              )}
+                                            </div>
+                                          </div>
+                                      )}
 
-                              {/* Warning message at the bottom */}
-                              {locationInfo.bescomInfo['O&M Office'] !== "Not Available" && (
-                                  <div className="mt-3 text-xs text-yellow-600 flex items-center">
-                                    <svg
-                                        xmlns="http://www.w2.org/2000/svg"
-                                        className="h-5 w-4 mr-1 text-yellow-500"
-                                        fill="none"
-                                        viewBox="-1 0 24 24"
-                                        stroke="currentColor"
-                                    >
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                    </svg>
-                                    O&M Office Address may not be accurate
-                                  </div>
-                              )}
+                                      {/* Warning message at the bottom */}
+                                      {locationInfo.bescomInfo['O&M Office'] !== "Not Available" && (
+                                          <div className="mt-3 text-xs text-yellow-600 flex items-center">
+                                            <svg
+                                                xmlns="http://www.w2.org/2000/svg"
+                                                className="h-5 w-4 mr-1 text-yellow-500"
+                                                fill="none"
+                                                viewBox="-1 0 24 24"
+                                                stroke="currentColor"
+                                            >
+                                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                            </svg>
+                                            <span>O&M office data may need verification.</span>
+                                          </div>
+                                      )}
+                                    </>
+                                  )
+                              }
                             </div>
                           </div>
                       )}
@@ -2439,8 +2463,8 @@ const BangaloreAddressMap = () => {
                     {/* BWSSB Information - Accordion */}
                     <div className="border-b border-gray-200">
                       <button
-                        onClick={() => toggleAccordion('bwssbInfo')}
-                        className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
+                          onClick={() => toggleAccordion('bwssbInfo')}
+                          className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
                       >
                         <h2 className="font-semibold text-gray-800 text-base">Water Supply (BWSSB)</h2>
                         {openAccordions.bwssbInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
@@ -2449,22 +2473,31 @@ const BangaloreAddressMap = () => {
                       {openAccordions.bwssbInfo && (
                         <div className="pb-4">
                           <div className="space-y-1 text-md">
-                            {Object.entries(locationInfo.bwssbInfo).map(([fieldName, value]) => (
-                              <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
-                                <span className="text-gray-600">{fieldName}</span>
-                                <span className="font-medium text-gray-700 text-left break-words">{value}</span>
-                              </div>
-                            ))}
+                            {Object.entries(locationInfo.bwssbInfo)
+                              .filter(([key]) => !key.includes('Address') && !key.includes('Contact'))
+                              .every(([_, value]) => value === "Not Available") ? (
+                                <p className="text-gray-700 py-1">This information is unavailable for this address. This could be because the area is outside BWSSB service limits</p>
+                              ) : (
+                                Object.entries(locationInfo.bwssbInfo)
+                                  .filter(([key]) => !key.includes('Address') && !key.includes('Contact'))
+                                  .map(([fieldName, value]) => (
+                                    <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
+                                      <span className="text-gray-600">{fieldName}</span>
+                                      <span className="font-medium text-gray-700 text-left break-words">{value}</span>
+                                    </div>
+                                  ))
+                              )
+                            }
                           </div>
                         </div>
                       )}
                     </div>
 
                     {/* Police Jurisdiction - Accordion */}
-                    <div>
-                    <button
-                        onClick={() => toggleAccordion('policeJurisdiction')}
-                        className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
+                    <div className="border-b border-gray-200">
+                      <button
+                          onClick={() => toggleAccordion('policeJurisdiction')}
+                          className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
                       >
                         <h2 className="font-semibold text-gray-800 text-base">Police Jurisdiction</h2>
                         {openAccordions.policeJurisdiction ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
@@ -2473,53 +2506,59 @@ const BangaloreAddressMap = () => {
                       {openAccordions.policeJurisdiction && (
                         <div className="pb-4">
                           <div className="space-y-4 text-md">
-                            {/* Police Station Information */}
-                            <div className="space-y-2">
-                              <div className="grid grid-cols-2 gap-2 py-1">
-                                <span className="text-gray-600">Police station</span>
-                                <span className="font-medium text-gray-700 text-left break-words">{locationInfo.policeJurisdiction['Police station']}</span>
-                              </div>
-                              <div className="grid grid-cols-2 gap-2 py-1 items-start">
-                                <span className="text-gray-600">Address</span>
-                                <div className="flex flex-col text-left">
-                                  <span className="text-gray-700 break-words">{locationInfo.policeJurisdiction['Police station Address']}</span>
-                                  {locationInfo.policeJurisdiction['Police station Maps Link'] && (
-                                    <a
-                                      href={locationInfo.policeJurisdiction['Police station Maps Link']}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="text-blue-600 hover:text-blue-800 flex items-center mt-1"
-                                    >
-                                      <ExternalLink size={14} className="mr-1 flex-shrink-0" /> Google Maps
-                                    </a>
-                                  )}
+                            {locationInfo.policeJurisdiction['Police station'] === "Not Available" && 
+                             locationInfo.policeJurisdiction['Traffic station'] === "Not Available" ? (
+                              <p className="text-gray-700 py-1">This information is unavailable for this address</p>
+                            ) : (
+                              <>
+                                {/* Police Station Information */}
+                                <div className="space-y-2">
+                                  <div className="grid grid-cols-2 gap-2 py-1">
+                                    <span className="text-gray-600">Police Station</span>
+                                    <span className="font-medium text-gray-700 text-left break-words">{locationInfo.policeJurisdiction['Police station']}</span>
+                                  </div>
+                                  <div className="grid grid-cols-2 gap-2 py-1 items-start">
+                                    <span className="text-gray-600">Address</span>
+                                    <div className="flex flex-col text-left">
+                                      <span className="text-gray-700 break-words">{locationInfo.policeJurisdiction['Police station Address']}</span>
+                                      {locationInfo.policeJurisdiction['Police station Maps Link'] && (
+                                        <a
+                                          href={locationInfo.policeJurisdiction['Police station Maps Link']}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="text-blue-600 hover:text-blue-800 flex items-center mt-1"
+                                        >
+                                          <ExternalLink size={14} className="mr-1 flex-shrink-0" /> Google Maps
+                                        </a>
+                                      )}
+                                    </div>
+                                  </div>
                                 </div>
-                              </div>
-                            </div>
-
-                            {/* Traffic Police Station Information */}
-                            <div className="space-y-2 mt-4">
-                              <div className="grid grid-cols-2 gap-2 py-1">
-                                <span className="text-gray-600">Traffic station</span>
-                                <span className="font-medium text-gray-700 text-left break-words">{locationInfo.policeJurisdiction['Traffic station']}</span>
-                              </div>
-                              <div className="grid grid-cols-2 gap-2 py-1 items-start">
-                                <span className="text-gray-600">Address</span>
-                                <div className="flex flex-col text-left">
-                                  <span className="text-gray-700 break-words">{locationInfo.policeJurisdiction['Traffic station Address']}</span>
-                                  {locationInfo.policeJurisdiction['Traffic station Maps Link'] && (
-                                    <a
-                                      href={locationInfo.policeJurisdiction['Traffic station Maps Link']}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="text-blue-600 hover:text-blue-800 flex items-center mt-1"
-                                    >
-                                      <ExternalLink size={14} className="mr-1 flex-shrink-0" /> Google Maps
-                                    </a>
-                                  )}
+                                {/* Traffic Police Station Information */}
+                                <div className="space-y-2 mt-4">
+                                  <div className="grid grid-cols-2 gap-2 py-1">
+                                    <span className="text-gray-600">Traffic Police</span>
+                                    <span className="font-medium text-gray-700 text-left break-words">{locationInfo.policeJurisdiction['Traffic station']}</span>
+                                  </div>
+                                  <div className="grid grid-cols-2 gap-2 py-1 items-start">
+                                    <span className="text-gray-600">Address</span>
+                                    <div className="flex flex-col text-left">
+                                      <span className="text-gray-700 break-words">{locationInfo.policeJurisdiction['Traffic station Address']}</span>
+                                      {locationInfo.policeJurisdiction['Traffic station Maps Link'] && (
+                                        <a
+                                          href={locationInfo.policeJurisdiction['Traffic station Maps Link']}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="text-blue-600 hover:text-blue-800 flex items-center mt-1"
+                                        >
+                                          <ExternalLink size={14} className="mr-1 flex-shrink-0" /> Google Maps
+                                        </a>
+                                      )}
+                                    </div>
+                                  </div>
                                 </div>
-                              </div>
-                            </div>
+                              </>
+                            )}
                           </div>
                         </div>
                       )}
@@ -2675,12 +2714,18 @@ const BangaloreAddressMap = () => {
                           <div className="space-y-1 text-md">
                             {Object.entries(locationInfo.revenueClassification)
                               .filter(([key]) => key !== 'htmlDescription')
-                              .map(([fieldName, value]) => (
-                                <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
-                                  <span className="text-gray-600">{fieldName}</span>
-                                  <span className="font-medium text-gray-700 text-left break-words">{value}</span>
-                                </div>
-                              ))
+                              .every(([_, value]) => value === "Not Available" || value === "Missing data") ? (
+                                <p className="text-gray-700 py-1">This information is unavailable for this address</p>
+                              ) : (
+                                Object.entries(locationInfo.revenueClassification)
+                                  .filter(([key]) => key !== 'htmlDescription')
+                                  .map(([fieldName, value]) => (
+                                    <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
+                                      <span className="text-gray-600">{fieldName}</span>
+                                      <span className="font-medium text-gray-700 text-left break-words">{value}</span>
+                                    </div>
+                                  ))
+                              )
                             }
                           </div>
                         </div>
@@ -2700,53 +2745,62 @@ const BangaloreAddressMap = () => {
                       {openAccordions.revenueOffices && (
                         <div className="pb-4">
                           <div className="space-y-4 text-md">
-                            {/* SRO Information */}
-                            <div className="space-y-2">
-                              <div className="grid grid-cols-2 gap-2 py-1">
-                                <span className="text-gray-600">SRO</span>
-                                <span className="font-medium text-gray-700 text-left break-words">{locationInfo.revenueOffices.SRO}</span>
-                              </div>
-                              <div className="grid grid-cols-2 gap-2 py-1 items-start">
-                                <span className="text-gray-600">Address</span>
-                                <div className="flex flex-col text-left">
-                                  <span className="text-gray-700 break-words">{locationInfo.revenueOffices['SRO Address']}</span>
-                                  {locationInfo.revenueOffices['SRO Maps Link'] && (
-                                    <a
-                                      href={locationInfo.revenueOffices['SRO Maps Link']}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="text-blue-600 hover:text-blue-800 flex items-center mt-1"
-                                    >
-                                      <ExternalLink size={14} className="mr-1 flex-shrink-0" /> Google Maps
-                                    </a>
-                                  )}
-                                </div>
-                              </div>
-                            </div>
+                            {Object.entries(locationInfo.revenueOffices)
+                              .filter(([key]) => !key.includes('Maps Link'))
+                              .every(([_, value]) => value === "Not Available" || value === "Missing data") ? (
+                                <p className="text-gray-700 py-1">This information is unavailable for this address</p>
+                              ) : (
+                                <>
+                                  {/* SRO Information */}
+                                  <div className="space-y-2">
+                                    <div className="grid grid-cols-2 gap-2 py-1">
+                                      <span className="text-gray-600">SRO</span>
+                                      <span className="font-medium text-gray-700 text-left break-words">{locationInfo.revenueOffices.SRO}</span>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-2 py-1 items-start">
+                                      <span className="text-gray-600">Address</span>
+                                      <div className="flex flex-col text-left">
+                                        <span className="text-gray-700 break-words">{locationInfo.revenueOffices['SRO Address']}</span>
+                                        {locationInfo.revenueOffices['SRO Maps Link'] && (
+                                          <a
+                                            href={locationInfo.revenueOffices['SRO Maps Link']}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-blue-600 hover:text-blue-800 flex items-center mt-1"
+                                          >
+                                            <ExternalLink size={14} className="mr-1 flex-shrink-0" /> Google Maps
+                                          </a>
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
 
-                            {/* DRO Information */}
-                            <div className="space-y-2 mt-4">
-                              <div className="grid grid-cols-2 gap-2 py-1">
-                                <span className="text-gray-600">DRO</span>
-                                <span className="font-medium text-gray-700 text-left break-words">{locationInfo.revenueOffices.DRO}</span>
-                              </div>
-                              <div className="grid grid-cols-2 gap-2 py-1 items-start">
-                                <span className="text-gray-600">Address</span>
-                                <div className="flex flex-col text-left">
-                                  <span className="text-gray-700 break-words">{locationInfo.revenueOffices['DRO Address']}</span>
-                                  {locationInfo.revenueOffices['DRO Maps Link'] && (
-                                    <a
-                                      href={locationInfo.revenueOffices['DRO Maps Link']}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="text-blue-600 hover:text-blue-800 flex items-center mt-1"
-                                    >
-                                      <ExternalLink size={14} className="mr-1 flex-shrink-0" /> Google Maps
-                                    </a>
-                                  )}
-                                </div>
-                              </div>
-                            </div>
+                                  {/* DRO Information */}
+                                  <div className="space-y-2 mt-4">
+                                    <div className="grid grid-cols-2 gap-2 py-1">
+                                      <span className="text-gray-600">DRO</span>
+                                      <span className="font-medium text-gray-700 text-left break-words">{locationInfo.revenueOffices.DRO}</span>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-2 py-1 items-start">
+                                      <span className="text-gray-600">Address</span>
+                                      <div className="flex flex-col text-left">
+                                        <span className="text-gray-700 break-words">{locationInfo.revenueOffices['DRO Address']}</span>
+                                        {locationInfo.revenueOffices['DRO Maps Link'] && (
+                                          <a
+                                            href={locationInfo.revenueOffices['DRO Maps Link']}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-blue-600 hover:text-blue-800 flex items-center mt-1"
+                                          >
+                                            <ExternalLink size={14} className="mr-1 flex-shrink-0" /> Google Maps
+                                          </a>
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </>
+                              )
+                            }
                           </div>
                         </div>
                       )}
@@ -2767,48 +2821,57 @@ const BangaloreAddressMap = () => {
                             <div className="space-y-1 text-md">
                               {Object.entries(locationInfo.bescomInfo)
                                   .filter(([key]) => key !== 'O&M Office Address' && key !== 'O&M Office Maps Link')
-                                  .map(([fieldName, value]) => (
-                                  <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
-                                    <span className="text-gray-600">{fieldName}</span>
-                                    <span className="font-medium text-gray-700 text-left break-words">{value}</span>
-                                  </div>
-                              ))}
+                                  .every(([_, value]) => value === "Not Available" || value === "Not available") ? (
+                                    <p className="text-gray-700 py-1">This information is unavailable for this address. This could be because the area is outside BESCOM limits</p>
+                                  ) : (
+                                    <>
+                                      {Object.entries(locationInfo.bescomInfo)
+                                          .filter(([key]) => key !== 'O&M Office Address' && key !== 'O&M Office Maps Link')
+                                          .map(([fieldName, value]) => (
+                                          <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
+                                            <span className="text-gray-600">{fieldName}</span>
+                                            <span className="font-medium text-gray-700 text-left break-words">{value}</span>
+                                          </div>
+                                      ))}
 
-                              {/* O&M Office Address */}
-                              {locationInfo.bescomInfo['O&M Office Address'] !== "Address not available" && (
-                                  <div className="grid grid-cols-2 py-1">
-                                    <span className="text-gray-600">O&M Office Address</span>
-                                    <div className="flex flex-col">
-                                      <span className="text-gray-700 break-words">{locationInfo.bescomInfo['O&M Office Address']}</span>
-                                      {locationInfo.bescomInfo['O&M Office Maps Link'] && (
-                                          <a
-                                              href={locationInfo.bescomInfo['O&M Office Maps Link']}
-                                              target="_blank"
-                                              rel="noopener noreferrer"
-                                              className="text-blue-600 hover:text-blue-800 text-md flex items-center mt-1"
-                                          >
-                                            <ExternalLink size={14} className="mr-1" /> Google Maps
-                                          </a>
+                                      {/* O&M Office Address */}
+                                      {locationInfo.bescomInfo['O&M Office Address'] !== "Address not available" && (
+                                          <div className="grid grid-cols-2 py-1">
+                                            <span className="text-gray-600">O&M Office Address</span>
+                                            <div className="flex flex-col">
+                                              <span className="text-gray-700 break-words">{locationInfo.bescomInfo['O&M Office Address']}</span>
+                                              {locationInfo.bescomInfo['O&M Office Maps Link'] && (
+                                                  <a
+                                                      href={locationInfo.bescomInfo['O&M Office Maps Link']}
+                                                      target="_blank"
+                                                      rel="noopener noreferrer"
+                                                      className="text-blue-600 hover:text-blue-800 text-md flex items-center mt-1"
+                                                  >
+                                                    <ExternalLink size={14} className="mr-1" /> Google Maps
+                                                  </a>
+                                              )}
+                                            </div>
+                                          </div>
                                       )}
-                                    </div>
-                                  </div>
-                              )}
 
-                              {/* Warning message at the bottom */}
-                              {locationInfo.bescomInfo['O&M Office'] !== "Not Available" && (
-                                  <div className="mt-3 text-xs text-yellow-600 flex items-center">
-                                    <svg
-                                        xmlns="http://www.w2.org/2000/svg"
-                                        className="h-5 w-4 mr-1 text-yellow-500"
-                                        fill="none"
-                                        viewBox="-1 0 24 24"
-                                        stroke="currentColor"
-                                    >
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                    </svg>
-                                    O&M Office Address may not be accurate
-                                  </div>
-                              )}
+                                      {/* Warning message at the bottom */}
+                                      {locationInfo.bescomInfo['O&M Office'] !== "Not Available" && (
+                                          <div className="mt-3 text-xs text-yellow-600 flex items-center">
+                                            <svg
+                                                xmlns="http://www.w2.org/2000/svg"
+                                                className="h-5 w-4 mr-1 text-yellow-500"
+                                                fill="none"
+                                                viewBox="-1 0 24 24"
+                                                stroke="currentColor"
+                                            >
+                                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                            </svg>
+                                            <span>O&M office data may need verification.</span>
+                                          </div>
+                                      )}
+                                    </>
+                                  )
+                              }
                             </div>
                           </div>
                       )}
@@ -2817,8 +2880,8 @@ const BangaloreAddressMap = () => {
                     {/* BWSSB Information - Accordion */}
                     <div className="border-b border-gray-200">
                       <button
-                        onClick={() => toggleAccordion('bwssbInfo')}
-                        className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
+                          onClick={() => toggleAccordion('bwssbInfo')}
+                          className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
                       >
                         <h2 className="font-semibold text-gray-800 text-base">Water Supply (BWSSB)</h2>
                         {openAccordions.bwssbInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
@@ -2827,22 +2890,31 @@ const BangaloreAddressMap = () => {
                       {openAccordions.bwssbInfo && (
                         <div className="pb-4">
                           <div className="space-y-1 text-md">
-                            {Object.entries(locationInfo.bwssbInfo).map(([fieldName, value]) => (
-                              <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
-                                <span className="text-gray-600">{fieldName}</span>
-                                <span className="font-medium text-gray-700 text-left break-words">{value}</span>
-                              </div>
-                            ))}
+                            {Object.entries(locationInfo.bwssbInfo)
+                              .filter(([key]) => !key.includes('Address') && !key.includes('Contact'))
+                              .every(([_, value]) => value === "Not Available") ? (
+                                <p className="text-gray-700 py-1">This information is unavailable for this address. This could be because the area is outside BWSSB service limits</p>
+                              ) : (
+                                Object.entries(locationInfo.bwssbInfo)
+                                  .filter(([key]) => !key.includes('Address') && !key.includes('Contact'))
+                                  .map(([fieldName, value]) => (
+                                    <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
+                                      <span className="text-gray-600">{fieldName}</span>
+                                      <span className="font-medium text-gray-700 text-left break-words">{value}</span>
+                                    </div>
+                                  ))
+                              )
+                            }
                           </div>
                         </div>
                       )}
                     </div>
 
                     {/* Police Jurisdiction - Accordion */}
-                    <div>
-                    <button
-                        onClick={() => toggleAccordion('policeJurisdiction')}
-                        className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
+                    <div className="border-b border-gray-200">
+                      <button
+                          onClick={() => toggleAccordion('policeJurisdiction')}
+                          className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
                       >
                         <h2 className="font-semibold text-gray-800 text-base">Police Jurisdiction</h2>
                         {openAccordions.policeJurisdiction ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
@@ -2851,53 +2923,59 @@ const BangaloreAddressMap = () => {
                       {openAccordions.policeJurisdiction && (
                         <div className="pb-4">
                           <div className="space-y-4 text-md">
-                            {/* Police Station Information */}
-                            <div className="space-y-2">
-                              <div className="grid grid-cols-2 gap-2 py-1">
-                                <span className="text-gray-600">Police station</span>
-                                <span className="font-medium text-gray-700 text-left break-words">{locationInfo.policeJurisdiction['Police station']}</span>
-                              </div>
-                              <div className="grid grid-cols-2 gap-2 py-1 items-start">
-                                <span className="text-gray-600">Address</span>
-                                <div className="flex flex-col text-left">
-                                  <span className="text-gray-700 break-words">{locationInfo.policeJurisdiction['Police station Address']}</span>
-                                  {locationInfo.policeJurisdiction['Police station Maps Link'] && (
-                                    <a
-                                      href={locationInfo.policeJurisdiction['Police station Maps Link']}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="text-blue-600 hover:text-blue-800 flex items-center mt-1"
-                                    >
-                                      <ExternalLink size={14} className="mr-1 flex-shrink-0" /> Google Maps
-                                    </a>
-                                  )}
+                            {locationInfo.policeJurisdiction['Police station'] === "Not Available" && 
+                             locationInfo.policeJurisdiction['Traffic station'] === "Not Available" ? (
+                              <p className="text-gray-700 py-1">This information is unavailable for this address</p>
+                            ) : (
+                              <>
+                                {/* Police Station Information */}
+                                <div className="space-y-2">
+                                  <div className="grid grid-cols-2 gap-2 py-1">
+                                    <span className="text-gray-600">Police Station</span>
+                                    <span className="font-medium text-gray-700 text-left break-words">{locationInfo.policeJurisdiction['Police station']}</span>
+                                  </div>
+                                  <div className="grid grid-cols-2 gap-2 py-1 items-start">
+                                    <span className="text-gray-600">Address</span>
+                                    <div className="flex flex-col text-left">
+                                      <span className="text-gray-700 break-words">{locationInfo.policeJurisdiction['Police station Address']}</span>
+                                      {locationInfo.policeJurisdiction['Police station Maps Link'] && (
+                                        <a
+                                          href={locationInfo.policeJurisdiction['Police station Maps Link']}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="text-blue-600 hover:text-blue-800 flex items-center mt-1"
+                                        >
+                                          <ExternalLink size={14} className="mr-1 flex-shrink-0" /> Google Maps
+                                        </a>
+                                      )}
+                                    </div>
+                                  </div>
                                 </div>
-                              </div>
-                            </div>
-
-                            {/* Traffic Police Station Information */}
-                            <div className="space-y-2 mt-4">
-                              <div className="grid grid-cols-2 gap-2 py-1">
-                                <span className="text-gray-600">Traffic station</span>
-                                <span className="font-medium text-gray-700 text-left break-words">{locationInfo.policeJurisdiction['Traffic station']}</span>
-                              </div>
-                              <div className="grid grid-cols-2 gap-2 py-1 items-start">
-                                <span className="text-gray-600">Address</span>
-                                <div className="flex flex-col text-left">
-                                  <span className="text-gray-700 break-words">{locationInfo.policeJurisdiction['Traffic station Address']}</span>
-                                  {locationInfo.policeJurisdiction['Traffic station Maps Link'] && (
-                                    <a
-                                      href={locationInfo.policeJurisdiction['Traffic station Maps Link']}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="text-blue-600 hover:text-blue-800 flex items-center mt-1"
-                                    >
-                                      <ExternalLink size={14} className="mr-1 flex-shrink-0" /> Google Maps
-                                    </a>
-                                  )}
+                                {/* Traffic Police Station Information */}
+                                <div className="space-y-2 mt-4">
+                                  <div className="grid grid-cols-2 gap-2 py-1">
+                                    <span className="text-gray-600">Traffic Police</span>
+                                    <span className="font-medium text-gray-700 text-left break-words">{locationInfo.policeJurisdiction['Traffic station']}</span>
+                                  </div>
+                                  <div className="grid grid-cols-2 gap-2 py-1 items-start">
+                                    <span className="text-gray-600">Address</span>
+                                    <div className="flex flex-col text-left">
+                                      <span className="text-gray-700 break-words">{locationInfo.policeJurisdiction['Traffic station Address']}</span>
+                                      {locationInfo.policeJurisdiction['Traffic station Maps Link'] && (
+                                        <a
+                                          href={locationInfo.policeJurisdiction['Traffic station Maps Link']}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="text-blue-600 hover:text-blue-800 flex items-center mt-1"
+                                        >
+                                          <ExternalLink size={14} className="mr-1 flex-shrink-0" /> Google Maps
+                                        </a>
+                                      )}
+                                    </div>
+                                  </div>
                                 </div>
-                              </div>
-                            </div>
+                              </>
+                            )}
                           </div>
                         </div>
                       )}
