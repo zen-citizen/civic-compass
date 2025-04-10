@@ -2298,7 +2298,7 @@ const BangaloreAddressMap = () => {
                             {Object.entries(locationInfo.revenueClassification)
                               .filter(([key]) => key !== 'htmlDescription')
                               .every(([_, value]) => value === "Not Available" || value === "Missing data") ? (
-                                <p className="text-gray-700 py-1">This information is unavailable for this address</p>
+                                <p className="text-gray-700 py-1">This information is unavailable for this address. This could be because the area is outside Bengaluru Urban district.</p>
                               ) : (
                                 Object.entries(locationInfo.revenueClassification)
                                   .filter(([key]) => key !== 'htmlDescription')
@@ -2331,7 +2331,7 @@ const BangaloreAddressMap = () => {
                             {Object.entries(locationInfo.revenueOffices)
                               .filter(([key]) => !key.includes('Maps Link'))
                               .every(([_, value]) => value === "Not Available" || value === "Missing data") ? (
-                                <p className="text-gray-700 py-1">This information is unavailable for this address</p>
+                                <p className="text-gray-700 py-1">This information is unavailable for this address. This could be because the area is outside Bengaluru Urban district.</p>
                               ) : (
                                 <>
                                   {/* SRO Information */}
@@ -2508,7 +2508,7 @@ const BangaloreAddressMap = () => {
                           <div className="space-y-4 text-md">
                             {locationInfo.policeJurisdiction['Police station'] === "Not Available" && 
                              locationInfo.policeJurisdiction['Traffic station'] === "Not Available" ? (
-                              <p className="text-gray-700 py-1">This information is unavailable for this address</p>
+                              <p className="text-gray-700 py-1">This information is unavailable for this address. This could be because the area is outside of Bengaluru City and Traffic police limits.</p>
                             ) : (
                               <>
                                 {/* Police Station Information */}
@@ -2715,7 +2715,7 @@ const BangaloreAddressMap = () => {
                             {Object.entries(locationInfo.revenueClassification)
                               .filter(([key]) => key !== 'htmlDescription')
                               .every(([_, value]) => value === "Not Available" || value === "Missing data") ? (
-                                <p className="text-gray-700 py-1">This information is unavailable for this address</p>
+                                <p className="text-gray-700 py-1">This information is unavailable for this address. This could be because the area is outside Bengaluru Urban district.</p>
                               ) : (
                                 Object.entries(locationInfo.revenueClassification)
                                   .filter(([key]) => key !== 'htmlDescription')
@@ -2748,7 +2748,7 @@ const BangaloreAddressMap = () => {
                             {Object.entries(locationInfo.revenueOffices)
                               .filter(([key]) => !key.includes('Maps Link'))
                               .every(([_, value]) => value === "Not Available" || value === "Missing data") ? (
-                                <p className="text-gray-700 py-1">This information is unavailable for this address</p>
+                                <p className="text-gray-700 py-1">This information is unavailable for this address. This could be because the area is outside Bengaluru Urban district.</p>
                               ) : (
                                 <>
                                   {/* SRO Information */}
@@ -2925,7 +2925,7 @@ const BangaloreAddressMap = () => {
                           <div className="space-y-4 text-md">
                             {locationInfo.policeJurisdiction['Police station'] === "Not Available" && 
                              locationInfo.policeJurisdiction['Traffic station'] === "Not Available" ? (
-                              <p className="text-gray-700 py-1">This information is unavailable for this address</p>
+                              <p className="text-gray-700 py-1">This information is unavailable for this address. This could be because the area is outside of Bengaluru City and Traffic police limits.</p>
                             ) : (
                               <>
                                 {/* Police Station Information */}
