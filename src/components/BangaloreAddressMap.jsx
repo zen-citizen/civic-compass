@@ -2235,19 +2235,22 @@ const BangaloreAddressMap = () => {
                     {openAccordions.bbmpInfo && (                      
                       <div className="pb-4">                      
                         <div className="space-y-1 text-md">
-                          {Object.entries(locationInfo.bbmpInfo).map(([fieldName, value]) => (
-                            <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
-                              <span className="text-gray-600">{fieldName}</span>
-                              <span className="font-medium text-gray-700 text-left break-words">{value}</span>
-                            </div>
-                          ))}
+                          {Object.values(locationInfo.bbmpInfo).every(value => value === "Not Available" || value === "Missing data") ? (
+                            <p className="text-gray-700 py-1">This information is unavailable for this address. This could be because the area is outside BBMP limits</p>
+                          ) : (
+                            <>
+                              {Object.entries(locationInfo.bbmpInfo).map(([fieldName, value]) => (
+                                <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
+                                  <span className="text-gray-600">{fieldName}</span>
+                                  <span className="font-medium text-gray-700 text-left break-words">{value}</span>
+                                </div>
+                              ))}
+                              <p className="text-xs text-gray-600 mt-4 mb-3">
+                                This information is based on the 198-ward classification, which BBMP still uses as a reference — even though it's no longer the official structure.
+                              </p>
+                            </>
+                          )}
                         </div>
-                        <p className="text-xs text-gray-600 mt-4 mb-3">
-                        This information is based on the 198-ward classification, which BBMP still uses as a reference — even though it’s no longer the official structure.
-                        </p>
-                        <p className="text-xs text-gray-600 mb-3">
-                        'Not Available' usually means the area is outside BBMP limits.
-                        </p> 
                       </div>
                     )}
                   </div>
@@ -2264,16 +2267,17 @@ const BangaloreAddressMap = () => {
                       {openAccordions.bdaInfo && (
                         <div className="pb-4">                         
                           <div className="space-y-1 text-md">
-                            {Object.entries(locationInfo.bdaInfo).map(([fieldName, value]) => (
-                              <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
-                                <span className="text-gray-600">{fieldName}</span>
-                                <span className="font-medium text-gray-700 text-left break-words">{value}</span>
-                              </div>
-                            ))}
+                            {Object.values(locationInfo.bdaInfo).every(value => value === "Not Available") ? (
+                              <p className="text-gray-700 py-1">This information is unavailable for this address. This could be because the area is outside BDA limits</p>
+                            ) : (
+                              Object.entries(locationInfo.bdaInfo).map(([fieldName, value]) => (
+                                <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
+                                  <span className="text-gray-600">{fieldName}</span>
+                                  <span className="font-medium text-gray-700 text-left break-words">{value}</span>
+                                </div>
+                              ))
+                            )}
                           </div>
-                          <p className="text-xs text-gray-600 mt-4 mb-3">
-                        'Not Available' usually means the area does not fall under BDA.
-                        </p> 
                         </div>
                       )}
                     </div>
@@ -2606,22 +2610,25 @@ const BangaloreAddressMap = () => {
                         {openAccordions.bbmpInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                     </button>
 
-                    {openAccordions.bbmpInfo && (
-                      <div className="pb-4">                                                
+                    {openAccordions.bbmpInfo && (                      
+                      <div className="pb-4">                      
                         <div className="space-y-1 text-md">
-                          {Object.entries(locationInfo.bbmpInfo).map(([fieldName, value]) => (
-                            <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
-                              <span className="text-gray-600">{fieldName}</span>
-                              <span className="font-medium text-gray-700 text-left break-words">{value}</span>
-                            </div>
-                          ))}
+                          {Object.values(locationInfo.bbmpInfo).every(value => value === "Not Available" || value === "Missing data") ? (
+                            <p className="text-gray-700 py-1">This information is unavailable for this address. This could be because the area is outside BBMP limits</p>
+                          ) : (
+                            <>
+                              {Object.entries(locationInfo.bbmpInfo).map(([fieldName, value]) => (
+                                <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
+                                  <span className="text-gray-600">{fieldName}</span>
+                                  <span className="font-medium text-gray-700 text-left break-words">{value}</span>
+                                </div>
+                              ))}
+                              <p className="text-xs text-gray-800 mt-4 mb-3 max-w-md">
+                                This information is based on the 198-ward classification, which BBMP still uses as a reference — even though it's no longer the official structure.
+                              </p>
+                            </>
+                          )}
                         </div>
-                        <p className="text-xs text-gray-800 mt-4 mb-3 max-w-md">
-                        This information is based on the 198-ward classification, which BBMP still uses as a reference — even though it’s no longer the official structure.
-                        </p>
-                        <p className="text-xs text-gray-800 mb-3 max-w-md">
-                        'Not Available' usually means the area is outside BBMP limits.
-                        </p> 
                       </div>
                     )}
                   </div>
@@ -2636,18 +2643,19 @@ const BangaloreAddressMap = () => {
                         {openAccordions.bdaInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                       </button>
                       {openAccordions.bdaInfo && (
-                        <div className="pb-4">                          
+                        <div className="pb-4">                         
                           <div className="space-y-1 text-md">
-                            {Object.entries(locationInfo.bdaInfo).map(([fieldName, value]) => (
-                              <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
-                                <span className="text-gray-600">{fieldName}</span>
-                                <span className="font-medium text-gray-700 text-left break-words">{value}</span>
-                              </div>
-                            ))}
+                            {Object.values(locationInfo.bdaInfo).every(value => value === "Not Available") ? (
+                              <p className="text-gray-700 py-1">This information is unavailable for this address. This could be because the area is outside BDA limits</p>
+                            ) : (
+                              Object.entries(locationInfo.bdaInfo).map(([fieldName, value]) => (
+                                <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
+                                  <span className="text-gray-600">{fieldName}</span>
+                                  <span className="font-medium text-gray-700 text-left break-words">{value}</span>
+                                </div>
+                              ))
+                            )}
                           </div>
-                          <p className="text-xs text-gray-800 mt-4 mb-3 max-w-md">
-                        'Not Available' usually means the area does not fall under BDA.
-                        </p> 
                         </div>
                       )}
                     </div>
