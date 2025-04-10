@@ -2530,7 +2530,7 @@ const BangaloreAddressMap = () => {
           {/* Footer - Common for mobile (Now outside scrollable content) */}
           <div className="flex-shrink-0 p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 z-10"> {/* Dark mode, Removed sticky/mt-auto */}
             <div className="flex justify-between items-center text-sm">
-              <a href="https://zencitizen.in/contact-us/" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80">Report an Error</a>
+              <a href="https://forms.gle/EmQiMpayciLdbww96" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80">Report an Error</a>
               <a href="https://docs.google.com/forms/d/e/1FAIpQLScQS_-VgUFQZJedyu6iIlpoYymsKSyGUhrvPoJX1WkZGQqfLQ/viewform" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80">Volunteer with Us</a>
               <a href="https://github.com/zen-citizen/civic-compass" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80">Open Source</a>
             </div>
@@ -2900,7 +2900,7 @@ const BangaloreAddressMap = () => {
 
             <div className="mt-auto pt-4 border-t border-gray-200 flex-shrink-0"> {/* Footer stick to bottom */}
               <div className="flex justify-between items-center text-sm">
-                <a href="https://zencitizen.in/contact-us/" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80">Report an Error</a>
+                <a href="https://forms.gle/EmQiMpayciLdbww96" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80">Report an Error</a>
                 <a href="https://docs.google.com/forms/d/e/1FAIpQLScQS_-VgUFQZJedyu6iIlpoYymsKSyGUhrvPoJX1WkZGQqfLQ/viewform" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80">Volunteer with Us</a>
                 <a href="https://github.com/zen-citizen/civic-compass" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80">Open Source</a>
               </div>
