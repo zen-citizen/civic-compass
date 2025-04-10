@@ -1,70 +1,80 @@
-# Getting Started with Create React App
+# Bangalore Civic Compass
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A civic information tool that helps Bangalore residents discover detailed information about any address in the city, including:
 
-## Available Scripts
+- BBMP Ward details
+- Revenue classifications and offices
+- Police jurisdictions
+- BESCOM electricity information
+- BWSSB water supply information
+- BDA layout boundaries
 
-In the project directory, you can run:
+> This project is part of [Zen Citizen](https://zencitizen.in), an initiative to empower Indian citizens with clear, practical information about government procedures and services.
 
-### `npm start`
+## Overview
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Bangalore Civic Compass is an interactive map-based web application that allows users to search for any address in Bangalore and get comprehensive civic information about that location. Users can click on the map or search for an address to see which administrative zones, wards, and jurisdictions the location falls under.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Features
 
-### `npm test`
+- Address search functionality
+- Interactive map interface
+- Detailed information panels showing:
+  - BBMP ward information
+  - Revenue classification details
+  - Police and traffic police jurisdictions
+  - BESCOM electricity division information
+  - BWSSB water supply information
+  - BDA layout details
+- Mobile-responsive design
+- Dark mode support
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Installation
 
-### `npm run build`
+1. Clone the repository:
+   ```
+   git clone https://github.com/yourusername/bangalore-civic-compass.git
+   cd bangalore-civic-compass
+   ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+2. Install dependencies:
+   ```
+   npm install
+   ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+3. Create a `.env` file in the root directory:
+   ```
+   REACT_APP_USE_GOOGLE_SEARCH=false
+   ```
+   Note: If you want to use Google Maps API for search, set to `true` and add your Google Maps API key.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+4. Start the development server:
+   ```
+   npm start
+   ```
 
-### `npm run eject`
+5. Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Contributing
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Contributions to improve Bangalore Civic Compass are welcome! Here's how you can contribute:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Development Guidelines
 
-## Learn More
+- Keep the UI responsive and mobile-friendly
+- Maintain accessibility standards
+- Test thoroughly on different devices and browsers
+- Follow the existing code style and patterns
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Data sources 
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- OpenCity
+- Karnataka-GIS
+- OpenStreetMap
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
