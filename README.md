@@ -27,7 +27,6 @@ Bangalore Civic Compass is an interactive map-based web application that allows 
   - BWSSB water supply information
   - BDA layout details
 - Mobile-responsive design
-- Dark mode support
 
 ## Installation
 
