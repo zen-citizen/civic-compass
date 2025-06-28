@@ -5,6 +5,8 @@ import BBMPInformation from '../layers/BBMPInformation_11.json'
 import Constituencies from '../layers/Constituencies_3.json'
 import RevenueOffices from '../layers/RevenueOffices_6.json'
 import RevenueClassification from '../layers/RevenueClassification_10.json'
+import Layer9 from '../layers/_9.json'
+import Layer8 from '../layers/_8.json'
 import bescomSectionBoundary from '../layers/bescom-section-boundary.json'
 import bescomDivisionBoundary from '../layers/bescom-division-boundary.json'
 import bescomSubdivisionBoundary from '../layers/bescom-subdivision-boundary.json'
@@ -676,68 +678,75 @@ const BangaloreAddressMap = () => {
       console.log("Revenue classification feature example:", RevenueClassification.features[0]);
     }
 
-    for (const feature of RevenueClassification.features) {
-      if (feature.geometry) {
-        const isInside = processGeometry(feature.geometry, point, L);
+    const extractNameFromDescription = (description, fieldName) => {
+      if (!description) return null;
+      const regex = new RegExp(`${fieldName}<\/td>\\s*<td>([^<]+)<\/td>`, 'i');
+      const match = description.match(regex);
+      return match ? match[1].trim() : null;
+    };
 
-        if (isInside) {
-          const villageName = feature.properties.Name || "Not Available";
+    const findByLocation = (dataSource, point) => {
+      if (!dataSource || !dataSource.features) return null;
 
-          const htmlDescription = feature.properties.description || null;
-
-          let district = "Not Available";
-          let taluk = "Not Available";
-          let hobli = "Not Available";
-
-          if (htmlDescription) {
-            const villageCodeMatch = htmlDescription.match(/KGISVillageCode<\/td>\s*<td>(\d+)<\/td>/);
-            const villageCode = villageCodeMatch ? villageCodeMatch[1] : null;
-
-            const hobliIdMatch = htmlDescription.match(/KGISHobliID<\/td>\s*<td>(\d+)<\/td>/);
-            const hobliId = hobliIdMatch ? hobliIdMatch[1] : null;
-
-            const bhuCodeMatch = htmlDescription.match(/Bhucode<\/td>\s*<td>(\d+)<\/td>/);
-            const bhuCode = bhuCodeMatch ? bhuCodeMatch[1] : null;
-
-            const districtCodeToName = { "20": "Bengaluru (Urban)" };
-
-            const talukCodeToName = {};
-
-            const hobliCodeToName = {};
-
-            if (bhuCode && bhuCode.length >= 2) {
-              const districtCode = bhuCode.substring(0, 2);
-              district = districtCodeToName[districtCode] || `District Code: ${districtCode}`;
-            }
-
-            if (bhuCode && bhuCode.length >= 4) {
-              const talukCode = bhuCode.substring(2, 4);
-              taluk = talukCodeToName[talukCode] || `Taluk Code: ${talukCode}`;
-            }
-
-            if (bhuCode && bhuCode.length >= 6) {
-              const hobliCode = bhuCode.substring(4, 6);
-              hobli = hobliCodeToName[hobliCode] || `Hobli Code: ${hobliCode}`;
-            }
+      for (const feature of dataSource.features) {
+        if (feature.geometry) {
+          const isInside = processGeometry(feature.geometry, point, L);
+          if (isInside) {
+            return feature;
           }
+        }
+      }
+      return null;
+    };
 
-          return {
-            District: district,
-            Taluk: taluk,
-            Hobli: hobli,
-            Village: villageName,
-            htmlDescription: htmlDescription
-          };
+    // Find village data
+    let village = "Not Available";
+    let district = "Not Available";
+    let htmlDescription = null;
+
+    const villageFeature = findByLocation(RevenueClassification, point);
+    if (villageFeature) {
+      village = villageFeature.properties.Name || "Not Available";
+      htmlDescription = villageFeature.properties.description || null;
+
+      // Extract district from village data (keeping the same logic)
+      if (htmlDescription) {
+        const bhuCodeMatch = htmlDescription.match(/Bhucode<\/td>\s*<td>(\d+)<\/td>/);
+        const bhuCode = bhuCodeMatch ? bhuCodeMatch[1] : null;
+
+        const districtCodeToName = { "20": "Bengaluru (Urban)" };
+
+        if (bhuCode && bhuCode.length >= 2) {
+          const districtCode = bhuCode.substring(0, 2);
+          district = districtCodeToName[districtCode] || `District Code: ${districtCode}`;
         }
       }
     }
 
+    // Find taluk data (Layer8)
+    let taluk = "Not Available";
+    const talukFeature = findByLocation(Layer8, point);
+    if (talukFeature) {
+      taluk = extractNameFromDescription(talukFeature.properties.description, "KGISTalukName") ||
+          talukFeature.properties.Name ||
+          "Not Available";
+    }
+
+    // Find hobli data (Layer9)
+    let hobli = "Not Available";
+    const hobliFeature = findByLocation(Layer9, point);
+    if (hobliFeature) {
+      hobli = extractNameFromDescription(hobliFeature.properties.description, "KGISHobliName") ||
+          hobliFeature.properties.Name ||
+          "Not Available";
+    }
+
     return {
-      District: "Missing data",
-      Taluk: "Missing data",
-      Hobli: "Missing data",
-      Village: "Missing data",
-      htmlDescription: null
+      District: district,
+      Taluk: taluk,
+      Hobli: hobli,
+      Village: village,
+      htmlDescription: htmlDescription
     };
   };
 
