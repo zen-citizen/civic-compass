@@ -121,27 +121,27 @@ const BangaloreAddressMap = () => {
 
   // First, add state for tracking open accordions
   const [openAccordions, setOpenAccordions] = useState({
-    bbmpInfo: true, // Open by default
+    gbaInfo: true,
+    bbmpInfo: false,
     revenueClassification: false,
     revenueOffices: false,
     policeJurisdiction: false,
     bescomInfo: false,
     bwssbInfo: false,
     bdaInfo: false,
-    gbaInfo: false
   });
  // Also open by default
   // Reset accordion state function
   const resetAccordions = () => {
     setOpenAccordions({
-      bbmpInfo: true,
+      gbaInfo: true,
+      bbmpInfo: false,
       revenueClassification: false,
       revenueOffices: false,
       policeJurisdiction: false,
       bescomInfo: false,
       bwssbInfo: false,
       bdaInfo: false,
-      gbaInfo: false
     });
   };
   // Then add a toggle function for accordions
@@ -2087,7 +2087,7 @@ const BangaloreAddressMap = () => {
     }
     // If switching to mobile view with intro panel, ensure BBMP accordion is open
     if (isMobile && showIntroPanel) {
-        setOpenAccordions(prev => ({...prev, bbmpInfo: true}));
+        setOpenAccordions(prev => ({...prev, gbaInfo: true}));
     }
   }, [isMobile, showIntroPanel, selectedLocation]);
 
@@ -2275,39 +2275,6 @@ const BangaloreAddressMap = () => {
 
                 {/* Accordions Container */}
                 <div className="flex-grow pr-1"> {/* Scrollable accordion area */}
-                  {/* BBMP Information */}
-                  <div className="border-b border-gray-200">
-                    <button
-                        onClick={() => toggleAccordion('bbmpInfo')}
-                        className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
-                    >
-                      <h2 className="font-semibold text-gray-800 text-base">BBMP Information</h2>
-                        {openAccordions.bbmpInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                    </button>
-
-                    {openAccordions.bbmpInfo && (                      
-                      <div className="pb-4">                      
-                        <div className="space-y-1 text-md">
-                          {Object.values(locationInfo.bbmpInfo).every(value => value === "Not Available" || value === "Missing data") ? (
-                            <p className="text-gray-700 py-1">This information is unavailable for this address. This could be because the area is outside BBMP limits</p>
-                          ) : (
-                            <>
-                              {Object.entries(locationInfo.bbmpInfo).map(([fieldName, value]) => (
-                                <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
-                                  <span className="text-gray-600">{fieldName}</span>
-                                  <span className="font-medium text-gray-700 text-left break-words">{value}</span>
-                                </div>
-                              ))}
-                              <p className="text-xs text-gray-600 mt-4 mb-3">
-                                This information is based on the 198-ward classification, which BBMP still uses as a reference — even though it's no longer the official structure.
-                              </p>
-                            </>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  
                     {/* GBA Corporation Information - Accordion */}
                     <div className="border-b border-gray-200">
                       <button
@@ -2329,6 +2296,39 @@ const BangaloreAddressMap = () => {
                                   <span className="font-medium text-gray-700 text-left break-words">{value}</span>
                                 </div>
                               ))
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* BBMP Information */}
+                    <div className="border-b border-gray-200">
+                      <button
+                          onClick={() => toggleAccordion('bbmpInfo')}
+                          className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
+                      >
+                        <h2 className="font-semibold text-gray-800 text-base">BBMP Information</h2>
+                          {openAccordions.bbmpInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                      </button>
+
+                      {openAccordions.bbmpInfo && (                      
+                        <div className="pb-4">                      
+                          <div className="space-y-1 text-md">
+                            {Object.values(locationInfo.bbmpInfo).every(value => value === "Not Available" || value === "Missing data") ? (
+                              <p className="text-gray-700 py-1">This information is unavailable for this address. This could be because the area is outside BBMP limits</p>
+                            ) : (
+                              <>
+                                {Object.entries(locationInfo.bbmpInfo).map(([fieldName, value]) => (
+                                  <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
+                                    <span className="text-gray-600">{fieldName}</span>
+                                    <span className="font-medium text-gray-700 text-left break-words">{value}</span>
+                                  </div>
+                                ))}
+                                <p className="text-xs text-gray-600 mt-4 mb-3">
+                                  This information is based on the 198-ward classification, which BBMP still uses as a reference — even though it's no longer the official structure.
+                                </p>
+                              </>
                             )}
                           </div>
                         </div>
@@ -2720,38 +2720,6 @@ const BangaloreAddressMap = () => {
                 {/* Accordions Container */}
                 <div className="flex-grow overflow-y-auto pr-1"> {/* Scrollable accordion area */}
 
-                  {/* BBMP Information */}
-                  <div className="border-b border-gray-200">
-                    <button
-                        onClick={() => toggleAccordion('bbmpInfo')}
-                        className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
-                    >
-                      <h2 className="font-semibold text-gray-800 text-base">BBMP Information</h2>
-                        {openAccordions.bbmpInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                    </button>
-
-                    {openAccordions.bbmpInfo && (                      
-                      <div className="pb-4">                      
-                        <div className="space-y-1 text-md">
-                          {Object.values(locationInfo.bbmpInfo).every(value => value === "Not Available" || value === "Missing data") ? (
-                            <p className="text-gray-700 py-1">This information is unavailable for this address. This could be because the area is outside BBMP limits</p>
-                          ) : (
-                            <>
-                              {Object.entries(locationInfo.bbmpInfo).map(([fieldName, value]) => (
-                                <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
-                                  <span className="text-gray-600">{fieldName}</span>
-                                  <span className="font-medium text-gray-700 text-left break-words">{value}</span>
-                                </div>
-                              ))}
-                              <p className="text-xs text-gray-800 mt-4 mb-3 max-w-md">
-                                This information is based on the 198-ward classification, which BBMP still uses as a reference — even though it's no longer the official structure.
-                              </p>
-                            </>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                  </div> 
                     {/* GBA Corporation Information - Accordion */}
                     <div className="border-b border-gray-200">
                       <button
@@ -2778,6 +2746,39 @@ const BangaloreAddressMap = () => {
                         </div>
                       )}
                     </div>
+
+                    {/* BBMP Information */}
+                    <div className="border-b border-gray-200">
+                      <button
+                          onClick={() => toggleAccordion('bbmpInfo')}
+                          className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
+                      >
+                        <h2 className="font-semibold text-gray-800 text-base">BBMP Information</h2>
+                          {openAccordions.bbmpInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                      </button>
+
+                      {openAccordions.bbmpInfo && (                      
+                        <div className="pb-4">                      
+                          <div className="space-y-1 text-md">
+                            {Object.values(locationInfo.bbmpInfo).every(value => value === "Not Available" || value === "Missing data") ? (
+                              <p className="text-gray-700 py-1">This information is unavailable for this address. This could be because the area is outside BBMP limits</p>
+                            ) : (
+                              <>
+                                {Object.entries(locationInfo.bbmpInfo).map(([fieldName, value]) => (
+                                  <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
+                                    <span className="text-gray-600">{fieldName}</span>
+                                    <span className="font-medium text-gray-700 text-left break-words">{value}</span>
+                                  </div>
+                                ))}
+                                <p className="text-xs text-gray-800 mt-4 mb-3 max-w-md">
+                                  This information is based on the 198-ward classification, which BBMP still uses as a reference — even though it's no longer the official structure.
+                                </p>
+                              </>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div> 
 
                     {/* BDA Information - Accordion */}
                     <div className="border-b border-gray-200">
