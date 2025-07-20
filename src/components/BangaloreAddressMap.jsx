@@ -1471,7 +1471,6 @@ const BangaloreAddressMap = () => {
         input: query,
         bounds: bangaloreBounds,
         componentRestrictions: { country: 'in' },
-        types: ['geocode']
       }, (predictions, status) => {
         if (status !== window.google.maps.places.PlacesServiceStatus.OK || !predictions) {
           setSearchResults([]);
