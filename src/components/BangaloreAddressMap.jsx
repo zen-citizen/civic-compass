@@ -14,6 +14,7 @@ import bwssbDivisions from '../layers/bwssb_divisions.json'
 import bwssbSubDivisions from '../layers/bwssb_sub_divisions.json'
 import bwssbServiceStations from '../layers/bwssb_service_station_divisions.json'
 import bdaLayoutBoundaries from '../layers/bda_layout_boundaries.json'
+import gbaCorpBoundaries from '../layers/gba.json'
 import sroLocations from '../data/sro_locs.json'
 import droLocations from '../data/dro_locs.json'
 import psLocations from '../data/ps_locs.json'
@@ -93,6 +94,9 @@ const BangaloreAddressMap = () => {
     bdaInfo: {
       'BDA Layout Name': "Not Available",
       'BDA Layout Number': "Not Available"
+    },
+    gbaInfo: {
+      'Corporation Name': "Not Available"
     }
   });
   
@@ -123,7 +127,8 @@ const BangaloreAddressMap = () => {
     policeJurisdiction: false,
     bescomInfo: false,
     bwssbInfo: false,
-    bdaInfo: false // Add BDA info accordion section
+    bdaInfo: false,
+    gbaInfo: false
   });
  // Also open by default
   // Reset accordion state function
@@ -135,7 +140,8 @@ const BangaloreAddressMap = () => {
       policeJurisdiction: false,
       bescomInfo: false,
       bwssbInfo: false,
-      bdaInfo: false
+      bdaInfo: false,
+      gbaInfo: false
     });
   };
   // Then add a toggle function for accordions
@@ -1072,6 +1078,37 @@ const BangaloreAddressMap = () => {
     return defaultInfo;
   };
 
+  const findGbaInfo = (lat, lng) => {
+    const defaultInfo = {
+      'Corporation Name': "Not Available",
+    };
+  
+    if (!gbaCorpBoundaries || !gbaCorpBoundaries.features) {
+      return defaultInfo;
+    }
+  
+    const L = window.L;
+    if (!L) return defaultInfo;
+  
+    const point = L.latLng(lat, lng);
+
+  
+    for (const feature of gbaCorpBoundaries.features) {
+      if (feature.geometry) {
+        const isInside = processGeometry(feature.geometry, point, L);
+  
+        if (isInside) {
+          console.log("Found GBA:", feature.properties);
+          return {
+            'Corporation Name': feature.properties.namecol || "Not Available",
+          };
+        }
+      }
+    }
+  
+    return defaultInfo;
+  };
+
   // Function to handle "Go back" action
   const handleGoBack = () => {
     setSelectedLocation(null);
@@ -1154,7 +1191,8 @@ const BangaloreAddressMap = () => {
         },
         bescomInfo: findBescomInfo(lat, lng),
         bwssbInfo: findBwssbInfo(lat, lng),
-        bdaInfo: findBdaInfo(lat, lng)
+        bdaInfo: findBdaInfo(lat, lng),
+        gbaInfo: findGbaInfo(lat, lng)
       });
       
       // Add marker to map without changing zoom or center
@@ -1189,7 +1227,8 @@ const BangaloreAddressMap = () => {
         },
         bescomInfo: findBescomInfo(lat, lng),
         bwssbInfo: findBwssbInfo(lat, lng),
-        bdaInfo: findBdaInfo(lat, lng)
+        bdaInfo: findBdaInfo(lat, lng),
+        gbaInfo: findGbaInfo(lat, lng)
       });
       
       zoomToLocation(lat, lng, `Location at ${lat.toFixed(5)}, ${lng.toFixed(5)}`);
@@ -1262,7 +1301,8 @@ const BangaloreAddressMap = () => {
             },
             bescomInfo: findBescomInfo(latitude, longitude),
             bwssbInfo: findBwssbInfo(latitude, longitude),
-            bdaInfo: findBdaInfo(latitude, longitude)
+            bdaInfo: findBdaInfo(latitude, longitude),
+            gbaInfo: findGbaInfo(latitude, longitude)
           });
           
           // Try to reverse geocode the location
@@ -1293,7 +1333,8 @@ const BangaloreAddressMap = () => {
               },
               bescomInfo: findBescomInfo(latitude, longitude),
               bwssbInfo: findBwssbInfo(latitude, longitude),
-              bdaInfo: findBdaInfo(latitude, longitude)
+              bdaInfo: findBdaInfo(latitude, longitude),
+              gbaInfo: findGbaInfo(latitude, longitude)
             });
             setShowInfoPanel(true); // Always show info panel
             setShowIntroPanel(false); // Hide intro panel
@@ -1537,7 +1578,8 @@ const BangaloreAddressMap = () => {
                 },
                 bescomInfo: findBescomInfo(lat, lng),
                 bwssbInfo: findBwssbInfo(lat, lng),
-                bdaInfo: findBdaInfo(lat, lng)
+                bdaInfo: findBdaInfo(lat, lng),
+                gbaInfo: findGbaInfo(lat, lng)
               });
 
               // When selecting from search results, DO center the map on the location
@@ -1582,7 +1624,8 @@ const BangaloreAddressMap = () => {
           },
           bescomInfo: findBescomInfo(latitude, longitude),
           bwssbInfo: findBwssbInfo(latitude, longitude),
-          bdaInfo: findBdaInfo(latitude, longitude)
+          bdaInfo: findBdaInfo(latitude, longitude),
+          gbaInfo: findGbaInfo(latitude, longitude)
         });
 
         // When selecting from search results, DO center the map on the location
@@ -1703,7 +1746,8 @@ const BangaloreAddressMap = () => {
         constituency: constituencyInfo,
         bescomInfo: findBescomInfo(lat, lng),
         bwssbInfo: findBwssbInfo(lat, lng),
-        bdaInfo: findBdaInfo(lat, lng)
+        bdaInfo: findBdaInfo(lat, lng),
+        gbaInfo: findGbaInfo(lat, lng)
       });
       
       // Show the info panel
@@ -1850,7 +1894,8 @@ const BangaloreAddressMap = () => {
         constituency: constituencyInfo,
         bescomInfo: findBescomInfo(lat, lng),
         bwssbInfo: findBwssbInfo(lat, lng),
-        bdaInfo: findBdaInfo(lat, lng)
+        bdaInfo: findBdaInfo(lat, lng),
+        gbaInfo: findGbaInfo(lat, lng)
       });
       
       // Show the info panel
@@ -2061,7 +2106,7 @@ const BangaloreAddressMap = () => {
                  onChange={handleSearchInputChange}
                  onKeyDown={handleKeyDown}
                  onFocus={() => searchQuery.length >= 2 && setShowSuggestions(true)}
-                 placeholder="Enter the exact address"
+                 placeholder="Enter the exact address in Bengaluru"
                  className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
                />
                <button
@@ -2263,6 +2308,33 @@ const BangaloreAddressMap = () => {
                       </div>
                     )}
                   </div>
+                  
+                    {/* GBA Corporation Information - Accordion */}
+                    <div className="border-b border-gray-200">
+                      <button
+                        onClick={() => toggleAccordion('gbaInfo')}
+                        className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
+                      >
+                        <h2 className="font-semibold text-gray-800 text-base">GBA Corporation</h2>
+                        {openAccordions.gbaInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                      </button>
+                      {openAccordions.gbaInfo && (
+                        <div className="pb-4">                         
+                          <div className="space-y-1 text-md">
+                            {Object.values(locationInfo.gbaInfo).every(value => value === "Not Available") ? (
+                              <p className="text-gray-700 py-1">This information is unavailable for this address. This could be because the area is outside GBA Corporation limits</p>
+                            ) : (
+                              Object.entries(locationInfo.gbaInfo).map(([fieldName, value]) => (
+                                <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
+                                  <span className="text-gray-600">{fieldName}</span>
+                                  <span className="font-medium text-gray-700 text-left break-words">{value}</span>
+                                </div>
+                              ))
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
 
                     {/* BDA Information - Accordion */}
                     <div className="border-b border-gray-200">
@@ -2648,6 +2720,7 @@ const BangaloreAddressMap = () => {
 
                 {/* Accordions Container */}
                 <div className="flex-grow overflow-y-auto pr-1"> {/* Scrollable accordion area */}
+
                   {/* BBMP Information */}
                   <div className="border-b border-gray-200">
                     <button
@@ -2679,7 +2752,33 @@ const BangaloreAddressMap = () => {
                         </div>
                       </div>
                     )}
-                  </div>
+                  </div> 
+                    {/* GBA Corporation Information - Accordion */}
+                    <div className="border-b border-gray-200">
+                      <button
+                        onClick={() => toggleAccordion('gbaInfo')}
+                        className="w-full flex justify-between items-center py-3 text-left focus:outline-none"
+                      >
+                        <h2 className="font-semibold text-gray-800 text-base">GBA Corporation</h2>
+                        {openAccordions.gbaInfo ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                      </button>
+                      {openAccordions.gbaInfo && (
+                        <div className="pb-4">                         
+                          <div className="space-y-1 text-md">
+                            {Object.values(locationInfo.gbaInfo).every(value => value === "Not Available") ? (
+                              <p className="text-gray-700 py-1">This information is unavailable for this address. This could be because the area is outside GBA Corporation limits</p>
+                            ) : (
+                              Object.entries(locationInfo.gbaInfo).map(([fieldName, value]) => (
+                                <div key={fieldName} className="grid grid-cols-2 gap-2 py-1">
+                                  <span className="text-gray-600">{fieldName}</span>
+                                  <span className="font-medium text-gray-700 text-left break-words">{value}</span>
+                                </div>
+                              ))
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
 
                     {/* BDA Information - Accordion */}
                     <div className="border-b border-gray-200">
