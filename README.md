@@ -2,6 +2,7 @@
 
 A civic information tool that helps Bangalore residents discover detailed information about any address in the city, including:
 
+- GBA Corporation 
 - BBMP Ward details
 - Revenue classifications and offices
 - Police jurisdictions
