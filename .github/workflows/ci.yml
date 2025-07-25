@@ -1,6 +1,6 @@
 name: "CI Pipeline"
 on:
-  pull_request:
+  pull_request_target:
     branches: [main] # trigger on PR raised to main
 
 concurrency:
