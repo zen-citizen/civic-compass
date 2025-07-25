@@ -1,0 +1,12 @@
+{
+  // removes the annoying debug symbol from package.json scripts
+  "debug.javascript.codelens.npmScripts": "never",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always"
+  },
+  "eslint.validate": ["javascript"],
+  "yaml.schemas": {
+    "https://json.schemastore.org/github-workflow.json": [".github/workflows/*"]
+  }
+}
