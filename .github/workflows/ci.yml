@@ -1,8 +1,7 @@
 name: "CI Pipeline"
 on:
-  pull_request_target:
-    branches: [main] # trigger on PR raised to main
-
+  pull_request:
+    types: [opened, edited]
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true # cancel existing runs if PR has been updated -- cost savings
