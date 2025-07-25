@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { LocateFixed, Search, Loader, ExternalLink, ChevronDown, ChevronUp, ArrowLeft, Sun, Moon, Plus, Minus } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { LocateFixed, Search, Loader, ExternalLink, ChevronDown, ChevronUp, ArrowLeft, Plus, Minus } from 'lucide-react';
 import policeJurisdiction from '../layers/PoliceJurisdiction_5.json'
 import BBMPInformation from '../layers/BBMPInformation_11.json'
 import Constituencies from '../layers/Constituencies_3.json'
@@ -28,12 +28,12 @@ const BangaloreAddressMap = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [showInfoPanel, setShowInfoPanel] = useState(false);
-  const [zoomedLocation, setZoomedLocation] = useState(false);
+  const [, setShowInfoPanel] = useState(false);
+  const [, setZoomedLocation] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [isReverseGeocoding, setIsReverseGeocoding] = useState(false);
   const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
-  const [tooltipPosition, setTooltipPosition] = useState('bottom');
+  const [tooltipPosition,] = useState('bottom');
   const [isMobile, setIsMobile] = useState(false);
   const [locationInfo, setLocationInfo] = useState({
     bbmpInfo: {
@@ -108,16 +108,13 @@ const BangaloreAddressMap = () => {
   const searchTimeoutRef = useRef(null);
   const infoPanelRef = useRef(null);
   const scrollableContentRef = useRef(null); // <-- Add ref for scrollable content
-  const [showTooltip, setShowTooltip] = useState(false);
-  const touchStartRef = useRef(null);
-  const touchEndRef = useRef(null);
-  const minSwipeDistance = 150; // minimum distance required for swipe action
+  const [showTooltip] = useState(false);
   const [showIntroPanel, setShowIntroPanel] = useState(true); // New state to control intro panel visibility
-  const [isDarkMode, setIsDarkMode] = useState(false); // <-- Add dark mode state
+  // const [isDarkMode, setIsDarkMode] = useState(false); // <-- Add dark mode state
   // State for panel expansion (start expanded on mobile if intro is showing)
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
   const [lastToggledAccordion, setLastToggledAccordion] = useState(null); // <-- State to track last opened accordion
-  const [useGoogleSearch, setUseGoogleSearch] = useState(process.env.REACT_APP_USE_GOOGLE_SEARCH === 'true');
+  const [, setUseGoogleSearch] = useState(process.env.REACT_APP_USE_GOOGLE_SEARCH === 'true');
 
   // First, add state for tracking open accordions
   const [openAccordions, setOpenAccordions] = useState({
@@ -450,6 +447,7 @@ const BangaloreAddressMap = () => {
         document.body.removeChild(tooltipPortal);
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapContainerRef]);
 
   const loadGoogleMapsScript = () => {
@@ -686,7 +684,7 @@ const BangaloreAddressMap = () => {
 
     const extractNameFromDescription = (description, fieldName) => {
       if (!description) return null;
-      const regex = new RegExp(`${fieldName}<\/td>\\s*<td>([^<]+)<\/td>`, 'i');
+      const regex = new RegExp(`${fieldName}</td>\\s*<td>([^<]+)</td>`, 'i');
       const match = description.match(regex);
       return match ? match[1].trim() : null;
     };
@@ -1990,35 +1988,6 @@ const BangaloreAddressMap = () => {
     setIsPanelExpanded(!isPanelExpanded);
   };
 
-  // Add a touch handling function
-  const handleTouchStart = (e) => {
-    touchStartRef.current = e.touches[0].clientY;
-  };
-
-  const handleTouchMove = (e) => {
-    touchEndRef.current = e.touches[0].clientY;
-  };
-
-  const handleTouchEnd = useCallback(() => {
-    if (!touchStartRef.current || !touchEndRef.current) return;
-    
-    const distance = touchStartRef.current - touchEndRef.current;
-    const isUpSwipe = distance > minSwipeDistance;
-    const isDownSwipe = distance < -minSwipeDistance;
-    
-    if (isUpSwipe && !isPanelExpanded) {
-      // Swipe up to expand
-      toggleMobileInfoPanel();
-    } else if (isDownSwipe && isPanelExpanded) {
-      // Swipe down to collapse
-      toggleMobileInfoPanel();
-    }
-    
-    // Reset values
-    touchStartRef.current = null;
-    touchEndRef.current = null;
-  }, [isPanelExpanded]);
-
   // When selected location changes, hide intro panel
   useEffect(() => {
     if (selectedLocation) {
@@ -2055,10 +2024,10 @@ const BangaloreAddressMap = () => {
   // }, [isDarkMode]);
 
   // Toggle dark mode
-  const toggleDarkMode = () => {
-    console.log('Toggling dark mode');
-    setIsDarkMode(prevMode => !prevMode);
-  };
+  // const toggleDarkMode = () => {
+  //   console.log('Toggling dark mode');
+  //   setIsDarkMode(prevMode => !prevMode);
+  // };
 
   useEffect(() => {
     // Update your existing useEffect to include this
@@ -2653,9 +2622,9 @@ const BangaloreAddressMap = () => {
           {/* Footer - Common for mobile (Now outside scrollable content) */}
           <div className="flex-shrink-0 p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 z-10"> {/* Dark mode, Removed sticky/mt-auto */}
             <div className="flex justify-between items-center text-sm">
-              <a href="https://forms.gle/EmQiMpayciLdbww96" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80">Report an Error</a>
-              <a href="https://docs.google.com/forms/d/e/1FAIpQLScQS_-VgUFQZJedyu6iIlpoYymsKSyGUhrvPoJX1WkZGQqfLQ/viewform" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80">Volunteer with Us</a>
-              <a href="https://github.com/zen-citizen/civic-compass" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80">Open Source</a>
+              <a href="https://forms.gle/EmQiMpayciLdbww96" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80" rel="noreferrer">Report an Error</a>
+              <a href="https://docs.google.com/forms/d/e/1FAIpQLScQS_-VgUFQZJedyu6iIlpoYymsKSyGUhrvPoJX1WkZGQqfLQ/viewform" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80" rel="noreferrer">Volunteer with Us</a>
+              <a href="https://github.com/zen-citizen/civic-compass" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80" rel="noreferrer">Open Source</a>
             </div>
           </div>
         </div>
@@ -3094,9 +3063,9 @@ const BangaloreAddressMap = () => {
 
             <div className="mt-auto pt-4 border-t border-gray-200 flex-shrink-0"> {/* Footer stick to bottom */}
               <div className="flex justify-between items-center text-sm">
-                <a href="https://forms.gle/EmQiMpayciLdbww96" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80">Report an Error</a>
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLScQS_-VgUFQZJedyu6iIlpoYymsKSyGUhrvPoJX1WkZGQqfLQ/viewform" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80">Volunteer with Us</a>
-                <a href="https://github.com/zen-citizen/civic-compass" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80">Open Source</a>
+                <a href="https://forms.gle/EmQiMpayciLdbww96" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80" rel="noreferrer">Report an Error</a>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLScQS_-VgUFQZJedyu6iIlpoYymsKSyGUhrvPoJX1WkZGQqfLQ/viewform" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80" rel="noreferrer">Volunteer with Us</a>
+                <a href="https://github.com/zen-citizen/civic-compass" target="_blank" className="underline text-gray-500 transition-opacity hover:opacity-80" rel="noreferrer">Open Source</a>
               </div>
             </div>
           </div>
