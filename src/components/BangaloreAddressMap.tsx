@@ -13,7 +13,7 @@ import {
 import { createPortal } from "react-dom";
 
 const useJSON = (path: string) => {
-  const [json, setJSON] = useState(""); // Maybe not array, maybe fix this
+  const [json, setJSON] = useState("");
   useEffect(() => {
     let mounted = true;
     const fetchJson = async () => {
