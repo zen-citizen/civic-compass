@@ -16,7 +16,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "lint": "eslint . --cache-file ./node_modules/.tmp/eslintcache",
+    "lint": "eslint . --cache --cache-location ./node_modules/.tmp/eslintcache",
     "build": "NODE_ENV=production vite build",
     "serve": "vite preview",
     "typecheck": "tsc -b"

@@ -14,7 +14,7 @@ export default [
   importPlugin.flatConfigs.typescript,
   reactHooks.configs["recommended-latest"],
   reactRefresh.configs.vite,
-  globalIgnores(["build", "public"]),
+  globalIgnores(["build", "public", ".yarn"]),
   {
     files: ["**/*.{ts,tsx,js,mjs}"],
 
