@@ -1,0 +1,1906 @@
+{
+    "Bellanduru PS": {
+        "places": [
+            {
+                "formattedAddress": "37, Sarjapur - Marathahalli Rd, Amblipura, PWD Quarters, 1st Sector, Bellandur, Bengaluru, Karnataka 560103, India",
+                "location": {
+                    "latitude": 12.9189863,
+                    "longitude": 77.6679781
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=33634110779502870",
+                "displayName": {
+                    "text": "Bellandur Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Halasurgate PS": {
+        "places": [
+            {
+                "formattedAddress": "XJFG+W4R, 6th Cross Rd, Camebridge Layout, Someshvarapura Layout, Jogupalya, Bengaluru, Karnataka 560008, India",
+                "location": {
+                    "latitude": 12.9748715,
+                    "longitude": 77.6252733
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=13686518291735160764",
+                "displayName": {
+                    "text": "Halasuru Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Indiranagar PS": {
+        "places": [
+            {
+                "formattedAddress": "648/L, Old Madras Rd, Binnamangala, Hoysala Nagar, Indiranagar, Bengaluru, Karnataka 560038, India",
+                "location": {
+                    "latitude": 12.982994200000002,
+                    "longitude": 77.6383974
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=2682521774334437470",
+                "displayName": {
+                    "text": "Indiranagar Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Amruthahally PS": {
+        "places": [
+            {
+                "formattedAddress": "3H4X+Q98, Amruth Nagar Main Rd, Sector B, Amruthnagar, Bengaluru, Byatarayanapura CMC and OG Part, Karnataka 560092, India",
+                "location": {
+                    "latitude": 13.0569042,
+                    "longitude": 77.59845969999999
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=16786404274819071926",
+                "displayName": {
+                    "text": "Amruthahalli Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Govindapura PS": {
+        "places": [
+            {
+                "formattedAddress": "26, 8th Cross Rd, N Block, Govindapura, Nagavara, Bengaluru, Karnataka 560045, India",
+                "location": {
+                    "latitude": 13.0342288,
+                    "longitude": 77.6194314
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=13372375501910685663",
+                "displayName": {
+                    "text": "Govindapura police station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Byatarayanapura PS": {
+        "places": [
+            {
+                "formattedAddress": "XG2R+J2P, MM Rd, Byatarayanapura, Banashankari 1st Stage, Banashankari, Bengaluru, Karnataka 560026, India",
+                "location": {
+                    "latitude": 12.951583399999999,
+                    "longitude": 77.5400662
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=8278724876378486567",
+                "displayName": {
+                    "text": "Byatarayanapura Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Kadugondana Halli PS": {
+        "places": [
+            {
+                "formattedAddress": "Nagawara Main Rd, Arabic College Post, Vinobha Nagar, Kadugondanahalli, Bengaluru, Karnataka 560045, India",
+                "location": {
+                    "latitude": 13.0193838,
+                    "longitude": 77.6192417
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=10655233990655087976",
+                "displayName": {
+                    "text": "K G Halli Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Bandepalya PS": {
+        "places": [
+            {
+                "formattedAddress": "WJ4R+6MW, 27th Cross Rd, Neelakanteshwara Layout, Sector 3, HSR Layout, Bengaluru, Karnataka 560102, India",
+                "location": {
+                    "latitude": 12.905615099999999,
+                    "longitude": 77.64169319999999
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=10913995751251033098",
+                "displayName": {
+                    "text": "Bandepalya Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "H.S.R.Layout PS": {
+        "places": [
+            {
+                "formattedAddress": "WMC2+3HH, 27th Main Rd, 1st Sector, HSR Layout, Bengaluru, Karnataka 560102, India",
+                "location": {
+                    "latitude": 12.9201935,
+                    "longitude": 77.6514879
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=185758089296535902",
+                "displayName": {
+                    "text": "HSR Layout Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Yelahanka New Town PS": {
+        "places": [
+            {
+                "formattedAddress": "4H2M+2GQ, 3rd B Cross Road, Yelahanka Satellite Town, Yelahanka New Town, Bengaluru, Karnataka 560064, India",
+                "location": {
+                    "latitude": 13.1000851,
+                    "longitude": 77.5838643
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=16688114978230213745",
+                "displayName": {
+                    "text": "Yelahanka New Town Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Nandini Layout PS": {
+        "places": [
+            {
+                "formattedAddress": "ZMF-26, Nandini Layout Main Rd, Nandini Layout, Bengaluru, Karnataka 560096, India",
+                "location": {
+                    "latitude": 13.0127651,
+                    "longitude": 77.53662349999999
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=5317869374423700273",
+                "displayName": {
+                    "text": "Nandini Layout Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Chandra Layout PS": {
+        "places": [
+            {
+                "formattedAddress": "XG5H+HC6, 2nd Cross Rd, Basaveshawara HBCS Layout 2nd Stage, Chandra Layout, Attiguppe, Bengaluru, Karnataka 560040, India",
+                "location": {
+                    "latitude": 12.958924699999999,
+                    "longitude": 77.52850699999999
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=18330785006050571647",
+                "displayName": {
+                    "text": "Chandra Layout Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Electronic City PS": {
+        "places": [
+            {
+                "formattedAddress": "near Office, Indra Nagar, Electronics City Phase 1, Konanakunte, Bengaluru, Karnataka 560100, India",
+                "location": {
+                    "latitude": 12.839999599999999,
+                    "longitude": 77.6630801
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=17111127613128322858",
+                "displayName": {
+                    "text": "Electronic city police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Chamarajpet PS": {
+        "places": [
+            {
+                "formattedAddress": "260, 5th Main Rd, Anandapuram, Chamrajpet, Bengaluru, Karnataka 560018, India",
+                "location": {
+                    "latitude": 12.9605579,
+                    "longitude": 77.5670751
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=16317246644884195179",
+                "displayName": {
+                    "text": "Chamrajpet Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Kamakshipalya PS": {
+        "places": [
+            {
+                "formattedAddress": "Magadi Main Rd, near Government School, KHB Colony, Vijayanagar, Bengaluru, Karnataka 560079, India",
+                "location": {
+                    "latitude": 12.982262299999999,
+                    "longitude": 77.53201600000001
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=13409210991793702826",
+                "displayName": {
+                    "text": "Kamakshipalya Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Jeevan Bheemanagar PS": {
+        "places": [
+            {
+                "formattedAddress": "XM94+38R, Jeevan Bima Nagar Main Rd, LIC Colony, HAL 3rd Stage, Sector 12, Jeevan Bima Nagar, Bengaluru, Karnataka 560075, India",
+                "location": {
+                    "latitude": 12.9677318,
+                    "longitude": 77.6557603
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=10613472844330585818",
+                "displayName": {
+                    "text": "Jeevan Bhima Nagar Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Upparpet PS": {
+        "places": [
+            {
+                "formattedAddress": "Upparpet Police Station, LTP Road, Majestic, Bengaluru, Karnataka 560009, India",
+                "location": {
+                    "latitude": 12.9744839,
+                    "longitude": 77.5750417
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=10888607872961535303",
+                "displayName": {
+                    "text": "Upparpet Traffic Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Madhanayakanahally PS": {
+        "places": [
+            {
+                "formattedAddress": "3F66+VWW, Sidedahalli Main Rd, Madanayakahalli, Bengaluru, Karnataka 562162, India",
+                "location": {
+                    "latitude": 13.0622274,
+                    "longitude": 77.4623335
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=3152306577693332061",
+                "displayName": {
+                    "text": "Madanayakanahalli Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Mahalakshmi Layout PS": {
+        "places": [
+            {
+                "formattedAddress": "2nd Cross Road, 2G4W+MQ2, 109, 11th C Cross Rd, West of Chord Road 2nd Stage, Bovipalya, Nagapura, Bengaluru, Karnataka 560086, India",
+                "location": {
+                    "latitude": 13.002749699999999,
+                    "longitude": 77.5473693
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=11093376571283269033",
+                "displayName": {
+                    "text": "Mahalakshmi Layout Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Peenya PS": {
+        "places": [
+            {
+                "formattedAddress": "Padarayanapalya, 2GPF+3JM, 2nd Cross, near Jalahalli, Peenya II Phase, Peenya, Bengaluru, Karnataka 560058, India",
+                "location": {
+                    "latitude": 13.0360196,
+                    "longitude": 77.5212291
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=113606732995976732",
+                "displayName": {
+                    "text": "Peenya Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Vijayanagar PS": {
+        "places": [
+            {
+                "formattedAddress": "XGCQ+843, Service Rd, SBI Staff Colony, Hoshalli Extension, Stage 1, Vijayanagar, Bengaluru, Karnataka 560040, India",
+                "location": {
+                    "latitude": 12.9707709,
+                    "longitude": 77.53780259999999
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=15006470210267148207",
+                "displayName": {
+                    "text": "Vijayanagar Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "H.A.L. PS": {
+        "places": [
+            {
+                "formattedAddress": "XM4M+24M, HAL Old Airport Rd, Sector 3, Marathahalli, Bengaluru, Karnataka 560037, India",
+                "location": {
+                    "latitude": 12.955084399999999,
+                    "longitude": 77.6828015
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=10883265580271897685",
+                "displayName": {
+                    "text": "HAL Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Shankarapuram PS": {
+        "places": [
+            {
+                "formattedAddress": "XH39+CXH, Shankar Mutt Rd, Chikkanna Garden, Shankarapura, Sankarapuram, Bengaluru, Karnataka 560004, India",
+                "location": {
+                    "latitude": 12.953558899999999,
+                    "longitude": 77.5699909
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=14251278325225289304",
+                "displayName": {
+                    "text": "Shankarapura Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Marathahalli PS": {
+        "places": [
+            {
+                "formattedAddress": "Kadubeesanahalli, Marathahalli, 88, Marathahalli - Sarjapur Outer Ring Rd, Kadubeesanahalli, Bengaluru, Karnataka 560037, India",
+                "location": {
+                    "latitude": 12.9455754,
+                    "longitude": 77.6979525
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=17004497194860116162",
+                "displayName": {
+                    "text": "Marathahalli Police Station, Kadubeesanahalli",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Chikkajala PS": {
+        "places": [
+            {
+                "formattedAddress": "5JCM+X4F, Chikkajala, Bengaluru, Karnataka 562157, India",
+                "location": {
+                    "latitude": 13.1724309,
+                    "longitude": 77.6328008
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=17660393973705075921",
+                "displayName": {
+                    "text": "Chikkajala Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Srirampura PS": {
+        "places": [
+            {
+                "formattedAddress": "47, 9th Main Rd, Dayananda Nagar, Srirampura, Bengaluru, Karnataka 560021, India",
+                "location": {
+                    "latitude": 12.9900114,
+                    "longitude": 77.5650232
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=7481416795834410480",
+                "displayName": {
+                    "text": "Srirampura Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Kodigehalli PS": {
+        "places": [
+            {
+                "formattedAddress": "3H5M+C5C, BB Nagar, Koti Hosahalli, Bengaluru, Karnataka 560092, India",
+                "location": {
+                    "latitude": 13.058573100000002,
+                    "longitude": 77.5829014
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=16176074296009352429",
+                "displayName": {
+                    "text": "Kodigehalli Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Puttenahalli PS": {
+        "places": [
+            {
+                "formattedAddress": "126, KR Layout, JP Nagar Phase 6, J. P. Nagar, Bengaluru, Karnataka 560078, India",
+                "location": {
+                    "latitude": 12.9024901,
+                    "longitude": 77.5820706
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=16685606689959746451",
+                "displayName": {
+                    "text": "Puttenahalli Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Banaswadi PS": {
+        "places": [
+            {
+                "formattedAddress": "2J9R+V25, 2nd H Cross Rd, HRBR Layout 2nd Block, HRBR Layout, Kalyan Nagar, Bengaluru, Karnataka 560043, India",
+                "location": {
+                    "latitude": 13.019627799999999,
+                    "longitude": 77.6401119
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=3433681030587874084",
+                "displayName": {
+                    "text": "Banaswadi Police Station - Assistant Commission of Police",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Bagalgunte PS": {
+        "places": [
+            {
+                "formattedAddress": "441-6A MA, 4th A Cross Rd, MEI Employees Housing Colony, Bengaluru, Karnataka 560073, India",
+                "location": {
+                    "latitude": 13.0595275,
+                    "longitude": 77.5035351
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=2062040372706172999",
+                "displayName": {
+                    "text": "Bagalgunte Police Station.",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "High Grounds PS": {
+        "places": [
+            {
+                "formattedAddress": "XHQV+X43, Millers Rd, Vasanth Nagar, Bengaluru, Karnataka 560052, India",
+                "location": {
+                    "latitude": 12.9898882,
+                    "longitude": 77.5928028
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=16090083624684966731",
+                "displayName": {
+                    "text": "High Grounds Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Sanjay Nagara PS": {
+        "places": [
+            {
+                "formattedAddress": "Sanjay Nagar Main Rd, CIL Layout A Block, Judicial Colony, Raj Mahal Vilas 2nd Stage, Sanjayanagara, Bengaluru, Karnataka 560094, India",
+                "location": {
+                    "latitude": 13.0333411,
+                    "longitude": 77.5757611
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=11173640761440293898",
+                "displayName": {
+                    "text": "Sanjayanagara Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Yeshwanthapura PS": {
+        "places": [
+            {
+                "formattedAddress": "2H95+778, 9th Cross Rd, Ashokapuram, Yesvantpur Industrial Suburb, Mahalakshmi Layout, Bengaluru, Karnataka 560022, India",
+                "location": {
+                    "latitude": 13.0181677,
+                    "longitude": 77.5581879
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=15613995402927232918",
+                "displayName": {
+                    "text": "Yeshwanthapura Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Jayanagar PS": {
+        "places": [
+            {
+                "formattedAddress": "156/1, 6th Main Rd, 4th Block, Jayanagar, Bengaluru, Karnataka 560011, India",
+                "location": {
+                    "latitude": 12.928565599999999,
+                    "longitude": 77.5813123
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=9326521917699471659",
+                "displayName": {
+                    "text": "Jayanagar police station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Attibele PS": {
+        "places": [
+            {
+                "formattedAddress": "QQHC+HMX, Chennekothapalli Rd, Attibele, Karnataka 562107, India",
+                "location": {
+                    "latitude": 12.7789968,
+                    "longitude": 77.77174169999999
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=4848291826726158988",
+                "displayName": {
+                    "text": "Attibele Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Seshadripuram PS": {
+        "places": [
+            {
+                "formattedAddress": "1st Main Road, 198, Subedar Chatram Rd, VV Giri Colony, Seshadripuram, Bengaluru, Karnataka 560020, India",
+                "location": {
+                    "latitude": 12.985229799999999,
+                    "longitude": 77.57296749999999
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=16686293158134308641",
+                "displayName": {
+                    "text": "Seshadripuram Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Commercial Street PS": {
+        "places": [
+            {
+                "formattedAddress": "67, Commercial Street, Tasker Town, Shivaji Nagar, Bengaluru, Karnataka 560001, India",
+                "location": {
+                    "latitude": 12.9823439,
+                    "longitude": 77.6071384
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=18300197119614497706",
+                "displayName": {
+                    "text": "Commercial Street police station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Kumaraswamy Layout PS": {
+        "places": [
+            {
+                "formattedAddress": "1755, 14th Main Rd, 1st Stage, Kumaraswamy Layout, Bengaluru, Karnataka 560078, India",
+                "location": {
+                    "latitude": 12.9051954,
+                    "longitude": 77.5628536
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=10706665012392414739",
+                "displayName": {
+                    "text": "Kumaraswamy Layout Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Hanumathanagar PS": {
+        "places": [
+            {
+                "formattedAddress": "WHP6+GHM, Kuppali Puttappa Poornachandra Tejaswi Rd, Ashok Nagar, Banashankari 1st Stage, Banashankari, Bengaluru, Karnataka 560050, India",
+                "location": {
+                    "latitude": 12.9363279,
+                    "longitude": 77.56143260000002
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=8566846805578861472",
+                "displayName": {
+                    "text": "Hanumantha Nagar Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Konanakunte PS": {
+        "places": [
+            {
+                "formattedAddress": "144, Anjanapura Main Rd, Anjanadri Layout, Konanakunte, Bengaluru, Karnataka 560062, India",
+                "location": {
+                    "latitude": 12.8839478,
+                    "longitude": 77.5663902
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=8329925291866568250",
+                "displayName": {
+                    "text": "Konanakunte Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Mahadevapura PS": {
+        "places": [
+            {
+                "formattedAddress": "Bus Stop, Whitefield Main Rd, beside Singayyanapalya, Singayyanapalya, Krishnarajapuram, Bengaluru, Karnataka 560048, India",
+                "location": {
+                    "latitude": 12.9966717,
+                    "longitude": 77.69281869999999
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=1464241892951451019",
+                "displayName": {
+                    "text": "Mahadevapura Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Kothanur PS": {
+        "places": [
+            {
+                "formattedAddress": "3J4W+6G8, New Airport Rd, Geddalahalli, Rammana Layout, Narayanapura, Bengaluru, Karnataka 560077, India",
+                "location": {
+                    "latitude": 13.0555478,
+                    "longitude": 77.6463381
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=17635074742413377966",
+                "displayName": {
+                    "text": "Kothanur Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Sampigehalli PS": {
+        "places": [
+            {
+                "formattedAddress": "Next Hegade Nagar, 3JGM+58H, Police Quarters, Thanisandra Main Rd, Sri Balaji Krupa Layout, RK Hegde Nagar, Bengaluru, Karnataka 560077, India",
+                "location": {
+                    "latitude": 13.0754474,
+                    "longitude": 77.63334499999999
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=14573972174091029493",
+                "displayName": {
+                    "text": "Sampigehalli Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "K.G.Nagar PS": {
+        "places": [
+            {
+                "formattedAddress": "70, KG Nagar Main Rd, RK Mutt Layout, Gavipuram Guttahalli, Kempegowda Nagar, Bengaluru, Karnataka 560019, India",
+                "location": {
+                    "latitude": 12.9495236,
+                    "longitude": 77.56328549999999
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=10141235809702922356",
+                "displayName": {
+                    "text": "Kempegowda Nagar Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Tilak Nagar PS": {
+        "places": [
+            {
+                "formattedAddress": "Swagath Rd, 4th T Block East, Jayanagar 3rd Block East, Jayanagar, Bengaluru, Karnataka 560041, India",
+                "location": {
+                    "latitude": 12.9283631,
+                    "longitude": 77.5905724
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=300959911284827419",
+                "displayName": {
+                    "text": "Thilaknagara Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Banashankari PS": {
+        "places": [
+            {
+                "formattedAddress": "9th Main Rd, Thyagaraja Nagar, Banashankari, Bengaluru, Karnataka 560070, India",
+                "location": {
+                    "latitude": 12.9292898,
+                    "longitude": 77.5678247
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=8034670228008365624",
+                "displayName": {
+                    "text": "Banashankari Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Subramanya Nagar PS": {
+        "places": [
+            {
+                "formattedAddress": "67, Dr Rajkumar Rd, E block, 2nd Stage, Rajajinagar, Bengaluru, Karnataka 560010, India",
+                "location": {
+                    "latitude": 13.0033841,
+                    "longitude": 77.55367369999999
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=5925440323993950480",
+                "displayName": {
+                    "text": "Subramanya Nagar Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Rajanukunte PS": {
+        "places": [
+            {
+                "formattedAddress": "5HF7+JV2, Rajanukunte, Karnataka 560064, India",
+                "location": {
+                    "latitude": 13.1740145,
+                    "longitude": 77.5646312
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=1017586167963342732",
+                "displayName": {
+                    "text": "Rajanukunte Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Annapoorneshwari Nagar PS": {
+        "places": [
+            {
+                "formattedAddress": "10th block, 5 Block, 2nd Stage, Naagarabhaavi, Bengaluru, Karnataka 560072, India",
+                "location": {
+                    "latitude": 12.9655168,
+                    "longitude": 77.5100329
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=15734084645328886178",
+                "displayName": {
+                    "text": "Annapoorneshwari Nagar Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Magadi Road PS": {
+        "places": [
+            {
+                "formattedAddress": "XHF2+RH4, Magadi Main Rd, Police Quarters, Rajajinagar, Bengaluru, Karnataka 560023, India",
+                "location": {
+                    "latitude": 12.9745239,
+                    "longitude": 77.55143749999999
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=15048127384010581459",
+                "displayName": {
+                    "text": "Magadi road police station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Madiwala PS": {
+        "places": [
+            {
+                "formattedAddress": "321/2A, Hosur Rd, Madiwala, 1st Stage, BTM 1st Stage, Bengaluru, Karnataka 560068, India",
+                "location": {
+                    "latitude": 12.921034899999999,
+                    "longitude": 77.62067979999999
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=589289919019148008",
+                "displayName": {
+                    "text": "Madivala Law And Order Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Cottonpet PS": {
+        "places": [
+            {
+                "formattedAddress": "149, Cottonpet Main Rd, Subhash Nagar, Cottonpete, Bengaluru, Karnataka 560053, India",
+                "location": {
+                    "latitude": 12.9680594,
+                    "longitude": 77.5700967
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=6515674970892699779",
+                "displayName": {
+                    "text": "Cottonpet Police station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Yeshwanthpura RMC Yard PS": {
+        "places": [
+            {
+                "formattedAddress": "1, APMC Yard, Yesvantpur Industrial Suburb, Yeswanthpur, Bengaluru, Karnataka 560022, India",
+                "location": {
+                    "latitude": 13.0233796,
+                    "longitude": 77.5490903
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=1547900739660735244",
+                "displayName": {
+                    "text": "RMC Yard Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Jalahalli PS": {
+        "places": [
+            {
+                "formattedAddress": "2GXX+FR5, HMT Main Rd, Jalahalli Village, Jalahalli, Bengaluru, Karnataka 560013, India",
+                "location": {
+                    "latitude": 13.048642300000001,
+                    "longitude": 77.5496131
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=16036973970583887594",
+                "displayName": {
+                    "text": "Jalahalli Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Wilsongarden PS": {
+        "places": [
+            {
+                "formattedAddress": "1, 7th Cross Rd, Vinayaka Nagar, Wilson Garden, Bengaluru, Karnataka 560027, India",
+                "location": {
+                    "latitude": 12.950211099999999,
+                    "longitude": 77.59611550000001
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=5104405171481155473",
+                "displayName": {
+                    "text": "Wilson Garden Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Rajgopal Nagar PS": {
+        "places": [
+            {
+                "formattedAddress": "KG Nagar, 137, Rajagopalnagar Main Rd, Kasthuri Badavane, Rajagopala Nagar, Laggere, Bengaluru, Karnataka 560086, India",
+                "location": {
+                    "latitude": 13.0173501,
+                    "longitude": 77.513571
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=12412889003669164532",
+                "displayName": {
+                    "text": "Rajagopal Nagar Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Koramangala PS": {
+        "places": [
+            {
+                "formattedAddress": "8/A, 20th Main Rd, 6th Block, Koramangala, Bengaluru, Karnataka 560095, India",
+                "location": {
+                    "latitude": 12.9411723,
+                    "longitude": 77.6213047
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=18272004267306020012",
+                "displayName": {
+                    "text": "Koramangala Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "City Market PS": {
+        "places": [
+            {
+                "formattedAddress": "#383 avenue road city market Bangalore, India, City Market, Old Tharagupet, Mamulpet, Chickpet, Bengaluru, Karnataka 560001, India",
+                "location": {
+                    "latitude": 12.9649603,
+                    "longitude": 77.57605989999999
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=10801013217371067018",
+                "displayName": {
+                    "text": "CITY MARKET POLICE STATION",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Soladevanahalli PS": {
+        "places": [
+            {
+                "formattedAddress": "near Bus Stop, Defence Colony, Soladevanahalli, Bengaluru, Karnataka 560090, India",
+                "location": {
+                    "latitude": 13.0934799,
+                    "longitude": 77.489167
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=8409140028252439315",
+                "displayName": {
+                    "text": "SOLADEVANAHALLI POLICE STATION",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Kengeri PS": {
+        "places": [
+            {
+                "formattedAddress": "Mysore Road, WF6J+5JV, Shirke Layout, Kengeri Satellite Town, Mysore Rd, Harsha Layout, Kengeri, Bengaluru, Karnataka 560060, India",
+                "location": {
+                    "latitude": 12.910496499999999,
+                    "longitude": 77.4815448
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=5837569346145710053",
+                "displayName": {
+                    "text": "Kengeri Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "K.R. Puram PS": {
+        "places": [
+            {
+                "formattedAddress": "2M5V+H7H, New Police Station Rd, Krishnarajapuram, Bengaluru, Karnataka 560036, India",
+                "location": {
+                    "latitude": 13.0089306,
+                    "longitude": 77.6932207
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=15269001051880307943",
+                "displayName": {
+                    "text": "KR Pura Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "C.K.Acchukattu PS": {
+        "places": [
+            {
+                "formattedAddress": "3th Cross Road, 8th Main Rd, Vidyapeeta Layout, Banashankari 3rd Stage, Banashankari, Bengaluru, Karnataka 560085, India",
+                "location": {
+                    "latitude": 12.930109,
+                    "longitude": 77.56070249999999
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=137506104828490531",
+                "displayName": {
+                    "text": "Chennamanakere Achukattu Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Kumbalagudu PS": {
+        "places": [
+            {
+                "formattedAddress": "VCMX+MQQ, NH 275, Kumbalgodu, Bengaluru, Karnataka 560074, India",
+                "location": {
+                    "latitude": 12.8842219,
+                    "longitude": 77.4494983
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=6380166755505344508",
+                "displayName": {
+                    "text": "New kumbalgodu police station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Rajarajeshwari Nagar PS": {
+        "places": [
+            {
+                "formattedAddress": "Ideal Township, Jawaharlal Nehru Rd, Sachidananda Nagar, Rajarajeshwari Nagar, Bengaluru, Karnataka 560098, India",
+                "location": {
+                    "latitude": 12.912932999999999,
+                    "longitude": 77.5206829
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=14767499452414194519",
+                "displayName": {
+                    "text": "RajaRajeshwari Nagar Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Rajaji Nagar PS": {
+        "places": [
+            {
+                "formattedAddress": "1150, 5th Cross Road, Dr, Dr Rajkumar Rd, 2nd Block, Prakash Nagar, Rajajinagar, Bengaluru, Karnataka 560021, India",
+                "location": {
+                    "latitude": 12.994793399999999,
+                    "longitude": 77.5541543
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=17204858433356220442",
+                "displayName": {
+                    "text": "Rajajinagar Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Kempapura Agrahara PS": {
+        "places": [
+            {
+                "formattedAddress": "Magadi Road, BBMP, 2nd Cross Rd, near Magadi Road Park, Keshava Nagar, Binnipete, Bengaluru, Karnataka 560023, India",
+                "location": {
+                    "latitude": 12.9727873,
+                    "longitude": 77.5615006
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=10675886924703612927",
+                "displayName": {
+                    "text": "Kempapura Agrahara Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Govindarajanagar PS": {
+        "places": [
+            {
+                "formattedAddress": "XGCH+QMH, Saraswathi Nagar, Huchappa Layout, Govindaraja Nagar Ward, Saraswathi Nagar, Vijayanagar, Bengaluru, Karnataka 560040, India",
+                "location": {
+                    "latitude": 12.9719262,
+                    "longitude": 77.5292474
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=14969050485917035655",
+                "displayName": {
+                    "text": "Govindrajnagar Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Ramamurthy Nagar PS": {
+        "places": [
+            {
+                "formattedAddress": "2M38+MCF, Kempe Gowda Underpass Rd, East of NGEF Layout, Dooravani Nagar, Bengaluru, Karnataka 560016, India",
+                "location": {
+                    "latitude": 13.0041893,
+                    "longitude": 77.66604099999999
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=16216662395545550254",
+                "displayName": {
+                    "text": "Ramamurthynagar Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Hebbal PS": {
+        "places": [
+            {
+                "formattedAddress": "2HQQ+9R5, Bellary Rd, Ayyappa Layout, Hebbal, Bengaluru, Karnataka 560024, India",
+                "location": {
+                    "latitude": 13.0383818,
+                    "longitude": 77.5896071
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=7493113802535795574",
+                "displayName": {
+                    "text": "Hebbal Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Yelahanka PS": {
+        "places": [
+            {
+                "formattedAddress": "3HWV+2JF, SH 9, Ambedkar Colony, Yelahanka, Bengaluru, Karnataka 560065, India",
+                "location": {
+                    "latitude": 13.095053,
+                    "longitude": 77.5940619
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=5528230254895396694",
+                "displayName": {
+                    "text": "Yelahanka Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Girinagar PS": {
+        "places": [
+            {
+                "formattedAddress": "WGPV+CH3, # 99/G, 6th main Road, BSK 3rd stage, Hosakerehalli Layout, Banashankari 3rd Stage, Girinagar, Bengaluru, Karnataka 560085, India",
+                "location": {
+                    "latitude": 12.9360036,
+                    "longitude": 77.543932
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=2576841447348144729",
+                "displayName": {
+                    "text": "Girinagara Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Bharathi Nagar PS": {
+        "places": [
+            {
+                "formattedAddress": "Frazer Town Police Station,, XJR6+FRF, Frazer Town, St Johns Church Rd, Near Mark Circle, Bharati Nagar, Shivaji Nagar, Bengaluru, Karnataka 560005, India",
+                "location": {
+                    "latitude": 12.991190399999999,
+                    "longitude": 77.61206109999999
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=9379824381606193851",
+                "displayName": {
+                    "text": "Bharthinagar Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Anekal PS": {
+        "places": [
+            {
+                "formattedAddress": "PM6W+32G, Vinayaka Nagar, Anekal, Karnataka 562106, India",
+                "location": {
+                    "latitude": 12.7101899,
+                    "longitude": 77.695087
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=14934125439388357333",
+                "displayName": {
+                    "text": "Anekal Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Basaveshwara Nagar PS": {
+        "places": [
+            {
+                "formattedAddress": "XGPV+42P, 8th A Main Rd, West of Chord Road 1st Stage, Basaveshwar Nagar, Bengaluru, Karnataka 560079, India",
+                "location": {
+                    "latitude": 12.985349399999999,
+                    "longitude": 77.5425819
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=5131204181105192402",
+                "displayName": {
+                    "text": "Basaveshwara Nagar Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Viveknagar PS": {
+        "places": [
+            {
+                "formattedAddress": "XJ3F+C6R, 4th Cross Rd, Andra Colony, Vannarpet Layout, Ejipura, Bengaluru, Karnataka 560047, India",
+                "location": {
+                    "latitude": 12.953617,
+                    "longitude": 77.6230097
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=2649155674525118060",
+                "displayName": {
+                    "text": "Viveknagara Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Vyalikaval PS": {
+        "places": [
+            {
+                "formattedAddress": "2H2H+VFG, 2nd Main Rd, Near State Bank of Mysore, Vyalikaval, Guttahalli, Bengaluru, Karnataka 560003, India",
+                "location": {
+                    "latitude": 13.002176700000001,
+                    "longitude": 77.5786894
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=12073929671079137674",
+                "displayName": {
+                    "text": "Vyalikaval Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Hulimavu PS": {
+        "places": [
+            {
+                "formattedAddress": "Cave Temple Rd, mainBusstop, Hulimavu, Bengaluru, Karnataka 560076, India",
+                "location": {
+                    "latitude": 12.8766916,
+                    "longitude": 77.6001266
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=8038588901094606557",
+                "displayName": {
+                    "text": "Hulimavu Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Jayaprakash Nagar PS": {
+        "places": [
+            {
+                "formattedAddress": "WH6Q+P2C, 21st Main Rd, R.K Colony, R K Colony, 2nd Phase, J. P. Nagar, Bengaluru, Karnataka 560078, India",
+                "location": {
+                    "latitude": 12.911803899999999,
+                    "longitude": 77.587518
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=11393817213987592151",
+                "displayName": {
+                    "text": "JP Nagar Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Kalasipalya PS": {
+        "places": [
+            {
+                "formattedAddress": "197/ A, Nawab Hyder Ali Khan Rd, Kalasipalya, Bengaluru, Karnataka 560002, India",
+                "location": {
+                    "latitude": 12.9573056,
+                    "longitude": 77.5773701
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=6594061551949696099",
+                "displayName": {
+                    "text": "Kalasipalya Police station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Basavanagudi PS": {
+        "places": [
+            {
+                "formattedAddress": "WHRF+VPC, Krishna Rajendra Rd, Near Krishna Rao Park, Basavanagudi, Bengaluru, Karnataka 560004, India",
+                "location": {
+                    "latitude": 12.9421807,
+                    "longitude": 77.5742728
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=13834625959961931581",
+                "displayName": {
+                    "text": "Basavanagudi Traffic Police Station.",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Jagajeevanram Nagar PS": {
+        "places": [
+            {
+                "formattedAddress": "Chowdappa Rd, Rayapuram, Jagajeevanram Nagar, Bengaluru, Karnataka 560018, India",
+                "location": {
+                    "latitude": 12.9647449,
+                    "longitude": 77.554999
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=3860103318713050266",
+                "displayName": {
+                    "text": "JagaJeevanRam Nagar (J J Nagar) Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Jigani PS": {
+        "places": [
+            {
+                "formattedAddress": "QJJR+FVH, APC Cir Rd, Ittina Nagar, Jigani, Karnataka 560105, India",
+                "location": {
+                    "latitude": 12.781175399999999,
+                    "longitude": 77.64222989999999
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=12756250853769014970",
+                "displayName": {
+                    "text": "Jigani Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Bagalur PS": {
+        "places": [
+            {
+                "formattedAddress": "RVM9+R9F, Lingapuram, Tamil Nadu 635124, India",
+                "location": {
+                    "latitude": 12.834560399999999,
+                    "longitude": 77.8684159
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=15586701434950945110",
+                "displayName": {
+                    "text": "Bagalur Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Vidhyaranyapura  PS": {
+        "places": [
+            {
+                "formattedAddress": "#281, 1st Main Rd BEL 6th Block, BEL Layout 6th Block, 7th Block, HMT Layout, Vidyaranyapura, Bengaluru, Karnataka 560097, India",
+                "location": {
+                    "latitude": 13.0840445,
+                    "longitude": 77.5645741
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=17054227426533209763",
+                "displayName": {
+                    "text": "Vidyaranyapura Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Byappanahalli PS": {
+        "places": [
+            {
+                "formattedAddress": "Gopalan Signature Mall, Old Madras Rd, Rahat Bagh, Nagavarapalya, Bennigana Halli, Bengaluru, Karnataka 560093, India",
+                "location": {
+                    "latitude": 12.9917144,
+                    "longitude": 77.6572248
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=9889957342288454925",
+                "displayName": {
+                    "text": "Baiyappanahalli Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Varthur PS": {
+        "places": [
+            {
+                "formattedAddress": "Varthur Road, WPQW+6Q6, Market, Near, Varthur, Bengaluru, Karnataka 560087, India",
+                "location": {
+                    "latitude": 12.9380413,
+                    "longitude": 77.7468884
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=4047827384577502190",
+                "displayName": {
+                    "text": "Varthur Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Cubbon Park PS": {
+        "places": [
+            {
+                "formattedAddress": "8, Central Division, Kasturba Road, Near Yes Bank, Shanthala Nagar, Ashok Nagar, Ambedkar Veedhi, Bengaluru, Karnataka 560001, India",
+                "location": {
+                    "latitude": 12.9761933,
+                    "longitude": 77.5983978
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=3437324226788563718",
+                "displayName": {
+                    "text": "Deputy Commissioner of Police Central, Cubbon Park Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Vidhana Soudha PS": {
+        "places": [
+            {
+                "formattedAddress": "XHHQ+56Q, Sampangi Rama Nagar, Ambedkar Veedhi, Bengaluru, Karnataka 560001, India",
+                "location": {
+                    "latitude": 12.9779602,
+                    "longitude": 77.5880956
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=12199402919986500206",
+                "displayName": {
+                    "text": "Vidhana Soudha Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Tavarekere PS": {
+        "places": [
+            {
+                "formattedAddress": "XC82+G64, Magadi Main Rd, Bengaluru, Thavarekere, Karnataka 562130, India",
+                "location": {
+                    "latitude": 12.9662629,
+                    "longitude": 77.400588
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=591563558724723290",
+                "displayName": {
+                    "text": "Tavarekere Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Avalahally PS": {
+        "places": [
+            {
+                "formattedAddress": "NH 75 Virgonagar PO Aavalahalli, Bidarahalli, Uttarahalli Hobli, Bengaluru, Karnataka 560049, India",
+                "location": {
+                    "latitude": 13.042269399999999,
+                    "longitude": 77.7457488
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=12913559141318591682",
+                "displayName": {
+                    "text": "Avalahalli Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "R.T. Nagar PS": {
+        "places": [
+            {
+                "formattedAddress": "Dinnur Main Rd, P&T Colony, RT Nagar, Bengaluru, Karnataka 560032, India",
+                "location": {
+                    "latitude": 13.0247216,
+                    "longitude": 77.5932634
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=7938796132232275941",
+                "displayName": {
+                    "text": "R T Nagar Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Sadashivanagar PS": {
+        "places": [
+            {
+                "formattedAddress": "CV raman, junction, New BEL Rd, near IISC campus, opp. Central Power Research Institute, entrance, Bengaluru, Karnataka 560080, India",
+                "location": {
+                    "latitude": 13.0148786,
+                    "longitude": 77.5725875
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=841664670268831414",
+                "displayName": {
+                    "text": "Sadashivanagara Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Whitefield PS": {
+        "places": [
+            {
+                "formattedAddress": "POLICE STATION, PRESTIGE WHITE MEADOWS, Whitefield Main Rd, Beside PRESTIGE WHITE MEADOWS, Sathya Sai Layout, Whitefield, Bengaluru, Karnataka 560066, India",
+                "location": {
+                    "latitude": 12.975354699999999,
+                    "longitude": 77.75118979999999
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=10719813195151085255",
+                "displayName": {
+                    "text": "Whitefield Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Mico layout Bangalore PS": {
+        "places": [
+            {
+                "formattedAddress": "WJ56+F73, 16th Main Rd, Lakshmi Layout, MCHS Colony, BTM 2nd Stage, BTM Layout, Bengaluru, Karnataka 560076, India",
+                "location": {
+                    "latitude": 12.9086426,
+                    "longitude": 77.61067039999999
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=4998667289915809975",
+                "displayName": {
+                    "text": "Mico Layout Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "V.V. Puram PS": {
+        "places": [
+            {
+                "formattedAddress": "Tippu Sultan Palace Rd, Kalasipalya, Bengaluru, Karnataka 560002, India",
+                "location": {
+                    "latitude": 12.960208399999999,
+                    "longitude": 77.57198819999999
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=2939365276587331693",
+                "displayName": {
+                    "text": "V V Puram Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Byadarahalli PS": {
+        "places": [
+            {
+                "formattedAddress": "XFPR+PHR, Magadi Main Rd, Anjana Nagar, Sunkadakatte, Bengaluru, Karnataka 560091, India",
+                "location": {
+                    "latitude": 12.98674,
+                    "longitude": 77.4914987
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=13698922982328610123",
+                "displayName": {
+                    "text": "Byadarahalli police station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Begur PS": {
+        "places": [
+            {
+                "formattedAddress": "737, 1, Begur Rd, Vishwapriya Nagar, Begur, Bengaluru, Karnataka 560068, India",
+                "location": {
+                    "latitude": 12.8782406,
+                    "longitude": 77.6243424
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=15636641094072017360",
+                "displayName": {
+                    "text": "Begur Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Kaggalipura PS": {
+        "places": [
+            {
+                "formattedAddress": "RG36+H48, Kanakapura Main Rd, Kaggalipura, Bengaluru, Karnataka 560082, India",
+                "location": {
+                    "latitude": 12.803921299999999,
+                    "longitude": 77.5103148
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=5530332425259267345",
+                "displayName": {
+                    "text": "Police Station, Kaggalipura Pattaredepalya",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Malleshwarm PS": {
+        "places": [
+            {
+                "formattedAddress": "XHW9+MV6, XHW9+MVGUnnamed Road, Malleshwaram, Bengaluru, Karnataka 560003, India",
+                "location": {
+                    "latitude": 12.9966546,
+                    "longitude": 77.56964359999999
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=10940931228666278336",
+                "displayName": {
+                    "text": "Malleshwara Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Jnanabharathi PS": {
+        "places": [
+            {
+                "formattedAddress": "Gnana Bharathi University Campus, Bangalore University Rd, Mariyappana Palya, Jnana Ganga Nagar, Bengaluru, Karnataka 560056, India",
+                "location": {
+                    "latitude": 12.950628,
+                    "longitude": 77.5003655
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=9531840352394594186",
+                "displayName": {
+                    "text": "Jnanabharathi Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Siddapura PS": {
+        "places": [
+            {
+                "formattedAddress": "3, 1st Main Rd, 1st Block, Jaya Nagar East, Jayanagar, Bengaluru, Karnataka 560029, India",
+                "location": {
+                    "latitude": 12.9386726,
+                    "longitude": 77.5925688
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=6033849725042073909",
+                "displayName": {
+                    "text": "Siddapura Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "J.C. NagarPS": {
+        "places": [
+            {
+                "formattedAddress": "2H4V+6FR, VP Deenadayalu Naidu Rd, Jayamahal, Bengaluru, Karnataka 560046, India",
+                "location": {
+                    "latitude": 13.0056208,
+                    "longitude": 77.5936329
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=10282103317397260727",
+                "displayName": {
+                    "text": "JC Nagar Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Sarjapura PS": {
+        "places": [
+            {
+                "formattedAddress": "VQ6M+67P, Sarjapura, Bengaluru, Karnataka 562125, India",
+                "location": {
+                    "latitude": 12.8605937,
+                    "longitude": 77.7832179
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=10055303882685931063",
+                "displayName": {
+                    "text": "Sarjapura Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Adugodi PS": {
+        "places": [
+            {
+                "formattedAddress": "Cluster_adugodi 2 Office Work Space Building, Hosur Rd, Near Forum Mall, Mahalingeshwara Layout, Chikku Lakshmaiah Layout, Adugodi, Bengaluru, Karnataka 560030, India",
+                "location": {
+                    "latitude": 12.9392339,
+                    "longitude": 77.6101668
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=9745019549641329363",
+                "displayName": {
+                    "text": "Adugodi Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Hennur PS": {
+        "places": [
+            {
+                "formattedAddress": "Service Rd, Balachandra Layout, Babusabpalya, Hennur Gardens, Bengaluru, Karnataka 560043, India",
+                "location": {
+                    "latitude": 13.0239996,
+                    "longitude": 77.6457169
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=17763091161034367475",
+                "displayName": {
+                    "text": "Hennur Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Gangammagudi PS": {
+        "places": [
+            {
+                "formattedAddress": "Gangamma Gudi Police Station Rd, Abbigere Industrial Area, KVP Nagar, Jalahalli, Bengaluru, Karnataka 560015, India",
+                "location": {
+                    "latitude": 13.072241900000002,
+                    "longitude": 77.53012
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=5596273369984550678",
+                "displayName": {
+                    "text": "Gangamma Gudi Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "S.J. Park PS": {
+        "places": [
+            {
+                "formattedAddress": "391, Kumbaragundi Rd, behind Shiva Talkies, Kalasipalyam New Extension, Kalasipalya, Bengaluru, Karnataka 560002, India",
+                "location": {
+                    "latitude": 12.9609233,
+                    "longitude": 77.5831687
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=18396944896915511748",
+                "displayName": {
+                    "text": "SJ Park Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Thalaghattapura PS": {
+        "places": [
+            {
+                "formattedAddress": "Kanakapura Main Rd, Talaghattapura, Bengaluru, Karnataka 560062, India",
+                "location": {
+                    "latitude": 12.8689796,
+                    "longitude": 77.5362213
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=73965784838950713",
+                "displayName": {
+                    "text": "Thalaghattapura police station Bangalore Karnataka 560109",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Shivajinagar PS": {
+        "places": [
+            {
+                "formattedAddress": "XJQ3+4FJ, Sulthangunta, Shivaji Nagar, Bengaluru, Karnataka 560051, India",
+                "location": {
+                    "latitude": 12.987848999999999,
+                    "longitude": 77.6036383
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=8787008216514019445",
+                "displayName": {
+                    "text": "Shivajinagar police station and women's cell",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Bommanahalli PS": {
+        "places": [
+            {
+                "formattedAddress": "WJ6F+6XQ, 10th Main Rd, NGR Layout, Roopena Agrahara, Bommanahalli, Bengaluru, Karnataka 560068, India",
+                "location": {
+                    "latitude": 12.910584499999999,
+                    "longitude": 77.6249968
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=6347893618968093941",
+                "displayName": {
+                    "text": "Bommanahalli Police station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Ashokanagara  PS": {
+        "places": [
+            {
+                "formattedAddress": "38H, 3rd St, Shanthala Nagar, Ashok Nagar, Bengaluru, Karnataka 560025, India",
+                "location": {
+                    "latitude": 12.9716635,
+                    "longitude": 77.6101324
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=18204670296299086850",
+                "displayName": {
+                    "text": "Ashoka Nagar Police Station And office of the Assistant commissioner of police cubbon park sub division",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "parappana Agrahara": {
+        "places": [
+            {
+                "formattedAddress": "VMG8+WW9, Jail Rd, opposite Hosa Road, Sai Sree Layout, Parappana Agrahara, Bengaluru, Karnataka 560100, India",
+                "location": {
+                    "latitude": 12.877291099999999,
+                    "longitude": 77.6673532
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=3785215100810837340",
+                "displayName": {
+                    "text": "Parappana Agrahara Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Halasur PS": {
+        "places": [
+            {
+                "formattedAddress": "XJFG+W4R, 6th Cross Rd, Camebridge Layout, Someshvarapura Layout, Jogupalya, Bengaluru, Karnataka 560008, India",
+                "location": {
+                    "latitude": 12.9748715,
+                    "longitude": 77.6252733
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=13686518291735160764",
+                "displayName": {
+                    "text": "Halasuru Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Subramanyapura PS": {
+        "places": [
+            {
+                "formattedAddress": "WG2V+FQ9, Gubbalaala Main Rd, Uttarahalli Hobli, Bengaluru, Karnataka 560061, India",
+                "location": {
+                    "latitude": 12.901174399999999,
+                    "longitude": 77.5444808
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=8903228185119931585",
+                "displayName": {
+                    "text": "Subramanyapura Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Sampangiramanagar PS": {
+        "places": [
+            {
+                "formattedAddress": "XH7R+6R4, 16th Cross, 4th Main Road, Mission Road, Sampangi Rama Nagara, Sampangi Rama Nagar, Bengaluru, Karnataka 560027, India",
+                "location": {
+                    "latitude": 12.963000399999999,
+                    "longitude": 77.5920836
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=8091429553669345409",
+                "displayName": {
+                    "text": "Sampangi Rama Nagara Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Pulakeshinagar PS": {
+        "places": [
+            {
+                "formattedAddress": "Lazar road Coxtown, Frazer Town, Bengaluru, Karnataka 560005, India",
+                "location": {
+                    "latitude": 12.9994119,
+                    "longitude": 77.619731
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=14418028610713903314",
+                "displayName": {
+                    "text": "Pulikeshi Nagar Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Devarajeevanahalli PS": {
+        "places": [
+            {
+                "formattedAddress": "3, Survey Number 4 Munimarappa Block, Dr Ambedkar Nagar, Devara Jeevanahalli, Bengaluru, Karnataka 560045, India",
+                "location": {
+                    "latitude": 13.011502100000001,
+                    "longitude": 77.6131765
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=9174790062767501855",
+                "displayName": {
+                    "text": "D J Halli Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Kadugodi PS": {
+        "places": [
+            {
+                "formattedAddress": "XQW5+53P, opposite BMTC Bus Stand, Kadugodi Colony, Kadugodi, Bengaluru, Karnataka 560067, India",
+                "location": {
+                    "latitude": 12.995463899999999,
+                    "longitude": 77.7577067
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=6359680926679667911",
+                "displayName": {
+                    "text": "Kadugodi Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Suddaguntepalya  PS": {
+        "places": [
+            {
+                "formattedAddress": "WJH3+9WF, Bhavani Nagar, S.G. Palya, Bengaluru, Karnataka 560029, India",
+                "location": {
+                    "latitude": 12.9284039,
+                    "longitude": 77.6047337
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=16046835936836757281",
+                "displayName": {
+                    "text": "SG Palya Police Station New Building",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    }
+}

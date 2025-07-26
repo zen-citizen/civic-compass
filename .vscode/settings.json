@@ -1,11 +1,13 @@
 {
+  "typescript.tsdk": "node_modules/typescript/lib",
   // removes the annoying debug symbol from package.json scripts
   "debug.javascript.codelens.npmScripts": "never",
   "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "always"
   },
-  "eslint.validate": ["javascript"],
+  "eslint.validate": ["javascript", "typescript"],
   "yaml.schemas": {
     "https://json.schemastore.org/github-workflow.json": [".github/workflows/*"]
   }
