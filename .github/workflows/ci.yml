@@ -19,6 +19,13 @@ jobs:
         with:
           node-version-file: "./.nvmrc"
       - name: Install Dependencies
-        run: npm install
+        run: yarn install --non-interactive --frozen-lockfile
+
+      - name: Check Types
+        run: yarn typecheck
+
+      - name: Lint & Formatting
+        run: yarn lint
+
       - name: Build for production
-        run: npm run build
+        run: yarn build
