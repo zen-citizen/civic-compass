@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { LocateFixed, Search, Loader, ExternalLink, ChevronDown, ChevronUp, ArrowLeft, Plus, Minus } from 'lucide-react';
 import policeJurisdiction from '../layers/PoliceJurisdiction_5.json'
+import trafficPoliceStation from '../layers/_4.json'
 import BBMPInformation from '../layers/BBMPInformation_11.json'
 import Constituencies from '../layers/Constituencies_3.json'
 import RevenueOffices from '../layers/RevenueOffices_6.json'
@@ -576,7 +577,6 @@ const BangaloreAddressMap = () => {
     };
   };
 
-  // Function to find police jurisdiction for a location
   const findPoliceJurisdiction = (lat, lng) => {
     if (!policeJurisdiction || !policeJurisdiction.features) {
       return {
@@ -601,57 +601,64 @@ const BangaloreAddressMap = () => {
 
     const point = L.latLng(lat, lng);
 
-    if (policeJurisdiction.features.length > 0 && lng === 77.5946 && lat === 12.9716) {
-      console.log("Police jurisdiction feature example:", policeJurisdiction.features[0]);
-    }
+    let policeStation = "Not Available";
+    let psAddress = "Address not available";
+    let psMapsLink = null;
 
     for (const feature of policeJurisdiction.features) {
       if (feature.geometry) {
         const isInside = processGeometry(feature.geometry, point, L);
 
         if (isInside) {
-          const policeStation = feature.properties["Police Station"] ||
+          policeStation = feature.properties["Police Station"] ||
               feature.properties.Name ||
               "Not Available";
-
-          const trafficStation = policeStation.replace(' PS', ' Traffic PS');
-
-          let psAddress = "Address not available";
-          let psMapsLink = null;
-          let tpAddress = "Address not available";
-          let tpMapsLink = null;
-
-          if (psLocations[policeStation.trim()] && psLocations[policeStation.trim()].places && psLocations[policeStation.trim()].places.length > 0) {
-            const psInfo = psLocations[policeStation.trim()].places[0];
-            psAddress = psInfo.formattedAddress;
-            psMapsLink = psInfo.googleMapsUri;
-          }
-
-          if (tpLocations[trafficStation.trim()] && tpLocations[trafficStation.trim()].places && tpLocations[trafficStation.trim()].places.length > 0) {
-            const tpInfo = tpLocations[trafficStation.trim()].places[0];
-            tpAddress = tpInfo.formattedAddress;
-            tpMapsLink = tpInfo.googleMapsUri;
-          }
-
-          return {
-            'Police station': policeStation,
-            'Traffic station': trafficStation,
-            'Police station Address': psAddress,
-            'Traffic station Address': tpAddress,
-            'Police station Maps Link': psMapsLink,
-            'Traffic station Maps Link': tpMapsLink
-          };
+          break;
         }
       }
     }
 
+    if (policeStation !== "Not Available" && psLocations[policeStation.trim()] &&
+        psLocations[policeStation.trim()].places &&
+        psLocations[policeStation.trim()].places.length > 0) {
+      const psInfo = psLocations[policeStation.trim()].places[0];
+      psAddress = psInfo.formattedAddress;
+      psMapsLink = psInfo.googleMapsUri;
+    }
+
+    let trafficStation = "Not Available";
+    let tpAddress = "Address not available";
+    let tpMapsLink = null;
+
+    for (const feature of trafficPoliceStation.features) {
+      if (feature.geometry) {
+        const isInside = processGeometry(feature.geometry, point, L);
+        console.log("tp Feature:", feature.properties.Name);
+        if (isInside) {
+          console.log("inside");
+          trafficStation = feature.properties["Traffic_PS"] ||
+              feature.properties.Name ||
+              "Not Available";
+          break;
+        }
+      }
+    }
+
+    if (trafficStation !== "Not Available" && tpLocations[trafficStation.trim()] &&
+        tpLocations[trafficStation.trim()].places &&
+        tpLocations[trafficStation.trim()].places.length > 0) {
+      const tpInfo = tpLocations[trafficStation.trim()].places[0];
+      tpAddress = tpInfo.formattedAddress;
+      tpMapsLink = tpInfo.googleMapsUri;
+    }
+
     return {
-      'Police station': "Not Available",
-      'Traffic station': "Not Available",
-      'Police station Address': "Not Available",
-      'Traffic station Address': "Not Available",
-      'Police station Maps Link': null,
-      'Traffic station Maps Link': null
+      'Police station': policeStation,
+      'Traffic station': trafficStation,
+      'Police station Address': psAddress,
+      'Traffic station Address': tpAddress,
+      'Police station Maps Link': psMapsLink,
+      'Traffic station Maps Link': tpMapsLink
     };
   };
 
