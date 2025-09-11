@@ -1,211 +1,31 @@
 {
-    "Chikkabanavara PS": {
+    "Whitefield Traffic  PS": {
         "places": [
             {
-                "formattedAddress": "441-6A MA, 4th A Cross Rd, MEI Employees Housing Colony, Bengaluru, Karnataka 560073, India",
+                "formattedAddress": "XQV4+PV4, Kadugodi Rd, Kadugodi Colony, Kadugodi, Bengaluru, Karnataka 560067, India",
                 "location": {
-                    "latitude": 13.0595275,
-                    "longitude": 77.5035351
+                    "latitude": 12.994254999999999,
+                    "longitude": 77.7571905
                 },
-                "googleMapsUri": "https://maps.google.com/?cid=2062040372706172999",
+                "googleMapsUri": "https://maps.google.com/?cid=8978614435710985889&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
                 "displayName": {
-                    "text": "Bagalgunte Police Station.",
+                    "text": "Whitefield Traffic Police Station",
                     "languageCode": "en"
                 }
             }
         ]
     },
-    "Upparpet Traffic PS": {
+    "Mico layout Traffic PS": {
         "places": [
             {
-                "formattedAddress": "Upparpet Police Station, LTP Road, Majestic, Bengaluru, Karnataka 560009, India",
+                "formattedAddress": "WJ82+CG4 MR-12, MF15, 1st A Main Rd, SFHS Layout, BHBCS Layout, BTM 2nd Stage, BTM Layout, Bengaluru, Karnataka 560076, India",
                 "location": {
-                    "latitude": 12.9744839,
-                    "longitude": 77.5750417
+                    "latitude": 12.9132584,
+                    "longitude": 77.6010544
                 },
-                "googleMapsUri": "https://maps.google.com/?cid=10888607872961535303",
+                "googleMapsUri": "https://maps.google.com/?cid=2095454906241422258&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
                 "displayName": {
-                    "text": "Upparpet Traffic Police Station",
-                    "languageCode": "en"
-                }
-            }
-        ]
-    },
-    "": {
-        "places": [
-        ]
-    },
-    "Sadashivanagar Traffic PS": {
-        "places": [
-            {
-                "formattedAddress": "1, New BEL Rd, CPRI Staff Colony, Mathikere, Bengaluru, Karnataka 560012, India",
-                "location": {
-                    "latitude": 13.0151739,
-                    "longitude": 77.5725897
-                },
-                "googleMapsUri": "https://maps.google.com/?cid=10173616075908107372",
-                "displayName": {
-                    "text": "Sadashivanagar Traffic Police Station",
-                    "languageCode": "en"
-                }
-            }
-        ]
-    },
-    "Shivajinagar Traffic  PS": {
-        "places": [
-            {
-                "formattedAddress": "Bradway Road, Old Police station Junction, XJQ3+5CH, HKP Road, Sulthangunta, Shivaji Nagar, Bengaluru, Karnataka 560051, India",
-                "location": {
-                    "latitude": 12.9879433,
-                    "longitude": 77.6036013
-                },
-                "googleMapsUri": "https://maps.google.com/?cid=14046291239988024659",
-                "displayName": {
-                    "text": "Shivajinagara Traffic Police Station",
-                    "languageCode": "en"
-                }
-            }
-        ]
-    },
-    "K.R. Puram Traffic  PS": {
-        "places": [
-            {
-                "formattedAddress": "K R Pura Extension,Old Madras Road, Cluster_k R Puram 2 Clubhouse, Cluster_k R Puram 2, Malur - Byranahalli Rd, Opposite Sri Ram Hospital, Nisarga Layout, Devasandra, Krishnarajapuram, Bengaluru, Karnataka 560036, India",
-                "location": {
-                    "latitude": 13.0112252,
-                    "longitude": 77.69879270000001
-                },
-                "googleMapsUri": "https://maps.google.com/?cid=11204461568213280665",
-                "displayName": {
-                    "text": "Krishnarajapura Traffic Police Station",
-                    "languageCode": "en"
-                }
-            }
-        ]
-    },
-    "Electronic City Traffic PS": {
-        "places": [
-            {
-                "formattedAddress": "KSSIDC Building, 3rd block, 1st floor, A/213, Indra Nagar, Electronics City Phase 1, Electronic City, Bengaluru, Karnataka 560100, India",
-                "location": {
-                    "latitude": 12.839377899999999,
-                    "longitude": 77.6616193
-                },
-                "googleMapsUri": "https://maps.google.com/?cid=14476037282200005167",
-                "displayName": {
-                    "text": "Electronic city Traffic Police Station",
-                    "languageCode": "en"
-                }
-            }
-        ]
-    },
-    "Devanahalli Traffic PS": {
-        "places": [
-            {
-                "formattedAddress": "6PM7+435, Bychapura, Karnataka 562110, India",
-                "location": {
-                    "latitude": 13.232776699999999,
-                    "longitude": 77.7127769
-                },
-                "googleMapsUri": "https://maps.google.com/?cid=15935231761957243304",
-                "displayName": {
-                    "text": "DEVANAHALLI TRAFFIC POLICE STATION.",
-                    "languageCode": "en"
-                }
-            }
-        ]
-    },
-    "V.V. Puram Traffic  PS": {
-        "places": [
-            {
-                "formattedAddress": "Police station, 83, Kalasipalya Main Rd, near Kalasipalya, Kalasipalya, Bengaluru, Karnataka 560002, India",
-                "location": {
-                    "latitude": 12.957223899999999,
-                    "longitude": 77.57737279999999
-                },
-                "googleMapsUri": "https://maps.google.com/?cid=188938809921425168",
-                "displayName": {
-                    "text": "V.V. Pura Traffic Police Station",
-                    "languageCode": "en"
-                }
-            }
-        ]
-    },
-    "Yeshwanthapura Traffic PS": {
-        "places": [
-            {
-                "formattedAddress": "2H95+778, 9th Cross Rd, Ashokapuram, Yesvantpur Industrial Suburb, Mahalakshmi Layout, Bengaluru, Karnataka 560022, India",
-                "location": {
-                    "latitude": 13.0181677,
-                    "longitude": 77.5581879
-                },
-                "googleMapsUri": "https://maps.google.com/?cid=15613995402927232918",
-                "displayName": {
-                    "text": "Yeshwanthapura Police Station",
-                    "languageCode": "en"
-                }
-            }
-        ]
-    },
-    "Banaswadi Traffic PS": {
-        "places": [
-            {
-                "formattedAddress": "2J9R+V25, 2nd H Cross Rd, HRBR Layout 2nd Block, HRBR Layout, Kalyan Nagar, Bengaluru, Karnataka 560043, India",
-                "location": {
-                    "latitude": 13.019627799999999,
-                    "longitude": 77.6401119
-                },
-                "googleMapsUri": "https://maps.google.com/?cid=3433681030587874084",
-                "displayName": {
-                    "text": "Banaswadi Police Station - Assistant Commission of Police",
-                    "languageCode": "en"
-                }
-            }
-        ]
-    },
-    "Hennur PS": {
-        "places": [
-            {
-                "formattedAddress": "3JCP+7FJ, K Narayanapura Main Rd, BDS Nagar, Narayanapura, Bengaluru, Karnataka 560077, India",
-                "location": {
-                    "latitude": 13.070715400000001,
-                    "longitude": 77.63612789999999
-                },
-                "googleMapsUri": "https://maps.google.com/?cid=15698885419758811575",
-                "displayName": {
-                    "text": "Hennur Traffic Police Station",
-                    "languageCode": "en"
-                }
-            }
-        ]
-    },
-    "H.A.L Airport Traffic PS": {
-        "places": [
-            {
-                "formattedAddress": "D-14/T,HAL Employees Quarters,Old Airport Road Old Airport Road, Near, Post Office, HAL Employee Quarters, D-32, Behind CS-HAL Post Office, Reddypalya, HAL, Bengaluru, Karnataka 560017, India",
-                "location": {
-                    "latitude": 12.9589807,
-                    "longitude": 77.66753280000002
-                },
-                "googleMapsUri": "https://maps.google.com/?cid=3054038805883821867",
-                "displayName": {
-                    "text": "Hal Airport Traffic Police Station",
-                    "languageCode": "en"
-                }
-            }
-        ]
-    },
-    "R.T. Nagar Traffic PS": {
-        "places": [
-            {
-                "formattedAddress": "BB Road, 42, 2nd floor, VG Layout, Anand Nagar Main Rd, SBM Colony, Anandnagar, Hebbal, Bengaluru, Karnataka 560024, India",
-                "location": {
-                    "latitude": 13.0333242,
-                    "longitude": 77.5886065
-                },
-                "googleMapsUri": "https://maps.google.com/?cid=15663535905166840041",
-                "displayName": {
-                    "text": "R.T. Nagar Traffic Police Station",
+                    "text": "Mico Layout Traffic Police station",
                     "languageCode": "en"
                 }
             }
@@ -219,393 +39,9 @@
                     "latitude": 12.994626,
                     "longitude": 77.5542172
                 },
-                "googleMapsUri": "https://maps.google.com/?cid=11937788764387402510",
+                "googleMapsUri": "https://maps.google.com/?cid=11937788764387402510&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
                 "displayName": {
                     "text": "Rajajinagara Traffic Police Station",
-                    "languageCode": "en"
-                }
-            }
-        ]
-    },
-    "Basavanagudi  Traffic PS": {
-        "places": [
-            {
-                "formattedAddress": "WHRF+VPC, Krishna Rajendra Rd, Near Krishna Rao Park, Basavanagudi, Bengaluru, Karnataka 560004, India",
-                "location": {
-                    "latitude": 12.9421807,
-                    "longitude": 77.5742728
-                },
-                "googleMapsUri": "https://maps.google.com/?cid=13834625959961931581",
-                "displayName": {
-                    "text": "Basavanagudi Traffic Police Station.",
-                    "languageCode": "en"
-                }
-            }
-        ]
-    },
-    "City Market Traffic  PS": {
-        "places": [
-            {
-                "formattedAddress": "balepete circul, 4-81/A, KV Temple Street Cross, Near \u092c\u0932\u0947\u092a\u0947\u091f \u0938\u094d\u0915\u0941\u090f\u0930, Santhusapet, Chickpet, Bengaluru, Karnataka 560053, India",
-                "location": {
-                    "latitude": 12.9707093,
-                    "longitude": 77.5736505
-                },
-                "googleMapsUri": "https://maps.google.com/?cid=165950292532039266",
-                "displayName": {
-                    "text": "City Market Traffic Police Station",
-                    "languageCode": "en"
-                }
-            }
-        ]
-    },
-    "H.S.R.Layout Traffic PS": {
-        "places": [
-            {
-                "formattedAddress": "Hsr Bda Complex, 38 & 39, 14th Main Rd, Sector 6, HSR Layout, Bengaluru, Karnataka 560102, India",
-                "location": {
-                    "latitude": 12.9137634,
-                    "longitude": 77.63727779999999
-                },
-                "googleMapsUri": "https://maps.google.com/?cid=9695938737628889882",
-                "displayName": {
-                    "text": "HSR Layout Traffic Police Station",
-                    "languageCode": "en"
-                }
-            }
-        ]
-    },
-    "Kamakshipalya Traffic PS": {
-        "places": [
-            {
-                "formattedAddress": "No-25, Magadi Main Rd, Vinayaka Layout, Asthagrama Layout, Vijayanagar, Bengaluru, Karnataka 560079, India",
-                "location": {
-                    "latitude": 12.9820683,
-                    "longitude": 77.5330898
-                },
-                "googleMapsUri": "https://maps.google.com/?cid=5281002128512253877",
-                "displayName": {
-                    "text": "Kamakshipalya Traffic Police Station",
-                    "languageCode": "en"
-                }
-            }
-        ]
-    },
-    "Hulimavu Traffic PS": {
-        "places": [
-            {
-                "formattedAddress": "Bannerghatta Rd, Opposite Gottigere Government School, Jyothi Nagar, Bohra Layout, Gottigere, Bengaluru, Karnataka 560083, India",
-                "location": {
-                    "latitude": 12.858305,
-                    "longitude": 77.5893284
-                },
-                "googleMapsUri": "https://maps.google.com/?cid=13206932166248806864",
-                "displayName": {
-                    "text": "Hulimavu Traffic Police Station",
-                    "languageCode": "en"
-                }
-            }
-        ]
-    },
-    "Malleshwarm  Traffic PS": {
-        "places": [
-            {
-                "formattedAddress": "3, 5, 5th Cross Rd, Near KCG Hospital, Malleshwaram, Bengaluru, Karnataka 560003, India",
-                "location": {
-                    "latitude": 12.996666699999999,
-                    "longitude": 77.5697222
-                },
-                "googleMapsUri": "https://maps.google.com/?cid=4462932160784169027",
-                "displayName": {
-                    "text": "Malleshwaram Traffic Police Station",
-                    "languageCode": "en"
-                }
-            }
-        ]
-    },
-    "Madiwala Traffic PS": {
-        "places": [
-            {
-                "formattedAddress": "WJCC+C78, Madiwala Rd, Santhosapuram, 1st Block Koramangala, Koramangala, Bengaluru, Karnataka 560068, India",
-                "location": {
-                    "latitude": 12.9210491,
-                    "longitude": 77.62070299999999
-                },
-                "googleMapsUri": "https://maps.google.com/?cid=11202219061386118703",
-                "displayName": {
-                    "text": "Madiwala Traffic Police Station",
-                    "languageCode": "en"
-                }
-            }
-        ]
-    },
-    "High Grounds Traffic  PS": {
-        "places": [
-            {
-                "formattedAddress": "12, Race Course Rd, In front of Bangalore Turf Club Ltd., High Grounds, Gandhi Nagar, Bengaluru, Karnataka 560001, India",
-                "location": {
-                    "latitude": 12.9848082,
-                    "longitude": 77.5826232
-                },
-                "googleMapsUri": "https://maps.google.com/?cid=223619448622164471",
-                "displayName": {
-                    "text": "High Grounds Traffic Police Station",
-                    "languageCode": "en"
-                }
-            }
-        ]
-    },
-    "Pulakeshinagar Traffic PS": {
-        "places": [
-            {
-                "formattedAddress": "Lazar road Coxtown, Frazer Town, Bengaluru, Karnataka 560005, India",
-                "location": {
-                    "latitude": 12.9994119,
-                    "longitude": 77.619731
-                },
-                "googleMapsUri": "https://maps.google.com/?cid=14418028610713903314",
-                "displayName": {
-                    "text": "Pulikeshi Nagar Police Station",
-                    "languageCode": "en"
-                }
-            }
-        ]
-    },
-    "Peenya  Traffic  PS": {
-        "places": [
-            {
-                "formattedAddress": "Police Station, 1, \"A\" Cross, VP-7, near Peenya, Peenya 1st Stage, Vivekananda Nagar, Peenya, Bengaluru, Karnataka 560058, India",
-                "location": {
-                    "latitude": 13.036028199999999,
-                    "longitude": 77.5212463
-                },
-                "googleMapsUri": "https://maps.google.com/?cid=4783072222197595901",
-                "displayName": {
-                    "text": "Peenya traffic police station",
-                    "languageCode": "en"
-                }
-            }
-        ]
-    },
-    "Byatarayanapura Traffic PS": {
-        "places": [
-            {
-                "formattedAddress": "5th cross road,No 203.204,Kavika Kowtras,Mysore Road, MM Rd, Byatarayanapura, Banashankari 1st Stage, Banashankari, Bengaluru, Karnataka 560026, India",
-                "location": {
-                    "latitude": 12.9505097,
-                    "longitude": 77.5407324
-                },
-                "googleMapsUri": "https://maps.google.com/?cid=7302942545149707790",
-                "displayName": {
-                    "text": "Byatarayanapura Traffic Police Station",
-                    "languageCode": "en"
-                }
-            }
-        ]
-    },
-    "Jalahalli PS": {
-        "places": [
-            {
-                "formattedAddress": "2GXX+FR5, HMT Main Rd, Jalahalli Village, Jalahalli, Bengaluru, Karnataka 560013, India",
-                "location": {
-                    "latitude": 13.048642300000001,
-                    "longitude": 77.5496131
-                },
-                "googleMapsUri": "https://maps.google.com/?cid=16036973970583887594",
-                "displayName": {
-                    "text": "Jalahalli Police Station",
-                    "languageCode": "en"
-                }
-            }
-        ]
-    },
-    "Kengeri Traffic PS": {
-        "places": [
-            {
-                "formattedAddress": "Mysore Road, WF6J+5JV, Shirke Layout, Kengeri Satellite Town, Mysore Rd, Harsha Layout, Kengeri, Bengaluru, Karnataka 560060, India",
-                "location": {
-                    "latitude": 12.910496499999999,
-                    "longitude": 77.4815448
-                },
-                "googleMapsUri": "https://maps.google.com/?cid=5837569346145710053",
-                "displayName": {
-                    "text": "Kengeri Police Station",
-                    "languageCode": "en"
-                }
-            }
-        ]
-    },
-    "Vijayanagar Traffic PS": {
-        "places": [
-            {
-                "formattedAddress": "1777, 9th Cross Rd, Hampi Nagar, RPC Layout, Vijayanagar, Bengaluru, Karnataka 560104, India",
-                "location": {
-                    "latitude": 12.9606915,
-                    "longitude": 77.54082509999999
-                },
-                "googleMapsUri": "https://maps.google.com/?cid=8879979871889406723",
-                "displayName": {
-                    "text": "Vijayanagara Traffic Police Station",
-                    "languageCode": "en"
-                }
-            }
-        ]
-    },
-    "Yelahanka Traffic PS": {
-        "places": [
-            {
-                "formattedAddress": "3HWV+2JF, SH 9, Ambedkar Colony, Yelahanka, Bengaluru, Karnataka 560065, India",
-                "location": {
-                    "latitude": 13.095053,
-                    "longitude": 77.5940619
-                },
-                "googleMapsUri": "https://maps.google.com/?cid=5528230254895396694",
-                "displayName": {
-                    "text": "Yelahanka Police Station",
-                    "languageCode": "en"
-                }
-            }
-        ]
-    },
-    "Adugodi Traffic PS": {
-        "places": [
-            {
-                "formattedAddress": "Corporation Complex,1st Floor, Hosur-Lashkar Road, BBMP Complex, 30, Hosur Rd, near Vijaya Bank, Audugodi Police Quarters, Adugodi, Bengaluru, Karnataka 560030, India",
-                "location": {
-                    "latitude": 12.9415313,
-                    "longitude": 77.6087755
-                },
-                "googleMapsUri": "https://maps.google.com/?cid=14946699267010791647",
-                "displayName": {
-                    "text": "Adugodi Traffic Police Station",
-                    "languageCode": "en"
-                }
-            }
-        ]
-    },
-    "Kumaraswamy Layout Traffic PS": {
-        "places": [
-            {
-                "formattedAddress": "PS Building, Police Station Subramanyapura, Gubbalaala Main Rd, opposite Sri Venugopal Mill, Subramanyapura, Bengaluru, Karnataka 560085, India",
-                "location": {
-                    "latitude": 12.9011865,
-                    "longitude": 77.5445372
-                },
-                "googleMapsUri": "https://maps.google.com/?cid=7687554567121080431",
-                "displayName": {
-                    "text": "Kumarswamy Layout Traffic Police Station",
-                    "languageCode": "en"
-                }
-            }
-        ]
-    },
-    "Kadugondana Halli Traffic PS (K.G Halli)": {
-        "places": [
-            {
-                "formattedAddress": "K.G.Halli Bus Stop A, Arabic College Post, 2J99+VJF, Arabic College Main Rd, Kushal Nagar, Kadugondanahalli, Bengaluru, Karnataka 560045, India",
-                "location": {
-                    "latitude": 13.019697299999999,
-                    "longitude": 77.6190615
-                },
-                "googleMapsUri": "https://maps.google.com/?cid=13073668907883203339",
-                "displayName": {
-                    "text": "KG Halli Traffic Police Station",
-                    "languageCode": "en"
-                }
-            }
-        ]
-    },
-    "Cubbon Park Traffic PS": {
-        "places": [
-            {
-                "formattedAddress": "Visvesvaraya Tower, Queens Rd, Vasanth Nagar, Bengaluru, Karnataka 560001, India",
-                "location": {
-                    "latitude": 12.9827312,
-                    "longitude": 77.5960079
-                },
-                "googleMapsUri": "https://maps.google.com/?cid=16638735842501305353",
-                "displayName": {
-                    "text": "Cubbon Park Traffic Police Station",
-                    "languageCode": "en"
-                }
-            }
-        ]
-    },
-    "Wilsongarden Traffic PS": {
-        "places": [
-            {
-                "formattedAddress": "1, 7th Cross Rd, Vinayaka Nagar, Wilson Garden, Bengaluru, Karnataka 560027, India",
-                "location": {
-                    "latitude": 12.9502267,
-                    "longitude": 77.5961114
-                },
-                "googleMapsUri": "https://maps.google.com/?cid=1501154529476884320",
-                "displayName": {
-                    "text": "Wilson Garden Traffic Police Station",
-                    "languageCode": "en"
-                }
-            }
-        ]
-    },
-    "Halasurgate Traffic PS": {
-        "places": [
-            {
-                "formattedAddress": "XH8P+PV5, NR Rd, Opposite Bruhat Bengaluru Mahanagara Palike Office - Kempegowda Civic Hall, Cubbonpete, Nagarathpete, Bengaluru, Karnataka 560002, India",
-                "location": {
-                    "latitude": 12.9667681,
-                    "longitude": 77.58722379999999
-                },
-                "googleMapsUri": "https://maps.google.com/?cid=17711483249680111382",
-                "displayName": {
-                    "text": "Halasuru Gate Traffic Police Station",
-                    "languageCode": "en"
-                }
-            }
-        ]
-    },
-    "Jayanagar Traffic PS": {
-        "places": [
-            {
-                "formattedAddress": "156/1, 6th Main Rd, 4th Block, Jayanagar, Bengaluru, Karnataka 560011, India",
-                "location": {
-                    "latitude": 12.928565599999999,
-                    "longitude": 77.5813123
-                },
-                "googleMapsUri": "https://maps.google.com/?cid=9326521917699471659",
-                "displayName": {
-                    "text": "Jayanagar police station",
-                    "languageCode": "en"
-                }
-            }
-        ]
-    },
-    "Jeevan Bheemanagar Traffic PS": {
-        "places": [
-            {
-                "formattedAddress": "D/62, Jeevanbeema Nagar Main Rd, DOS Colony, Jeevan Bima Nagar, Bengaluru, Karnataka 560075, India",
-                "location": {
-                    "latitude": 12.967341999999999,
-                    "longitude": 77.65594519999999
-                },
-                "googleMapsUri": "https://maps.google.com/?cid=15096956303934973034",
-                "displayName": {
-                    "text": "JB Nagar traffic police station",
-                    "languageCode": "en"
-                }
-            }
-        ]
-    },
-    "Chikkapete Traffic ps": {
-        "places": [
-            {
-                "formattedAddress": "Tippu Sultan Palace Rd, Anandapuram, Chamrajpet, Bengaluru, Karnataka 560018, India",
-                "location": {
-                    "latitude": 12.9605701,
-                    "longitude": 77.5682954
-                },
-                "googleMapsUri": "https://maps.google.com/?cid=1645054859373383563",
-                "displayName": {
-                    "text": "Chickpet Traffic Police Station",
                     "languageCode": "en"
                 }
             }
@@ -619,7 +55,7 @@
                     "latitude": 12.9745913,
                     "longitude": 77.62542119999999
                 },
-                "googleMapsUri": "https://maps.google.com/?cid=17750911640706750353",
+                "googleMapsUri": "https://maps.google.com/?cid=17750911640706750353&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
                 "displayName": {
                     "text": "Halasuru Traffic Police Station",
                     "languageCode": "en"
@@ -627,97 +63,209 @@
             }
         ]
     },
-    "Banashankari Traffic PS": {
+    "R.T. Nagar Traffic PS": {
         "places": [
             {
-                "formattedAddress": "2nd Stage, Post Office Rd, 1st Block, Dasarhalli, Banashankari 1st Stage, Banashankari, Bengaluru, Karnataka 560050, India",
+                "formattedAddress": "23, 5th Main Rd, Opposite Union Bank of India, KGH Layout, Ganganagar, Bengaluru, Karnataka 560032, India",
                 "location": {
-                    "latitude": 12.944266899999999,
-                    "longitude": 77.555903
+                    "latitude": 13.0258179,
+                    "longitude": 77.5880925
                 },
-                "googleMapsUri": "https://maps.google.com/?cid=16750014371369337920",
+                "googleMapsUri": "https://maps.google.com/?cid=15663535905166840041&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
                 "displayName": {
-                    "text": "Traffic Police Station",
+                    "text": "R.T. Nagar Traffic Police Station",
                     "languageCode": "en"
                 }
             }
         ]
     },
-    "Whitefield Traffic  PS": {
+    "Electronic City Traffic PS": {
         "places": [
             {
-                "formattedAddress": "XQV4+PV4, Kadugodi Rd, Kadugodi Colony, Kadugodi, Bengaluru, Karnataka 560067, India",
+                "formattedAddress": "KSSIDC Building, 3rd block, 1st floor, A/213, Indra Nagar, Electronic City Phase I, Electronic City, Bengaluru, Karnataka 560100, India",
                 "location": {
-                    "latitude": 12.994254999999999,
-                    "longitude": 77.7571905
+                    "latitude": 12.839377899999999,
+                    "longitude": 77.6616193
                 },
-                "googleMapsUri": "https://maps.google.com/?cid=8978614435710985889",
+                "googleMapsUri": "https://maps.google.com/?cid=14476037282200005167&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
                 "displayName": {
-                    "text": "Whitefield Traffic Police Station",
+                    "text": "Electronic city Traffic Police Station",
                     "languageCode": "en"
                 }
             }
         ]
     },
-    "Hebbal Traffic PS": {
+    "Peenya  Traffic  PS": {
         "places": [
             {
-                "formattedAddress": "Under, Hebbal Flyover, Vinayakanagar, Hebbal, Bengaluru, Karnataka 560024, India",
+                "formattedAddress": "Police Station, 1, \"A\" Cross, VP-7, near Peenya, Peenya 1st Stage, Vivekananda Nagar, Peenya, Bengaluru, Karnataka 560058, India",
                 "location": {
-                    "latitude": 13.042447899999999,
-                    "longitude": 77.5891602
+                    "latitude": 13.036028199999999,
+                    "longitude": 77.5212463
                 },
-                "googleMapsUri": "https://maps.google.com/?cid=3766071184736574221",
+                "googleMapsUri": "https://maps.google.com/?cid=4783072222197595901&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
                 "displayName": {
-                    "text": "Hebbal Traffic Police Station",
+                    "text": "Peenya traffic police station",
                     "languageCode": "en"
                 }
             }
         ]
     },
-    "Mico layout Traffic PS": {
+    "Wilsongarden Traffic PS": {
         "places": [
             {
-                "formattedAddress": "MF15, 1st A Main Rd, BTM 2nd Stage, BTM Layout, Bengaluru, Karnataka 560076, India",
+                "formattedAddress": "1, 6th Main Rd, Vinayaka Nagar, Wilson Garden, Bengaluru, Karnataka 560027, India",
                 "location": {
-                    "latitude": 12.9132584,
-                    "longitude": 77.6010544
+                    "latitude": 12.9502267,
+                    "longitude": 77.5961114
                 },
-                "googleMapsUri": "https://maps.google.com/?cid=2095454906241422258",
+                "googleMapsUri": "https://maps.google.com/?cid=1501154529476884320&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
                 "displayName": {
-                    "text": "Mico Layout Traffic Police station",
+                    "text": "Wilson Garden Traffic Police Station",
                     "languageCode": "en"
                 }
             }
         ]
     },
-    "Chikkajala Traffic PS": {
+    "H.A.L Airport Traffic PS": {
         "places": [
             {
-                "formattedAddress": "4MQC+X5W, Gummanahalli, Nagareshwara - Nagenahalli, Bengaluru, Karnataka 562149, India",
+                "formattedAddress": "D-14/T,HAL Employees Quarters,Old Airport Road Old Airport Road, Near, Post Office, HAL Employee Quarters, D-32, Behind CS-HAL Post Office, Reddypalya, HAL, Bengaluru, Karnataka 560017, India",
                 "location": {
-                    "latitude": 13.1399865,
-                    "longitude": 77.6704436
+                    "latitude": 12.9589807,
+                    "longitude": 77.66753280000002
                 },
-                "googleMapsUri": "https://maps.google.com/?cid=4419372402904948624",
+                "googleMapsUri": "https://maps.google.com/?cid=3054038805883821867&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
                 "displayName": {
-                    "text": "Chikkajala Traffic Police Station",
+                    "text": "Hal Airport Traffic Police Station",
                     "languageCode": "en"
                 }
             }
         ]
     },
-    "Magadi Road Traffic PS": {
+    "Byatarayanapura Traffic PS": {
         "places": [
             {
-                "formattedAddress": "XHF2+VFV, 3rd Cross Rd, Near Prasanna Theatre, Police Quarters, Rajajinagar, Bengaluru, Karnataka 560023, India",
+                "formattedAddress": "5th cross road,No 203.204,Kavika Kowtras,Mysore Road, MM Rd, Byatarayanapura, Banashankari 1st Stage, Banashankari, Bengaluru, Karnataka 560026, India",
                 "location": {
-                    "latitude": 12.9747493,
-                    "longitude": 77.5511714
+                    "latitude": 12.9505097,
+                    "longitude": 77.5407324
                 },
-                "googleMapsUri": "https://maps.google.com/?cid=15013910813905504249",
+                "googleMapsUri": "https://maps.google.com/?cid=7302942545149707790&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
                 "displayName": {
-                    "text": "Magadi Road Traffic Police Station",
+                    "text": "Byatarayanapura Traffic Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Pulakeshinagar Traffic PS": {
+        "places": [
+            {
+                "formattedAddress": "Lazar road Coxtown, Frazer Town, Bengaluru, Karnataka 560005, India",
+                "location": {
+                    "latitude": 12.9994119,
+                    "longitude": 77.619731
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=14418028610713903314&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Pulikeshi Nagar Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Kadugondana Halli Traffic PS (K.G Halli)": {
+        "places": [
+            {
+                "formattedAddress": "A, Arabic College Post, Bus Stop, Arabic College Main Rd, Kushal Nagar, Kadugondanahalli, Bengaluru, Karnataka 560045, India",
+                "location": {
+                    "latitude": 13.019697299999999,
+                    "longitude": 77.6190615
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=13073668907883203339&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "KG Halli Traffic Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Yeshwanthapura Traffic PS": {
+        "places": [
+            {
+                "formattedAddress": "2H95+778, 9th Cross Rd, Ashokapuram, Yeshwanthpur Industrial Suburb, Mahalakshmi Layout, Bengaluru, Karnataka 560022, India",
+                "location": {
+                    "latitude": 13.0181677,
+                    "longitude": 77.5581879
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=15613995402927232918&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Yeshwanthapura Police Station",
+                    "languageCode": "en"
+                }
+            },
+            {
+                "formattedAddress": "Sir CV Raman Road, 1st Floor, Circle, Yeswanthpur, Bengaluru, Karnataka 560022, India",
+                "location": {
+                    "latitude": 13.0180881,
+                    "longitude": 77.5585153
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=2035083340998263258&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Office of the Deputy Commissioner Of Police, Bengaluru West Traffic Division",
+                    "languageCode": "en"
+                }
+            },
+            {
+                "formattedAddress": "Police Station, 1, \"A\" Cross, VP-7, near Peenya, Peenya 1st Stage, Vivekananda Nagar, Peenya, Bengaluru, Karnataka 560058, India",
+                "location": {
+                    "latitude": 13.036028199999999,
+                    "longitude": 77.5212463
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=4783072222197595901&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Peenya traffic police station",
+                    "languageCode": "en"
+                }
+            },
+            {
+                "formattedAddress": "2H72+RHJ, Yeshwanthpur Industrial Suburb, Mahalakshmi Layout, Bengaluru, Karnataka 560022, India",
+                "location": {
+                    "latitude": 13.014593699999999,
+                    "longitude": 77.55140469999999
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=13474469027560696403&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Traffic police",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Cubbon Park Traffic PS": {
+        "places": [
+            {
+                "formattedAddress": "Visvesvaraya Tower, Queens Rd, Vasanth Nagar, Bengaluru, Karnataka 560001, India",
+                "location": {
+                    "latitude": 12.9827312,
+                    "longitude": 77.5960079
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=16638735842501305353&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Cubbon Park Traffic Police Station",
+                    "languageCode": "en"
+                }
+            },
+            {
+                "formattedAddress": "CUBBON PARK TRAFFIC POLICE STATION, RUSSELL MARKET, 99, Broadway Rd, Bharati Nagar, Shivaji Nagar, Bengaluru, Karnataka 560051, India",
+                "location": {
+                    "latitude": 12.985047999999999,
+                    "longitude": 77.60616279999999
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=4482038024747376300&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Cubbon Park Traffic Police Station",
                     "languageCode": "en"
                 }
             }
@@ -731,9 +279,701 @@
                     "latitude": 12.971556200000002,
                     "longitude": 77.6103105
                 },
-                "googleMapsUri": "https://maps.google.com/?cid=2970073408684036103",
+                "googleMapsUri": "https://maps.google.com/?cid=2970073408684036103&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
                 "displayName": {
                     "text": "Ashoka Nagara Traffic Police Station Shanthalanagara",
+                    "languageCode": "en"
+                }
+            },
+            {
+                "formattedAddress": "XJ76+9HM, Mother Teresa Rd, Xavier Layout, Victoria Layout, Bengaluru, Karnataka 560025, India",
+                "location": {
+                    "latitude": 12.9634606,
+                    "longitude": 77.6114075
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=7663830972395220683&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Old Ashok Nagar Traffic Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Jeevan Bheemanagar Traffic PS": {
+        "places": [
+            {
+                "formattedAddress": "D/62, Jeevanbeema Nagar Main Rd, DOS Colony, Jeevan Bima Nagar, Bengaluru, Karnataka 560075, India",
+                "location": {
+                    "latitude": 12.967341999999999,
+                    "longitude": 77.65594519999999
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=15096956303934973034&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "JB Nagar traffic police station",
+                    "languageCode": "en"
+                }
+            },
+            {
+                "formattedAddress": "XM94+38R, Jeevan Bima Nagar Main Rd, LIC Colony, HAL 3rd Stage, Sector 12, Jeevan Bima Nagar, Bengaluru, Karnataka 560075, India",
+                "location": {
+                    "latitude": 12.9677318,
+                    "longitude": 77.6557603
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=10613472844330585818&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Jeevan Bhima Nagar Police Station",
+                    "languageCode": "en"
+                }
+            },
+            {
+                "formattedAddress": "XJHR+73Q, Stage 2, Stage 1, Indiranagar, Bengaluru, Karnataka 560038, India",
+                "location": {
+                    "latitude": 12.978215299999999,
+                    "longitude": 77.6402312
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=4342970450392531983&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Indiranagar Traffic Police Station",
+                    "languageCode": "en"
+                }
+            },
+            {
+                "formattedAddress": "D-14/T,HAL Employees Quarters,Old Airport Road Old Airport Road, Near, Post Office, HAL Employee Quarters, D-32, Behind CS-HAL Post Office, Reddypalya, HAL, Bengaluru, Karnataka 560017, India",
+                "location": {
+                    "latitude": 12.9589807,
+                    "longitude": 77.66753280000002
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=3054038805883821867&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Hal Airport Traffic Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Adugodi Traffic PS": {
+        "places": [
+            {
+                "formattedAddress": "Corporation Complex,1st Floor, Hosur-Lashkar Road, BBMP Complex, 30, Hosur Rd, near Vijaya Bank, Audugodi Police Quarters, Adugodi, Bengaluru, Karnataka 560030, India",
+                "location": {
+                    "latitude": 12.9415313,
+                    "longitude": 77.6087755
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=14946699267010791647&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Adugodi Traffic Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Kamakshipalya Traffic PS": {
+        "places": [
+            {
+                "formattedAddress": "No-25, Magadi Main Rd, Vinayaka Layout, Asthagrama Layout, Vijayanagar, Bengaluru, Karnataka 560079, India",
+                "location": {
+                    "latitude": 12.9820683,
+                    "longitude": 77.5330898
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=5281002128512253877&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Kamakshipalya Traffic Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Chikkajala Traffic PS": {
+        "places": [
+            {
+                "formattedAddress": "4MQC+X5W, Gummanahalli, Nagareshwara - Nagenahalli, Bengaluru, Karnataka 562149, India",
+                "location": {
+                    "latitude": 13.1399865,
+                    "longitude": 77.6704436
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=4419372402904948624&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Chikkajala Traffic Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Banashankari Traffic PS": {
+        "places": [
+            {
+                "formattedAddress": "2nd Stage, Post Office Rd, 1st Block, Dasarhalli, Banashankari 1st Stage, Banashankari, Bengaluru, Karnataka 560050, India",
+                "location": {
+                    "latitude": 12.944266899999999,
+                    "longitude": 77.555903
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=16750014371369337920&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Traffic Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Hulimavu Traffic PS": {
+        "places": [
+            {
+                "formattedAddress": "Bannerghatta Rd, Opposite Gottigere Government School, Jyothi Nagar, Bohra Layout, Gottigere, Bengaluru, Karnataka 560083, India",
+                "location": {
+                    "latitude": 12.858339599999999,
+                    "longitude": 77.5891761
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=13206932166248806864&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Hulimavu Traffic Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Kengeri Traffic PS": {
+        "places": [
+            {
+                "formattedAddress": "Mysore Road, WF6J+5JX, Shirke Layout, Kengeri Satellite Town, Mysore Rd, Harsha Layout, Kengeri, Bengaluru, Karnataka 560060, India",
+                "location": {
+                    "latitude": 12.9104949,
+                    "longitude": 77.48159609999999
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=5837569346145710053&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Kengeri Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Devanahalli Traffic PS": {
+        "places": [
+            {
+                "formattedAddress": "6PM7+435, Bychapura, Karnataka 562110, India",
+                "location": {
+                    "latitude": 13.232776699999999,
+                    "longitude": 77.7127769
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=15935231761957243304&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "DEVANAHALLI TRAFFIC POLICE STATION.",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Sadashivanagar Traffic PS": {
+        "places": [
+            {
+                "formattedAddress": "1, New BEL Rd, CPRI Staff Colony, Mathikere, Bengaluru, Karnataka 560012, India",
+                "location": {
+                    "latitude": 13.0151739,
+                    "longitude": 77.5725897
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=10173616075908107372&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Sadashivanagar Traffic Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "K.R. Puram Traffic  PS": {
+        "places": [
+            {
+                "formattedAddress": "K R Pura Extension,Old Madras Road, Cluster_k R Puram 2 Clubhouse, Cluster_k R Puram 2, Malur - Byranahalli Rd, Opposite Sri Ram Hospital, Nisarga Layout, Devasandra, Krishnarajapuram, Bengaluru, Karnataka 560036, India",
+                "location": {
+                    "latitude": 13.011271599999999,
+                    "longitude": 77.698782
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=11204461568213280665&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Krishnarajapura Traffic Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Malleshwarm  Traffic PS": {
+        "places": [
+            {
+                "formattedAddress": "3, 5, 5th Cross Rd, Near KCG Hospital, Malleshwaram, Bengaluru, Karnataka 560003, India",
+                "location": {
+                    "latitude": 12.996666699999999,
+                    "longitude": 77.5697222
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=4462932160784169027&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Malleshwaram Traffic Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Jayanagar Traffic PS": {
+        "places": [
+            {
+                "formattedAddress": "156/1, 6th Main Rd, 4th Block, Jayanagar, Bengaluru, Karnataka 560011, India",
+                "location": {
+                    "latitude": 12.928565599999999,
+                    "longitude": 77.5813123
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=9326521917699471659&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Jayanagar police station",
+                    "languageCode": "en"
+                }
+            },
+            {
+                "formattedAddress": "WHFF+CMP, 13th Cross Rd, 7th Block, Basavanagudi, Bengaluru, Karnataka 560070, India",
+                "location": {
+                    "latitude": 12.9235805,
+                    "longitude": 77.57419089999999
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=15236859281611679457&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Traffic Police Checkpoint",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Chikkapete Traffic ps": {
+        "places": [
+            {
+                "formattedAddress": "Tippu Sultan Palace Rd, Anandapuram, Chamrajpet, Bengaluru, Karnataka 560018, India",
+                "location": {
+                    "latitude": 12.9605701,
+                    "longitude": 77.5682954
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=1645054859373383563&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Chickpet Traffic Police Station",
+                    "languageCode": "en"
+                }
+            },
+            {
+                "formattedAddress": "balepete circul, 4-81/A, KV Temple Street Cross, Near \u092c\u0932\u0947\u092a\u0947\u091f \u0938\u094d\u0915\u0941\u090f\u0930, Santhusapet, Chickpet, Bengaluru, Karnataka 560053, India",
+                "location": {
+                    "latitude": 12.9707093,
+                    "longitude": 77.5736505
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=165950292532039266&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "City Market Traffic Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Basavanagudi  Traffic PS": {
+        "places": [
+            {
+                "formattedAddress": "WHRF+VPC, Krishna Rajendra Rd, Near Krishna Rao Park, Basavanagudi, Bengaluru, Karnataka 560004, India",
+                "location": {
+                    "latitude": 12.9421807,
+                    "longitude": 77.5742728
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=13834625959961931581&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Basavanagudi Police Station.",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Vijayanagar Traffic PS": {
+        "places": [
+            {
+                "formattedAddress": "1777, 9th Cross Rd, Hampi Nagar, RPC Layout, Vijayanagar, Bengaluru, Karnataka 560104, India",
+                "location": {
+                    "latitude": 12.9606915,
+                    "longitude": 77.54082509999999
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=8879979871889406723&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Vijayanagara Traffic Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Upparpet Traffic PS": {
+        "places": [
+            {
+                "formattedAddress": "Upparpet Police Station, LTP Road, Majestic, Bengaluru, Karnataka 560009, India",
+                "location": {
+                    "latitude": 12.9744839,
+                    "longitude": 77.5750417
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=10888607872961535303&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Upparpet Traffic Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Banaswadi Traffic PS": {
+        "places": [
+            {
+                "formattedAddress": "XMWV+HF4, Singayyanapalya, Krishnarajapuram, Bengaluru, Karnataka 560048, India",
+                "location": {
+                    "latitude": 12.996412999999999,
+                    "longitude": 77.6936991
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=13601473784142055591&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "MAHADEVAPURA TRAFFIC POLICE STATION",
+                    "languageCode": "en"
+                }
+            },
+            {
+                "formattedAddress": "XJHR+73Q, Stage 2, Stage 1, Indiranagar, Bengaluru, Karnataka 560038, India",
+                "location": {
+                    "latitude": 12.978215299999999,
+                    "longitude": 77.6402312
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=4342970450392531983&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Indiranagar Traffic Police Station",
+                    "languageCode": "en"
+                }
+            },
+            {
+                "formattedAddress": "2, Horamavu Main Rd, HRBR Layout 1st Block, Annaiah Reddy Layout, Dodda Banaswadi, Bengaluru, Karnataka 560043, India",
+                "location": {
+                    "latitude": 13.0189537,
+                    "longitude": 77.6553996
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=7794639206308254701&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Banaswadi",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Hebbal Traffic PS": {
+        "places": [
+            {
+                "formattedAddress": "Under, Hebbal Flyover, Vinayakanagar, Hebbal, Bengaluru, Karnataka 560092, India",
+                "location": {
+                    "latitude": 13.042447899999999,
+                    "longitude": 77.5891602
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=3766071184736574221&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Hebbal Traffic Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Jalahalli Traffic PS": {
+        "places": [
+            {
+                "formattedAddress": "2GXX+FR5, HMT Main Rd, Jalahalli Village, Jalahalli, Bengaluru, Karnataka 560013, India",
+                "location": {
+                    "latitude": 13.048642300000001,
+                    "longitude": 77.5496131
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=16036973970583887594&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Jalahalli Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Kumaraswamy Layout Traffic PS": {
+        "places": [
+            {
+                "formattedAddress": "PS Building, Police Station Subramanyapura, Gubbalaala Main Rd, opposite Sri Venugopal Mill, Subramanyapura, Bengaluru, Karnataka 560085, India",
+                "location": {
+                    "latitude": 12.9011865,
+                    "longitude": 77.5445372
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=7687554567121080431&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Kumarswamy Layout Traffic Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Magadi Road Traffic PS": {
+        "places": [
+            {
+                "formattedAddress": "XHF2+VFV, 3rd Cross Rd, Near Prasanna Theatre (G.T. Mall), Police Quarters, Rajajinagar, Bengaluru, Karnataka 560023, India",
+                "location": {
+                    "latitude": 12.9747493,
+                    "longitude": 77.5511714
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=15013910813905504249&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Magadi Road Traffic Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Shivajinagar Traffic  PS": {
+        "places": [
+            {
+                "formattedAddress": "Bradway Road, Old Police station Junction, XJQ3+5CH, HKP Road, Sulthangunta, Shivaji Nagar, Bengaluru, Karnataka 560051, India",
+                "location": {
+                    "latitude": 12.9879433,
+                    "longitude": 77.6036013
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=14046291239988024659&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Shivajinagara Traffic Police Station",
+                    "languageCode": "en"
+                }
+            },
+            {
+                "formattedAddress": "Visvesvaraya Tower, Queens Rd, Vasanth Nagar, Bengaluru, Karnataka 560001, India",
+                "location": {
+                    "latitude": 12.9827312,
+                    "longitude": 77.5960079
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=16638735842501305353&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Cubbon Park Traffic Police Station",
+                    "languageCode": "en"
+                }
+            },
+            {
+                "formattedAddress": "CUBBON PARK TRAFFIC POLICE STATION, RUSSELL MARKET, 99, Broadway Rd, Bharati Nagar, Shivaji Nagar, Bengaluru, Karnataka 560051, India",
+                "location": {
+                    "latitude": 12.985047999999999,
+                    "longitude": 77.60616279999999
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=4482038024747376300&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Cubbon Park Traffic Police Station",
+                    "languageCode": "en"
+                }
+            },
+            {
+                "formattedAddress": "5, Infantry Rd, Shivaji Nagar, Bengaluru, Karnataka 560001, India",
+                "location": {
+                    "latitude": 12.984886699999999,
+                    "longitude": 77.5937302
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=12200954740523346358&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Commissioners Office Traffic Police Bangalore",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "High Grounds Traffic  PS": {
+        "places": [
+            {
+                "formattedAddress": "12, Race Course Rd, In front of Bangalore Turf Club Ltd., High Grounds, Gandhi Nagar, Bengaluru, Karnataka 560001, India",
+                "location": {
+                    "latitude": 12.9848082,
+                    "longitude": 77.5826232
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=223619448622164471&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "High Grounds Traffic Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Yelahanka Traffic PS": {
+        "places": [
+            {
+                "formattedAddress": "3HWV+2JF, SH 9, Ambedkar Colony, Yelahanka, Bengaluru, Karnataka 560064, India",
+                "location": {
+                    "latitude": 13.095053,
+                    "longitude": 77.5940619
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=5528230254895396694&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Yelahanka Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "H.S.R.Layout Traffic PS": {
+        "places": [
+            {
+                "formattedAddress": "HSR BDA Complex, 38 & 39, 14th Main Rd, Sector 6, HSR Layout, Bengaluru, Karnataka 560102, India",
+                "location": {
+                    "latitude": 12.9137634,
+                    "longitude": 77.63727779999999
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=9695938737628889882&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "HSR Layout Traffic Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "V.V. Puram Traffic  PS": {
+        "places": [
+            {
+                "formattedAddress": "Police station, 83, Kalasipalya Main Rd, near Kalasipalya, Kalasipalya, Bengaluru, Karnataka 560002, India",
+                "location": {
+                    "latitude": 12.957223899999999,
+                    "longitude": 77.57737279999999
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=188938809921425168&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "V.V. Pura Traffic Police Station",
+                    "languageCode": "en"
+                }
+            },
+            {
+                "formattedAddress": "Tippu Sultan Palace Rd, Kalasipalya, Bengaluru, Karnataka 560018, India",
+                "location": {
+                    "latitude": 12.960208399999999,
+                    "longitude": 77.57198819999999
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=2939365276587331693&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "V V Puram Police Station",
+                    "languageCode": "en"
+                }
+            },
+            {
+                "formattedAddress": "K R Pura Extension,Old Madras Road, Cluster_k R Puram 2 Clubhouse, Cluster_k R Puram 2, Malur - Byranahalli Rd, Opposite Sri Ram Hospital, Nisarga Layout, Devasandra, Krishnarajapuram, Bengaluru, Karnataka 560036, India",
+                "location": {
+                    "latitude": 13.011271599999999,
+                    "longitude": 77.698782
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=11204461568213280665&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Krishnarajapura Traffic Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Halasurgate Traffic PS": {
+        "places": [
+            {
+                "formattedAddress": "XH8P+PV5, NR Rd, Opposite Bruhat Bengaluru Mahanagara Palike Headquarters, Cubbonpete, Nagarathpete, Bengaluru, Karnataka 560002, India",
+                "location": {
+                    "latitude": 12.9667681,
+                    "longitude": 77.58722379999999
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=17711483249680111382&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Halasuru Gate Traffic Police Station",
+                    "languageCode": "en"
+                }
+            },
+            {
+                "formattedAddress": "ground floor, 01, Cambridge Rd, Halasuru, Cambridge Layout, Jogupalya, Bengaluru, Karnataka 560008, India",
+                "location": {
+                    "latitude": 12.9745913,
+                    "longitude": 77.62542119999999
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=17750911640706750353&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Halasuru Traffic Police Station",
+                    "languageCode": "en"
+                }
+            },
+            {
+                "formattedAddress": "XJHR+73Q, Stage 2, Stage 1, Indiranagar, Bengaluru, Karnataka 560038, India",
+                "location": {
+                    "latitude": 12.978215299999999,
+                    "longitude": 77.6402312
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=4342970450392531983&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Indiranagar Traffic Police Station",
+                    "languageCode": "en"
+                }
+            },
+            {
+                "formattedAddress": "XJC6+J4F, Commissariat Rd, Shanthala Nagar, Ashok Nagar, Bengaluru, Karnataka 560025, India",
+                "location": {
+                    "latitude": 12.971556200000002,
+                    "longitude": 77.6103105
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=2970073408684036103&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Ashoka Nagara Traffic Police Station Shanthalanagara",
+                    "languageCode": "en"
+                }
+            },
+            {
+                "formattedAddress": "D-14/T,HAL Employees Quarters,Old Airport Road Old Airport Road, Near, Post Office, HAL Employee Quarters, D-32, Behind CS-HAL Post Office, Reddypalya, HAL, Bengaluru, Karnataka 560017, India",
+                "location": {
+                    "latitude": 12.9589807,
+                    "longitude": 77.66753280000002
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=3054038805883821867&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Hal Airport Traffic Police Station",
+                    "languageCode": "en"
+                }
+            },
+            {
+                "formattedAddress": "13th Floor, Public Utility Building, Mahatma Gandhi Rd, near Canopy Restaurant, Shanthala Nagar, Ashok Nagar, Bengaluru, Karnataka 560001, India",
+                "location": {
+                    "latitude": 12.9744745,
+                    "longitude": 77.60976699999999
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=8372758309435037233&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Karnataka State Police Traffic",
+                    "languageCode": "en"
+                }
+            },
+            {
+                "formattedAddress": "A, Arabic College Post, Bus Stop, Arabic College Main Rd, Kushal Nagar, Kadugondanahalli, Bengaluru, Karnataka 560045, India",
+                "location": {
+                    "latitude": 13.019697299999999,
+                    "longitude": 77.6190615
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=13073668907883203339&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "KG Halli Traffic Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "Madiwala Traffic PS": {
+        "places": [
+            {
+                "formattedAddress": "WJCC+C73, Madiwala Rd, Santhosapuram, 1st Block Koramangala, Koramangala, Bengaluru, Karnataka 560068, India",
+                "location": {
+                    "latitude": 12.921021999999999,
+                    "longitude": 77.6206792
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=11202219061386118703&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "Madiwala Traffic Police Station",
+                    "languageCode": "en"
+                }
+            }
+        ]
+    },
+    "City Market Traffic  PS": {
+        "places": [
+            {
+                "formattedAddress": "balepete circul, 4-81/A, KV Temple Street Cross, Near \u092c\u0932\u0947\u092a\u0947\u091f \u0938\u094d\u0915\u0941\u090f\u0930, Santhusapet, Chickpet, Bengaluru, Karnataka 560053, India",
+                "location": {
+                    "latitude": 12.9707093,
+                    "longitude": 77.5736505
+                },
+                "googleMapsUri": "https://maps.google.com/?cid=165950292532039266&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQABgEIAA",
+                "displayName": {
+                    "text": "City Market Traffic Police Station",
                     "languageCode": "en"
                 }
             }
