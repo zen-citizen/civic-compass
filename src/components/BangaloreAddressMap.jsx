@@ -15,7 +15,7 @@ import bwssbDivisions from '../layers/bwssb_divisions.json'
 import bwssbSubDivisions from '../layers/bwssb_sub_divisions.json'
 import bwssbServiceStations from '../layers/bwssb_service_station_divisions.json'
 import bdaLayoutBoundaries from '../layers/bda_layout_boundaries.json'
-import gbaCorpBoundaries from '../layers/gba.json'
+import gbaCorpBoundaries from '../layers/gba_zones.geo.json'
 import sroLocations from '../data/sro_locs.json'
 import droLocations from '../data/dro_locs.json'
 import psLocations from '../data/ps_locs.json'
@@ -97,10 +97,11 @@ const BangaloreAddressMap = () => {
       'BDA Layout Number': "Not Available"
     },
     gbaInfo: {
-      'Corporation Name': "Not Available"
+      'Corporation Name': "Not Available",
+      'Zone Name': "Not Available"
     }
   });
-  
+
   const mapContainerRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const markerRef = useRef(null);
@@ -128,7 +129,7 @@ const BangaloreAddressMap = () => {
     bwssbInfo: false,
     bdaInfo: false,
   });
- // Also open by default
+  // Also open by default
   // Reset accordion state function
   const resetAccordions = () => {
     setOpenAccordions({
@@ -154,7 +155,7 @@ const BangaloreAddressMap = () => {
       if (isOpening) {
         setLastToggledAccordion(section);
       } else {
-          setLastToggledAccordion(null); // Reset if closing
+        setLastToggledAccordion(null); // Reset if closing
       }
       return newState;
     });
@@ -165,13 +166,13 @@ const BangaloreAddressMap = () => {
     const checkIsMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
-    
+
     // Initial check
     checkIsMobile();
-    
+
     // Add event listener for window resize
     window.addEventListener('resize', checkIsMobile);
-    
+
     // Cleanup
     return () => {
       window.removeEventListener('resize', checkIsMobile);
@@ -214,17 +215,17 @@ const BangaloreAddressMap = () => {
   const isMarkerInsidePolygon = (point, poly) => {
     // Ray casting algorithm for point in polygon detection
     const x = point.lat, y = point.lng;
-    
+
     let inside = false;
     for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
       const xi = poly[i].lat, yi = poly[i].lng;
       const xj = poly[j].lat, yj = poly[j].lng;
-      
+
       const intersect = ((yi > y) !== (yj > y))
           && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
       if (intersect) inside = !inside;
     }
-    
+
     return inside;
   };
 
@@ -241,7 +242,7 @@ const BangaloreAddressMap = () => {
       document.removeEventListener('click', handleClickOutside);
     };
   }, [showSuggestions]);
-  
+
   // Reset active suggestion index when search results change
   useEffect(() => {
     setActiveSuggestionIndex(-1);
@@ -263,15 +264,15 @@ const BangaloreAddressMap = () => {
     console.log("BWSSB Divisions data loaded:", bwssbDivisions);
     console.log("BWSSB Sub Divisions data loaded:", bwssbSubDivisions);
     console.log("BWSSB Service Stations data loaded:", bwssbServiceStations);
-    
+
     // Bangalore coordinates
     const bangaloreCoordinates = [12.9716, 77.5946]; // [latitude, longitude]
-    
+
     // Prevent multiple initializations
     if (mapInstanceRef.current) {
       return;
     }
-    
+
     // Only load Leaflet if we're in the browser
     if (typeof window !== 'undefined' && mapContainerRef.current) {
       // Load leaflet CSS
@@ -400,20 +401,20 @@ const BangaloreAddressMap = () => {
       const initializeMap = (L) => {
         // Make sure the container is still in the DOM and map isn't already initialized
         if (!mapContainerRef.current || mapInstanceRef.current) return;
-        
+
         // Initialize map
         const map = L.map(mapContainerRef.current, {
           zoomControl: false // Disable default zoom control
         }).setView(bangaloreCoordinates, 12);
-        
+
         // Add OpenStreetMap tiles
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
-        
+
         // Add click event to map for reverse geocoding
         map.on('click', handleMapClick);
-        
+
         // Store map instance
         mapInstanceRef.current = map;
       };
@@ -422,17 +423,17 @@ const BangaloreAddressMap = () => {
       // Check if initialization is already in progress
       if (!window.leafletInitializing) {
         window.leafletInitializing = true;
-        
+
         loadLeafletCSS();
         addCustomStyles();
         loadLeafletScript()
-          .then(initializeMap)
-          .catch(error => {
-            console.error('Failed to load Leaflet or plugins:', error);
-          })
-          .finally(() => {
-            window.leafletInitializing = false;
-          });
+            .then(initializeMap)
+            .catch(error => {
+              console.error('Failed to load Leaflet or plugins:', error);
+            })
+            .finally(() => {
+              window.leafletInitializing = false;
+            });
       }
     }
 
@@ -1086,31 +1087,39 @@ const BangaloreAddressMap = () => {
   const findGbaInfo = (lat, lng) => {
     const defaultInfo = {
       'Corporation Name': "Not Available",
+      'Zone Name': "Not Available"
     };
-  
+
     if (!gbaCorpBoundaries || !gbaCorpBoundaries.features) {
       return defaultInfo;
     }
-  
+
     const L = window.L;
     if (!L) return defaultInfo;
-  
+
     const point = L.latLng(lat, lng);
 
-  
+
     for (const feature of gbaCorpBoundaries.features) {
       if (feature.geometry) {
         const isInside = processGeometry(feature.geometry, point, L);
-  
+
         if (isInside) {
           console.log("Found GBA:", feature.properties);
+          const corporationRaw = feature.properties.Corporatio || "Not Available";
+          const corporation = corporationRaw !== "Not Available" ? `Bengaluru ${corporationRaw} City Corporation` : "Not Available";
+          const zone = feature.properties.Zone || "Not Available";
+          const zoneNumber = zone.replace("Zone", "");
+          const zoneName = zone !== "Not Available" ? `${corporationRaw} Zone ${zoneNumber}` : "Not Available";
+
           return {
-            'Corporation Name': feature.properties.namecol || "Not Available",
+            'Corporation Name': corporation,
+            'Zone Name': zoneName
           };
         }
       }
     }
-  
+
     return defaultInfo;
   };
 
