@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
-import { LocateFixed, Search, Loader, ExternalLink, ChevronDown, ChevronUp, ArrowLeft, Plus, Minus } from 'lucide-react';
+import {useEffect, useRef, useState} from 'react';
+import {ArrowLeft, ChevronDown, ChevronUp, ExternalLink, Loader, LocateFixed, Minus, Plus, Search} from 'lucide-react';
 import policeJurisdiction from '../layers/PoliceJurisdiction_5.json'
 import trafficPoliceStation from '../layers/_4.json'
 import BBMPInformation from '../layers/BBMPInformation_11.json'
@@ -16,6 +16,7 @@ import bwssbSubDivisions from '../layers/bwssb_sub_divisions.json'
 import bwssbServiceStations from '../layers/bwssb_service_station_divisions.json'
 import bdaLayoutBoundaries from '../layers/bda_layout_boundaries.json'
 import gbaCorpBoundaries from '../layers/gba_zones.geo.json'
+import gbaWards from '../layers/gba_wards.geo.json'
 import sroLocations from '../data/sro_locs.json'
 import droLocations from '../data/dro_locs.json'
 import psLocations from '../data/ps_locs.json'
@@ -98,7 +99,8 @@ const BangaloreAddressMap = () => {
     },
     gbaInfo: {
       'Corporation Name': "Not Available",
-      'Zone Name': "Not Available"
+      'Zone Name': "Not Available",
+      'Ward Name': "Not Available"
     }
   });
 
@@ -1087,10 +1089,11 @@ const BangaloreAddressMap = () => {
   const findGbaInfo = (lat, lng) => {
     const defaultInfo = {
       'Corporation Name': "Not Available",
-      'Zone Name': "Not Available"
+      'Zone Name': "Not Available",
+      'Ward Name': "Not Available"
     };
 
-    if (!gbaCorpBoundaries || !gbaCorpBoundaries.features) {
+    if (!gbaCorpBoundaries || !gbaCorpBoundaries.features || !gbaWards || !gbaWards.features) {
       return defaultInfo;
     }
 
@@ -1099,6 +1102,7 @@ const BangaloreAddressMap = () => {
 
     const point = L.latLng(lat, lng);
 
+    let result = { ...defaultInfo };
 
     for (const feature of gbaCorpBoundaries.features) {
       if (feature.geometry) {
@@ -1112,15 +1116,26 @@ const BangaloreAddressMap = () => {
           const zoneNumber = zone.replace("Zone", "");
           const zoneName = zone !== "Not Available" ? `${corporationRaw} Zone ${zoneNumber}` : "Not Available";
 
-          return {
-            'Corporation Name': corporation,
-            'Zone Name': zoneName
-          };
+          result['Corporation Name'] = corporation;
+          result['Zone Name'] = zoneName;
+          break;
         }
       }
     }
 
-    return defaultInfo;
+    for (const feature of gbaWards.features) {
+      if (feature.geometry) {
+        const isInside = processGeometry(feature.geometry, point, L);
+
+        if (isInside) {
+          console.log("Found GBA Ward:", feature.properties);
+          result['Ward Name'] = feature.properties.ward_name || "Not Available";
+          break;
+        }
+      }
+    }
+
+    return result;
   };
 
   // Function to handle "Go back" action
